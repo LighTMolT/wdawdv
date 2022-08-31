@@ -3091,7 +3091,8 @@ AvatarEditorService:PromptSaveAvatar(currentDescription, Enum.HumanoidRigType.R6
 local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
 if result == Enum.AvatarPromptResult.Success then
 end
-character:BreakJoints()
+Utils.Notify(Caller, "AvatarEditorService", "R6 loading...")
+        ReplaceCharacter();
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
 	ReplaceHumanoid()
@@ -3116,7 +3117,8 @@ AvatarEditorService:PromptSaveAvatar(currentDescription, Enum.HumanoidRigType.R1
 local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
 if result == Enum.AvatarPromptResult.Success then
 end
-character:BreakJoints()
+Utils.Notify(Caller, "AvatarEditorService", "R15 loading...")
+        ReplaceCharacter();
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
 	ReplaceHumanoid()
