@@ -5937,7 +5937,7 @@ AddCommand("unmute", {}, "unloopmutes a persons boombox", {"1"}, function(Caller
 	end
 end)
 
-AddCommand("lag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
+AddCommand("audiolag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
 	local Target = GetPlayer(Args[1]);
 	local filterBoomboxes = function(i,v)
 		return FindFirstChild(v, "Handle") and FindFirstChildWhichIsA(v.Handle, "Sound");
@@ -5963,7 +5963,7 @@ AddCommand("lag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
 	CEnv[Target] = Con
 end)
 
-AddCommand("unboomboxlag", {"noboomboxlag"}, "unaudiolag a persons boombox", {}, function(Caller, Args)
+AddCommand("unaudiolag", {"noaudiolag"}, "unaudiolag a persons boombox", {}, function(Caller, Args)
 	local Target = GetPlayer(Args[1])
 	local Lag = LoadCommand("audiolag").CmdEnv
 	for i, v in next, Lag do
