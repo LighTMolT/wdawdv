@@ -3074,7 +3074,7 @@ AddCommand("backpackboombox", {}, "works with r6 and r15 ", {1}, function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/fKaDCQRw"))()
 end)
 
-AddCommand("headless", {}, "removes your head", {}, function()
+AddCommand("headless", {}, "removes your head", {3}, function()
 loadstring(game:HttpGet("https://pastebin.com/raw/yc0STZCK"))()
 return format "Headless loading..."
 end)
