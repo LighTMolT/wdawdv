@@ -3092,10 +3092,9 @@ local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
 if result == Enum.AvatarPromptResult.Success then
 end
 Utils.Notify(Caller, "AvatarEditorService", "R6 loading...")
-        ReplaceCharacter();
+        game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
-	ReplaceHumanoid()
 	CWait(LocalPlayer.CharacterAdded)
 	WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
@@ -3118,10 +3117,9 @@ local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
 if result == Enum.AvatarPromptResult.Success then
 end
 Utils.Notify(Caller, "AvatarEditorService", "R15 loading...")
-        ReplaceCharacter();
+        game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
-	ReplaceHumanoid()
 	CWait(LocalPlayer.CharacterAdded)
 	WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
