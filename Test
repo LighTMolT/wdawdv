@@ -5860,7 +5860,7 @@ AddCommand("nostreamermode", {"unstreamermode"}, "removes all the changed names"
 	end
 end)
 
-AddCommand("fireclickdetectors", {"clickdetectors"}, "fires all the click detectors", {3}, function(Caller, Args)
+AddCommand("fireclickdetectors", {"clickdetectors", "fcd"}, "fires all the click detectors", {3}, function(Caller, Args)
 	local amount = 0
 	local howmany = Args[1]
 	for i, v in next, GetDescendants(Services.Workspace) do
@@ -5873,7 +5873,7 @@ AddCommand("fireclickdetectors", {"clickdetectors"}, "fires all the click detect
 	return format("Fired %d amount of clickdetectors", amount);
 end)
 
-AddCommand("firetouchinterests", {"touchinterests"}, "fires all the touch interests", {3}, function(Caller, Args)
+AddCommand("firetouchinterests", {"touchinterests", "fti"}, "fires all the touch interests", {3}, function(Caller, Args)
 	local amount = 0
 	local howmany = Args[1]
 	for i, v in next, GetDescendants(Services.Workspace) do
@@ -5888,7 +5888,7 @@ AddCommand("firetouchinterests", {"touchinterests"}, "fires all the touch intere
 	return format("Fired %d amount of touchtransmitters", amount);
 end)
 
-AddCommand("fireproximityprompts", {"proximityprompts"}, "fires all the proximity prompts", {3}, function(Caller, Args)
+AddCommand("fireproximityprompts", {"proximityprompts", "fpp"}, "fires all the proximity prompts", {3}, function(Caller, Args)
 	local amount = 0
 	local howmany = Args[1]
 	for i, v in next, GetDescendants(Services.Workspace) do
