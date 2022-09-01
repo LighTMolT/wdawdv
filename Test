@@ -3990,7 +3990,7 @@ AddCommand("antifling", {}, "can't be flinged ", {}, function()
 	return format "Antifling enabled."
 end)
 
-AddCommand("forcefield", {}, "enables invisible forcefield", {}, function()
+AddCommand("touchfling", {}, "enables invisible forcefield", {}, function()
 	local hiddenfling = true
 	local c = game:GetService("Players").LocalPlayer.Character
 	local plrs = game:GetService("Players")
