@@ -4924,6 +4924,40 @@ AddCommand("stopdupe", {}, "stops the dupe", {}, function()
 	return "dupetools stopped"
 end)
 
+AddCommand("savetools", {"st"}, "saves your tools", {1,3}, function(Caller, Args)
+    UnequipTools(GetHumanoid());
+    local Tools = GetChildren(LocalPlayer.Backpack);
+    local Char = GetCharacter();
+    for i, v in next, Tools do
+        SpoofProperty(v, "Parent");
+        v.Parent = Char
+        v.Parent = Services.Workspace
+        firetouchinterest(WaitForChild(Services.Workspace, v.Name).Handle, GetRoot(), 0);
+        wait();
+        firetouchinterest(v.Handle, GetRoot(), 1);
+        WaitForChild(Char, v.Name).Parent = LocalPlayer.Backpack
+    end
+    Utils.Notify(Caller, nil, "Tools are now saved");
+    CWait(GetHumanoid().Died);
+    UnequipTools(GetHumanoid());
+    Tools = GetChildren(LocalPlayer.Backpack);
+    wait(Players.RespawnTime - wait()); -- * #Tools);
+    for i, v in next, Tools do
+        if (IsA(v, "Tool") and FindFirstChild(v, "Handle")) then
+            v.Parent = Char
+            v.Parent = Services.Workspace
+        end
+    end
+    CWait(LocalPlayer.CharacterAdded);
+    WaitForChild(LocalPlayer.Character, "HumanoidRootPart");
+    for i, v in next, Tools do
+        firetouchinterest(v.Handle, GetRoot(), 0);
+        wait();
+        firetouchinterest(v.Handle, GetRoot(), 1);
+    end
+    return "Tools recovered."
+end)
+
 AddCommand("givetools", {}, "gives all of your tools to a player", {3,1,"1"}, function(Caller, Args)
 	local Target = GetPlayer(Args[1]);
 	local Root = GetRoot();
