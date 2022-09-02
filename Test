@@ -5106,7 +5106,7 @@ AddCommand("drophats", {}, "removes all the hats from your character", {3}, func
 	character.Head:remove() --optional, can be removed
 end)
 
-AddCommand("nomeshhats", {}, "makes your hats block", {3}, function()
+AddCommand("nomeshhats", {}, "makes your hats block", {2}, function()
 	local character = game.Players.LocalPlayer.Character
 	for _,v in pairs(character:FindFirstChildOfClass('Humanoid'):GetAccessories()) do
 		for i,c in pairs(v:GetDescendants()) do
