@@ -3031,7 +3031,7 @@ AddCommand("httpspy", {}, "httpspy game", {}, function()
     end
 
     local Clone = Clone(ChatLogMessage);
-    Clone.Text = "httpspy loaded"
+    Clone.Text = "Httpspy loaded."
     Clone.RichText = true
     Clone.Visible = true
     Clone.TextTransparency = 1
