@@ -3232,8 +3232,6 @@ local char = plr.Character
 local UIS = game:GetService("UserInputService")
 local Tools = plr.Backpack:GetChildren()
 
-
-
 Tools[1].Grip = cf.n(-1.5,-5.5,-1.5) * cf.a(rd(0),rd(0),rd(0))
 Tools[1].Parent = char
 
@@ -3282,68 +3280,59 @@ end)
 
 AddCommand("gun", {}, "makes your tool a gun", {1}, function()
     
+local sin = math.sin
+local cos = math.cos
+local rd = math.rad
+local cf = {a=CFrame.Angles,n=CFrame.new}
 local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
+local char = plr.Character
+local UIS = game:GetService("UserInputService")
 local Tools = plr.Backpack:GetChildren()
+
+ Tools[1].Grip = cf.n(0.1,-0.4,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[1].Parent = char
  
- Tools[1].Grip = CFrame.new(0.7, -0.5, -0.2) * CFrame.Angles(50, math.rad(-180), 3.13)
- Tools[1].Parent = plr.Character
-
- Tools[2].Grip = CFrame.new(0.5, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0)
- Tools[2].Parent = plr.Character
-
- Tools[3].Grip = CFrame.new(-1.5, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0.03)
- Tools[3].Parent = plr.Character
-
- Tools[4].Grip = CFrame.new(-2.5, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0)
- Tools[4].Parent = plr.Character
-
- Tools[5].Grip = CFrame.new(-4.6, -0.4, -0.2) * CFrame.Angles(1.6, math.rad(-98), 1.6)
- Tools[5].Parent = plr.Character
-
- Tools[6].Grip = CFrame.new(-7, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0)
- Tools[6].Parent = plr.Character
-
- Tools[7].Grip = CFrame.new(-9.6, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0)
- Tools[7].Parent = plr.Character
-
- Tools[8].Grip = CFrame.new(-12.2, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0)
- Tools[8].Parent = plr.Character
-
- Tools[9].Grip = CFrame.new(-1.2, -3.1, -0.2) * CFrame.Angles(1.6, math.rad(-15), 1.6)
- Tools[9].Parent = plr.Character
-
- Tools[10].Grip = CFrame.new(-3.3, -2.7, -0.2) * CFrame.Angles(1.6, math.rad(-25), 1.6)
- Tools[10].Parent = plr.Character
-
- Tools[11].Grip = CFrame.new(-0.1, 1.8, -0.1) * CFrame.Angles(1.6, math.rad(65), 1.6)
- Tools[11].Parent = plr.Character
-
- Tools[12].Grip = CFrame.new(1.3, 2.05, -0.1) * CFrame.Angles(1.6, math.rad(90), 1.6)
- Tools[12].Parent = plr.Character
-
- Tools[13].Grip = CFrame.new(3.15, 2.05, -0.1) * CFrame.Angles(1.6, math.rad(90), 1.6)
- Tools[13].Parent = plr.Character
-
- Tools[14].Grip = CFrame.new(5.3, 2.05, -0.1) * CFrame.Angles(1.6, math.rad(90), 1.6)
- Tools[14].Parent = plr.Character
-
- Tools[15].Grip = CFrame.new(6.5, 4.1, -0.1) * CFrame.Angles(1.6, math.rad(110), 1.6)
- Tools[15].Parent = plr.Character
-
- Tools[16].Grip = CFrame.new(-14.3, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0)
- Tools[16].Parent = plr.Character
-
- Tools[17].Grip = CFrame.new(3.1, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0)
- Tools[17].Parent = plr.Character
-
- Tools[18].Grip = CFrame.new(5.2, -1.2, -0.2) * CFrame.Angles(0, math.rad(-90), 0)
- Tools[18].Parent = plr.Character
-
- Tools[19].Grip = CFrame.new(0.25, 6.8, -0.05) * CFrame.Angles(1.6, math.rad(-0), 1.6)
- Tools[19].Parent = plr.Character
-
- Tools[20].Grip = CFrame.new(3.8, -4.4, -0.27) * CFrame.Angles(1.6, math.rad(-137), 1.6)
- Tools[20].Parent = plr.Character
+ Tools[2].Grip = cf.n(-0.9,-0.9,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[2].Parent = char
+ 
+ Tools[3].Grip = cf.n(-1.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[3].Parent = char
+ 
+ Tools[4].Grip = cf.n(-1.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[4].Parent = char
+ 
+ Tools[5].Grip = cf.n(-1.5,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[5].Parent = char
+ 
+ Tools[6].Grip = cf.n(-1.7,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[6].Parent = char
+ 
+ Tools[7].Grip = cf.n(-1.9,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[7].Parent = char
+ 
+ Tools[8].Grip = cf.n(-2.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[8].Parent = char
+ 
+ Tools[9].Grip = cf.n(-2.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[9].Parent = char
+ 
+ Tools[10].Grip = cf.n(-2.5,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[10].Parent = char
+ 
+ Tools[11].Grip = cf.n(-2.7,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[11].Parent = char
+ 
+ Tools[12].Grip = cf.n(-2.9,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[12].Parent = char
+ 
+ Tools[13].Grip = cf.n(-3.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[13].Parent = char
+ 
+ Tools[14].Grip = cf.n(-3.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[14].Parent = char
+ 
+ Tools[15].Grip = cf.n(-3.5,-1,0) * cf.a(rd(10),rd(-90),rd(0))
+ Tools[15].Parent = char
 end)
 
 AddCommand("upsidedown", {"dinnerbone"}, "upside down", {2}, function()
