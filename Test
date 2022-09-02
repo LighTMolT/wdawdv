@@ -3725,6 +3725,25 @@ AddCommand("playsounds", {}, "plays all game sounds", {}, function()
 	end
 end)
 
+AddCommand("antichat", {}, "can't be banned for swearing", {}, function()
+	local CloneFunction = clonefunction
+	local CheckCaller = CloneFunction(checkcaller)
+	local HookFunction = CloneFunction(hookfunction)
+	Utils.Notify(Caller, "", "Antichat enabled.")
+	local LocalPlayer = game.Players.PlayerAdded:wait()
+	local PostMessage = require(LocalPlayer:WaitForChild("PlayerScripts", 1/0):WaitForChild("ChatScript", 1/0):WaitForChild("ChatMain", 1/0)).MessagePosted
+	getgenv().MessageEvent = Instance.new("BindableEvent")
+	local OldFunctionHook
+	local PostMessageHook = function(self, msg)
+		if not CheckCaller() and self == PostMessage then
+			MessageEvent:Fire(msg)
+			return
+		end
+		return OldFunctionHook(self, msg)		
+	end
+	OldFunctionHook = HookFunction(PostMessage.fire, PostMessageHook)	
+end)
+
 AddCommand("antivoid", {}, "can't be voided", {}, function()
 	workspace.FallenPartsDestroyHeight = 0/1/0
 	return format "Antivoid enabled."
