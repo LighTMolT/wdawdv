@@ -3387,7 +3387,7 @@ AddCommand("blockholder", {}, "gives you an item to hold blocks", {}, function()
 end)
 
 
-AddCommand("2006animations", {}, "old roblox animations", {}, function()
+AddCommand("2006animations", {"2006anims"}, "old roblox animations", {}, function()
 	game.Players.LocalPlayer.Character:BreakJoints()
 	game.Players.LocalPlayer.Character=nil
 	Connection = game.Workspace.DescendantAdded:Connect(function(c)
