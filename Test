@@ -3079,6 +3079,13 @@ loadstring(game:HttpGet("https://pastebin.com/raw/yc0STZCK"))()
 return format "Headless loading..."
 end)
 
+AddCommand("split", {}, "splits your body in half", {3}, function()
+if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
+    game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
+else return format "Need R15 for this command."
+end
+end)
+
 AddCommand("ragdoll", {}, "makes you ragdoll", {2}, function()
 LocalPlayer = game:GetService("Players").LocalPlayer
 LocalPlayer.Character.Humanoid:MoveTo(LocalPlayer.Character.HumanoidRootPart.Position + LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 10)
