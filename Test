@@ -6232,6 +6232,31 @@ AddCommand("getaudio", {}, "audio logs someone", {}, function(Caller, Args)
 	end
 end)
 
+AddCommand("audioreplicate", {"replicate"}, "replicate someones audio", {}, function(Caller, Args)
+	local Target = GetPlayer(Args[1]);
+	for i, v in next, Target do
+		for i2, v2 in next, GetDescendants(v.Character) do
+			if (IsA(v2, "Sound") and IsA(v2.Parent.Parent, "Tool")) then
+				local AudioId = split(v2.SoundId, "=")[2]
+				local Character = GetCharacter();
+	                        local Humanoid = GetHumanoid();
+				local Boomboxes = filter(GetChildren(LocalPlayer.Backpack), function(i, v)
+		               if (Sfind(lower(v.Name), "boombox") or FindFirstChildOfClass(v.Handle, "Sound", true)) then
+			               v.Parent = Character
+			               return true
+		            end
+		            return false
+	            end)
+			for i = 1, #Boomboxes do
+		        local Boombox = Boomboxes[i]
+	               	local RemoteEvent = FindFirstChildWhichIsA(Boombox, "RemoteEvent")
+	    	        RemoteEvent.FireServer(RemoteEvent, "PlaySong", AudioId);
+	            end
+			end
+		end
+	end
+end)
+
 AddCommand("grippos", {}, "changes grippos of your tool", {"3"}, function(Caller, Args, CEnv)
 	local Tool = FindFirstChildWhichIsA(GetCharacter(), "Tool") or FindFirstChildWhichIsA(LocalPlayer.Backpack, "Tool");
 	if (Tool) then
