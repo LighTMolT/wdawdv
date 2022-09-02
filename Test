@@ -5008,25 +5008,7 @@ AddCommand("givetools", {}, "gives all of your tools to a player", {3,1,"1"}, fu
 	WaitForChild(Char, "HumanoidRootPart").CFrame = OldPos
 end)
 
-AddCommand("grabtools", {}, "grabs tools in the workspace", {3}, function(Caller, Args)
-	local Tools = filter(GetDescendants(Services.Workspace), function(i,v)
-		return IsA(v, "Tool") and FindFirstChild(v, "Handle");
-	end)
-	UnequipTools(GetHumanoid());
-	local ToolAmount = #GetChildren(LocalPlayer.Backpack);
-	for i, v in next, Tools do
-		if (v.Handle) then
-			firetouchinterest(v.Handle, GetRoot(), 0);
-			wait();
-			firetouchinterest(v.Handle, GetRoot(), 1);
-		end
-	end
-	wait(.4);
-	UnequipTools(GetHumanoid());
-	return format(("Grabbed %d tool (s)"), #GetChildren(LocalPlayer.Backpack) - ToolAmount)
-end)
-
-AddCommand("autograbtools", {}, "once a tool is added to workspace it will be grabbed", {3}, function(Caller, Args, CEnv)
+AddCommand("grabtools", {}, "once a tool is added to workspace it will be grabbed", {3}, function(Caller, Args, CEnv)
 	AddConnection(CConnect(Services.Workspace.ChildAdded, function(Child)
 		if (IsA(Child, "Tool") and FindFirstChild(Child, "Handle")) then
 			firetouchinterest(Child.Handle, GetRoot(), 0);
@@ -5038,8 +5020,8 @@ AddCommand("autograbtools", {}, "once a tool is added to workspace it will be gr
 	return "Tools will be grabbed automatically."
 end)
 
-AddCommand("unautograbtools", {"unloopgrabtools"}, "stops autograbtools", {}, function()
-	DisableAllCmdConnections("autograbtools");
+AddCommand("ungrabtools", {"unloopgrabtools"}, "stops grabtools", {}, function()
+	DisableAllCmdConnections("grabtools");
 	return "Auto grabtools disabled."
 end)
 
