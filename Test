@@ -6532,10 +6532,10 @@ AddCommand("buildertools", {"btools"}, "gives you btools", {3}, function(Caller,
 	for i = 1, 4 do
 		local Bin = InstanceNew("HopperBin");
 		Bin.BinType = i
-		ProtectInstance(Bin);
+		--ProtectInstance(Bin);
 		Bin.Parent = BP
 	end
-	return "Client sided btools loaded."
+	return "Btools loaded."
 end)
 
 AddCommand("spin", {}, "spins your character (optional: speed)", {}, function(Caller, Args, CEnv)
