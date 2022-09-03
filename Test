@@ -7804,15 +7804,6 @@ AddCommand("hidename", {"hidetag"}, "hides your nametag (billboardgui)", {3}, fu
 	return "Name hidden, use showname to show it again."
 end)
 
-AddCommand("showname", {"showtag"}, "shows your player tag", {3}, function()
-	local Char = GetCharacter();
-	local Billboards = LoadCommand("hidename").CmdEnv
-	if (not next(Billboards)) then
-		return "Your name is already shown."
-	end
-	return "You have to reset to show your nametag."
-end)
-
 AddCommand("nojumpcooldown", {}, "removes a jumpcooldown if any in games", {}, function()
 	local UserInputService = Services.UserInputService
 	local Humanoid = GetHumanoid();
