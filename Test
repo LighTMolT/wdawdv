@@ -3056,12 +3056,14 @@ AddCommand("netless", {}, "gives you network of character", {}, function()
 end)
 
 AddCommand("partownership", {}, "gives you ownership of unanchored parts", {}, function()
+	Utils.Notify(Caller, "Ownership", "PartOwnership enabled.")
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/your4eyes/RobloxScripts/main/Net_Library.lua"))()
 	coroutine.resume(Network["PartOwnership"]["Enable"])
 	Network.RetainPart(Part)
+	
 end)
 
-AddCommand("reanimate", {}, "gives you network of character", {}, function()
+AddCommand("reanimate", {}, "reanimates your character", {3}, function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/UiDNEtL8"))()
 end)
 
@@ -3069,8 +3071,11 @@ AddCommand("backpackboombox", {}, "works with r6 and r15 ", {1}, function()
 	local plr = game.Players.LocalPlayer
 	local backpack = plr.Backpack
 	local character = plr.Character
-	local tool = character:FindFirstChildOfClass("Tool") or backpack:FindFirstChildOfClass("Tool")
-	tool.Name = "BoomBox"
+	local Boomboxes = filter(GetChildren(LocalPlayer.Backpack), function(i, v)
+		if (Sfind(lower(v.Name), "boombox") or FindFirstChildOfClass(v.Handle, "RemoteEvent", true)) then
+			v.Name = "BoomBox"
+		end
+	end)
 	loadstring(game:HttpGet("https://pastebin.com/raw/fKaDCQRw"))()
 end)
 
