@@ -5889,15 +5889,19 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 	MouseDown = false
 	local RunService = game:GetService("RunService")
 	local UserInputService = game:GetService("UserInputService")
-	local MouseDown = Mouse.Button1Down
 
-	UserInputService.InputBegan:Connect(function(inputObject)
-	if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-		    MouseDown = true
-		else
-		    MouseDown = false
-	     end
-        end)	
+
+
+local MouseDown = false
+
+Mouse.Button1Down:connect(function()
+     MouseDown = true
+end)
+
+Mouse.Button1Up:connect(function()
+     MouseDown = false
+end)
+
 	game:GetService("RunService").Heartbeat:Connect(function()		
 		if MouseDown then
 			temp.Position = Mouse.Hit.p
