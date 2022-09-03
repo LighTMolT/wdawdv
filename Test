@@ -2950,96 +2950,96 @@ AddCommand("remotespy", {"rspy"}, "spy remotes in game", {}, function()
 end)
 
 AddCommand("httpspy", {}, "httpspy game", {}, function()
- local MessageClone = Clone(HttpLogs.Frame.List);
+	local MessageClone = Clone(HttpLogs.Frame.List);
 
-    Utils.ClearAllObjects(HttpLogs.Frame.List)
-    HttpLogs.Visible = true
+	Utils.ClearAllObjects(HttpLogs.Frame.List)
+	HttpLogs.Visible = true
 
-    local Tween = Utils.TweenAllTransToObject(HttpLogs, .25, HttpLogsTransparencyClone)
+	local Tween = Utils.TweenAllTransToObject(HttpLogs, .25, HttpLogsTransparencyClone)
 
-    Destroy(HttpLogs.Frame.List)
-    MessageClone.Parent = HttpLogs.Frame
+	Destroy(HttpLogs.Frame.List)
+	MessageClone.Parent = HttpLogs.Frame
 
-    for i, v in next, GetChildren(HttpLogs.Frame.List) do
-        if (not IsA(v, "UIListLayout")) then
-            Utils.Tween(v, "Sine", "Out", .25, {
-                TextTransparency = 0
-            })
-        end
-    end
+	for i, v in next, GetChildren(HttpLogs.Frame.List) do
+		if (not IsA(v, "UIListLayout")) then
+			Utils.Tween(v, "Sine", "Out", .25, {
+				TextTransparency = 0
+			})
+		end
+	end
 
-    local HttpLogsListLayout = HttpLogs.Frame.List.UIListLayout
+	local HttpLogsListLayout = HttpLogs.Frame.List.UIListLayout
 
-    CConnect( GetPropertyChangedSignal(HttpLogsListLayout, "AbsoluteContentSize"), function()
-        local CanvasPosition = HttpLogs.Frame.List.CanvasPosition
-        local CanvasSize = HttpLogs.Frame.List.CanvasSize
-        local AbsoluteSize = HttpLogs.Frame.List.AbsoluteSize
+	CConnect( GetPropertyChangedSignal(HttpLogsListLayout, "AbsoluteContentSize"), function()
+		local CanvasPosition = HttpLogs.Frame.List.CanvasPosition
+		local CanvasSize = HttpLogs.Frame.List.CanvasSize
+		local AbsoluteSize = HttpLogs.Frame.List.AbsoluteSize
 
-        if (CanvasSize.Y.Offset - AbsoluteSize.Y - CanvasPosition.Y < 20) then
-           wait() -- chatlogs updates absolutecontentsize before sizing frame
-           HttpLogs.Frame.List.CanvasPosition = Vector2.new(0, CanvasSize.Y.Offset + 1000) --ChatLogsListLayout.AbsoluteContentSize.Y + 100)
-        end
-    end)
+		if (CanvasSize.Y.Offset - AbsoluteSize.Y - CanvasPosition.Y < 20) then
+			wait() -- chatlogs updates absolutecontentsize before sizing frame
+			HttpLogs.Frame.List.CanvasPosition = Vector2.new(0, CanvasSize.Y.Offset + 1000) --ChatLogsListLayout.AbsoluteContentSize.Y + 100)
+		end
+	end)
 
-    Utils.Tween(HttpLogs.Frame.List, "Sine", "Out", .25, {
-        ScrollBarImageTransparency = 0
-    })
+	Utils.Tween(HttpLogs.Frame.List, "Sine", "Out", .25, {
+		ScrollBarImageTransparency = 0
+	})
 
-    local AddLog = function(reqType, url, Req)
-        if (getgenv().F_A and UI) then
-            local Clone = Clone(ChatLogMessage);
-            Clone.Text = format("%s\nUrl: %s%s\n", Utils.TextFont(reqType .. " Detected (time: " .. tostring(os.date("%X")) ..")", {255, 165, 0}), url, Req and ", RequestPayLoad: " .. Utils.TextFont(Req, {255, 255, 0}) or "");
-            Clone.RichText = true
-            Clone.Visible = true
-            Clone.TextTransparency = 1
-            Clone.Parent = HttpLogs.Frame.List
-            Utils.Tween(Clone, "Sine", "Out", .25, {
-                TextTransparency = 0
-            });
-            HttpLogs.Frame.List.CanvasSize = UDim2.fromOffset(0, HttpLogs.Frame.List.UIListLayout.AbsoluteContentSize.Y);
-        end
-    end
+	local AddLog = function(reqType, url, Req)
+		if (getgenv().F_A and UI) then
+			local Clone = Clone(ChatLogMessage);
+			Clone.Text = format("%s\nUrl: %s%s\n", Utils.TextFont(reqType .. " Detected (time: " .. tostring(os.date("%X")) ..")", {255, 165, 0}), url, Req and ", RequestPayLoad: " .. Utils.TextFont(Req, {255, 255, 0}) or "");
+			Clone.RichText = true
+			Clone.Visible = true
+			Clone.TextTransparency = 1
+			Clone.Parent = HttpLogs.Frame.List
+			Utils.Tween(Clone, "Sine", "Out", .25, {
+				TextTransparency = 0
+			});
+			HttpLogs.Frame.List.CanvasSize = UDim2.fromOffset(0, HttpLogs.Frame.List.UIListLayout.AbsoluteContentSize.Y);
+		end
+	end
 
-    local Request;
-    Request = hookfunction(syn and syn.request or request, newcclosure(function(reqtbl)
-        AddLog(syn and "syn.request" or "request", reqtbl.Url, JSONEncode(Services.HttpService, reqtbl));
-        return Request(reqtbl);
-    end));
-    local Httpget;
-    Httpget = hookfunction(game.HttpGet, newcclosure(function(self, url)
-        AddLog("HttpGet", url);
-        return Httpget(self, url);
-    end));
-    if (game.HttpGet ~= game.HttpGetAsync) then
-        local HttpgetAsync;
-        HttpgetAsync = hookfunction(game.HttpGetAsync, newcclosure(function(self, url)
-            AddLog("HttpGetAsync", url);
-            return HttpgetAsync(self, url);
-        end));
-    end
-    local Httppost;
-    Httppost = hookfunction(game.HttpPost, newcclosure(function(self, url)
-        AddLog("HttpPost", url);
-        return Httppost(self, url);
-    end));
-    if (game.HttpPost ~= game.HttpPostAsync) then
-        local HttppostAsync;
-        HttppostAsync = hookfunction(game.HttpPostAsync, newcclosure(function(self, url)
-            AddLog("HttpPostAsync", url);
-            return HttppostAsync(self, url);
-        end));
-    end
+	local Request;
+	Request = hookfunction(syn and syn.request or request, newcclosure(function(reqtbl)
+		AddLog(syn and "syn.request" or "request", reqtbl.Url, JSONEncode(Services.HttpService, reqtbl));
+		return Request(reqtbl);
+	end));
+	local Httpget;
+	Httpget = hookfunction(game.HttpGet, newcclosure(function(self, url)
+		AddLog("HttpGet", url);
+		return Httpget(self, url);
+	end));
+	if (game.HttpGet ~= game.HttpGetAsync) then
+		local HttpgetAsync;
+		HttpgetAsync = hookfunction(game.HttpGetAsync, newcclosure(function(self, url)
+			AddLog("HttpGetAsync", url);
+			return HttpgetAsync(self, url);
+		end));
+	end
+	local Httppost;
+	Httppost = hookfunction(game.HttpPost, newcclosure(function(self, url)
+		AddLog("HttpPost", url);
+		return Httppost(self, url);
+	end));
+	if (game.HttpPost ~= game.HttpPostAsync) then
+		local HttppostAsync;
+		HttppostAsync = hookfunction(game.HttpPostAsync, newcclosure(function(self, url)
+			AddLog("HttpPostAsync", url);
+			return HttppostAsync(self, url);
+		end));
+	end
 
-    local Clone = Clone(ChatLogMessage);
-    Clone.Text = "Httpspy loaded."
-    Clone.RichText = true
-    Clone.Visible = true
-    Clone.TextTransparency = 1
-    Clone.Parent = HttpLogs.Frame.List
-    Utils.Tween(Clone, "Sine", "Out", .25, {
-        TextTransparency = 0
-    });
-    HttpLogs.Frame.List.CanvasSize = UDim2.fromOffset(0, HttpLogs.Frame.List.UIListLayout.AbsoluteContentSize.Y);
+	local Clone = Clone(ChatLogMessage);
+	Clone.Text = "Httpspy loaded."
+	Clone.RichText = true
+	Clone.Visible = true
+	Clone.TextTransparency = 1
+	Clone.Parent = HttpLogs.Frame.List
+	Utils.Tween(Clone, "Sine", "Out", .25, {
+		TextTransparency = 0
+	});
+	HttpLogs.Frame.List.CanvasSize = UDim2.fromOffset(0, HttpLogs.Frame.List.UIListLayout.AbsoluteContentSize.Y);
 end)
 
 AddCommand("netless", {}, "gives you network of character", {}, function()
@@ -3056,13 +3056,13 @@ AddCommand("netless", {}, "gives you network of character", {}, function()
 end)
 
 AddCommand("partownership", {}, "gives you ownership of unanchored parts", {}, function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/your4eyes/RobloxScripts/main/Net_Library.lua"))()
-coroutine.resume(Network["PartOwnership"]["Enable"])
-Network.RetainPart(Part)
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/your4eyes/RobloxScripts/main/Net_Library.lua"))()
+	coroutine.resume(Network["PartOwnership"]["Enable"])
+	Network.RetainPart(Part)
 end)
 
 AddCommand("reanimate", {}, "gives you network of character", {}, function()
-loadstring(game:HttpGet("https://pastebin.com/raw/UiDNEtL8"))()
+	loadstring(game:HttpGet("https://pastebin.com/raw/UiDNEtL8"))()
 end)
 
 AddCommand("backpackboombox", {}, "works with r6 and r15 ", {1}, function()
@@ -3075,112 +3075,112 @@ AddCommand("backpackboombox", {}, "works with r6 and r15 ", {1}, function()
 end)
 
 AddCommand("headless", {}, "removes your head", {2}, function()
-loadstring(game:HttpGet("https://pastebin.com/raw/yc0STZCK"))()
-return format "Headless loading..."
+	loadstring(game:HttpGet("https://pastebin.com/raw/yc0STZCK"))()
+	return format "Headless loading..."
 end)
 
 AddCommand("split", {}, "splits your body in half", {3}, function()
-if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
-    game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
-else return format "Need R15 for this command."
-end
+	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
+		game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
+	else return format "Need R15 for this command."
+	end
 end)
 
 AddCommand("ragdoll", {}, "makes you ragdoll", {2}, function()
-LocalPlayer = game:GetService("Players").LocalPlayer
-LocalPlayer.Character.Humanoid:MoveTo(LocalPlayer.Character.HumanoidRootPart.Position + LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 10)
-LocalPlayer.Character.Humanoid.Jump = true
-wait(0.1)
-function Iterate(instance, func)
-for i, v in next, instance:GetChildren() do
-func(v)
-end
-end
-limbs = {
-["Right Leg"] = true;
-["Right Arm"] = true;
-["Left Leg"] = true;
-["Left Arm"] = true;
-}
-Iterate(LocalPlayer.Character, function(v)
-if v:IsA("BasePart") then
-local attachment = Instance.new("Attachment")
-attachment.Parent = v
-attachment.Name = (v.Name .. "[Attachment]")
-if limbs[v.Name] then
-attachment.Position = Vector3.new(0, v.Size.Y/2, 0)
-elseif v.Name == "Head" then
-attachment.Position = Vector3.new(0, -v.Size.Y/2, 0)
-attachment.Rotation = Vector3.new(0, 0, -90)
-end
-end
-end)
-local leftLegAttachment = Instance.new("Attachment")
-leftLegAttachment.Position = Vector3.new(-.5, -1, 0)
-leftLegAttachment.Rotation = Vector3.new(0, -90, 0)
-local rightLegAttachment = Instance.new("Attachment")
-rightLegAttachment.Position = Vector3.new(.5, -1, 0)
-rightLegAttachment.Rotation = Vector3.new(0, -90, 0)
-rightLegAttachment.Parent, leftLegAttachment.Parent = LocalPlayer.Character.Torso, LocalPlayer.Character.Torso
-jointAttachments = {
-['Head'] = {
-['Attachment0'] = LocalPlayer.Character.Torso['NeckAttachment'];
-['Attachment1'] = LocalPlayer.Character.Head['Head[Attachment]'];
-};
-['Left Arm'] = {
-['Attachment0'] = LocalPlayer.Character.Torso['LeftCollarAttachment'];
-['Attachment1'] = LocalPlayer.Character['Left Arm']['Left Arm[Attachment]'];
-};
-['Right Arm'] = {
-['Attachment0'] = LocalPlayer.Character.Torso['RightCollarAttachment'];
-['Attachment1'] = LocalPlayer.Character['Right Arm']['Right Arm[Attachment]'];
-};
-['Left Leg'] = {
-['Attachment0'] = leftLegAttachment;
-['Attachment1'] = LocalPlayer.Character['Left Leg']['Left Leg[Attachment]'];
-};
-['Right Leg'] = {
-['Attachment0'] = rightLegAttachment;
-['Attachment1'] = LocalPlayer.Character['Right Leg']['Right Leg[Attachment]'];
-};
-}
-LocalPlayer.Character.Humanoid.PlatformStand = true
-Iterate(LocalPlayer.Character, function(v)
-if v:IsA("BasePart") then
-if jointAttachments[v.Name] then
-local ballSocketJoint = Instance.new("BallSocketConstraint")
-ballSocketJoint.Parent = v
-ballSocketJoint.Radius = 0.15
-ballSocketJoint.Attachment0, ballSocketJoint.Attachment1 = jointAttachments[v.Name]['Attachment0'], jointAttachments[v.Name]['Attachment1']
-end
-end
-end)
-Iterate(LocalPlayer.Character.Torso, function(v)
-if v:IsA("Motor") then
-v:Remove()
-end
-end)
+	LocalPlayer = game:GetService("Players").LocalPlayer
+	LocalPlayer.Character.Humanoid:MoveTo(LocalPlayer.Character.HumanoidRootPart.Position + LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 10)
+	LocalPlayer.Character.Humanoid.Jump = true
+	wait(0.1)
+	function Iterate(instance, func)
+		for i, v in next, instance:GetChildren() do
+			func(v)
+		end
+	end
+	limbs = {
+		["Right Leg"] = true;
+		["Right Arm"] = true;
+		["Left Leg"] = true;
+		["Left Arm"] = true;
+	}
+	Iterate(LocalPlayer.Character, function(v)
+		if v:IsA("BasePart") then
+			local attachment = Instance.new("Attachment")
+			attachment.Parent = v
+			attachment.Name = (v.Name .. "[Attachment]")
+			if limbs[v.Name] then
+				attachment.Position = Vector3.new(0, v.Size.Y/2, 0)
+			elseif v.Name == "Head" then
+				attachment.Position = Vector3.new(0, -v.Size.Y/2, 0)
+				attachment.Rotation = Vector3.new(0, 0, -90)
+			end
+		end
+	end)
+	local leftLegAttachment = Instance.new("Attachment")
+	leftLegAttachment.Position = Vector3.new(-.5, -1, 0)
+	leftLegAttachment.Rotation = Vector3.new(0, -90, 0)
+	local rightLegAttachment = Instance.new("Attachment")
+	rightLegAttachment.Position = Vector3.new(.5, -1, 0)
+	rightLegAttachment.Rotation = Vector3.new(0, -90, 0)
+	rightLegAttachment.Parent, leftLegAttachment.Parent = LocalPlayer.Character.Torso, LocalPlayer.Character.Torso
+	jointAttachments = {
+		['Head'] = {
+			['Attachment0'] = LocalPlayer.Character.Torso['NeckAttachment'];
+			['Attachment1'] = LocalPlayer.Character.Head['Head[Attachment]'];
+		};
+		['Left Arm'] = {
+			['Attachment0'] = LocalPlayer.Character.Torso['LeftCollarAttachment'];
+			['Attachment1'] = LocalPlayer.Character['Left Arm']['Left Arm[Attachment]'];
+		};
+		['Right Arm'] = {
+			['Attachment0'] = LocalPlayer.Character.Torso['RightCollarAttachment'];
+			['Attachment1'] = LocalPlayer.Character['Right Arm']['Right Arm[Attachment]'];
+		};
+		['Left Leg'] = {
+			['Attachment0'] = leftLegAttachment;
+			['Attachment1'] = LocalPlayer.Character['Left Leg']['Left Leg[Attachment]'];
+		};
+		['Right Leg'] = {
+			['Attachment0'] = rightLegAttachment;
+			['Attachment1'] = LocalPlayer.Character['Right Leg']['Right Leg[Attachment]'];
+		};
+	}
+	LocalPlayer.Character.Humanoid.PlatformStand = true
+	Iterate(LocalPlayer.Character, function(v)
+		if v:IsA("BasePart") then
+			if jointAttachments[v.Name] then
+				local ballSocketJoint = Instance.new("BallSocketConstraint")
+				ballSocketJoint.Parent = v
+				ballSocketJoint.Radius = 0.15
+				ballSocketJoint.Attachment0, ballSocketJoint.Attachment1 = jointAttachments[v.Name]['Attachment0'], jointAttachments[v.Name]['Attachment1']
+			end
+		end
+	end)
+	Iterate(LocalPlayer.Character.Torso, function(v)
+		if v:IsA("Motor") then
+			v:Remove()
+		end
+	end)
 end)
 
 AddCommand("r6", {}, "changes your humanoidrigtype to R6 if possible", {}, function()
-local AvatarEditorService = game:GetService("AvatarEditorService")
-local Players = game:GetService("Players")
+	local AvatarEditorService = game:GetService("AvatarEditorService")
+	local Players = game:GetService("Players")
 
-local player = Players.LocalPlayer
-local character = player.Character
-if not character or not character.Parent then
-character = player.CharacterAdded:Wait()
-end
-local humanoid = character:WaitForChild("Humanoid")
+	local player = Players.LocalPlayer
+	local character = player.Character
+	if not character or not character.Parent then
+		character = player.CharacterAdded:Wait()
+	end
+	local humanoid = character:WaitForChild("Humanoid")
 
-local currentDescription = humanoid:GetAppliedDescription()
-AvatarEditorService:PromptSaveAvatar(currentDescription, Enum.HumanoidRigType.R6)
+	local currentDescription = humanoid:GetAppliedDescription()
+	AvatarEditorService:PromptSaveAvatar(currentDescription, Enum.HumanoidRigType.R6)
 
-local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
-if result == Enum.AvatarPromptResult.Success then
-end
-Utils.Notify(Caller, "AvatarEditorService", "R6 loading...")
-        game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
+	local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
+	if result == Enum.AvatarPromptResult.Success then
+	end
+	Utils.Notify(Caller, "AvatarEditorService", "R6 loading...")
+	game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
 	CWait(LocalPlayer.CharacterAdded)
@@ -3188,24 +3188,24 @@ Utils.Notify(Caller, "AvatarEditorService", "R6 loading...")
 end)
 
 AddCommand("r15", {}, "changes your humanoidrigtype to R15 if possible", {}, function()
-local AvatarEditorService = game:GetService("AvatarEditorService")
-local Players = game:GetService("Players")
+	local AvatarEditorService = game:GetService("AvatarEditorService")
+	local Players = game:GetService("Players")
 
-local player = Players.LocalPlayer
-local character = player.Character
-if not character or not character.Parent then
-character = player.CharacterAdded:Wait()
-end
-local humanoid = character:WaitForChild("Humanoid")
+	local player = Players.LocalPlayer
+	local character = player.Character
+	if not character or not character.Parent then
+		character = player.CharacterAdded:Wait()
+	end
+	local humanoid = character:WaitForChild("Humanoid")
 
-local currentDescription = humanoid:GetAppliedDescription()
-AvatarEditorService:PromptSaveAvatar(currentDescription, Enum.HumanoidRigType.R15)
+	local currentDescription = humanoid:GetAppliedDescription()
+	AvatarEditorService:PromptSaveAvatar(currentDescription, Enum.HumanoidRigType.R15)
 
-local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
-if result == Enum.AvatarPromptResult.Success then
-end
-Utils.Notify(Caller, "AvatarEditorService", "R15 loading...")
-        game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
+	local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
+	if result == Enum.AvatarPromptResult.Success then
+	end
+	Utils.Notify(Caller, "AvatarEditorService", "R15 loading...")
+	game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
 	CWait(LocalPlayer.CharacterAdded)
@@ -3213,126 +3213,126 @@ Utils.Notify(Caller, "AvatarEditorService", "R15 loading...")
 end)
 
 AddCommand("lowhold", {}, "makes you low holding a tool", {1}, function()
-game:GetService("Workspace").LighTMolT.Animate.toolnone.ToolNoneAnim.AnimationId = 1
+	game:GetService("Workspace").LighTMolT.Animate.toolnone.ToolNoneAnim.AnimationId = 1
 
- local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
- local Tools = plr.Backpack:GetChildren()
+	local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
+	local Tools = plr.Backpack:GetChildren()
 
- Tools[1].Grip = CFrame.new(0,0.8,0) * CFrame.Angles(-89.5, math.rad(-360), math.rad(-270))
- Tools[1].Parent = plr.Character
+	Tools[1].Grip = CFrame.new(0,0.8,0) * CFrame.Angles(-89.5, math.rad(-360), math.rad(-270))
+	Tools[1].Parent = plr.Character
 end)
 
 AddCommand("swas", {"hail"}, "creates a swas with tools", {1}, function()
-local sin = math.sin
-local cos = math.cos
-local rd = math.rad
-local cf = {a=CFrame.Angles,n=CFrame.new}
-local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
-local char = plr.Character
-local UIS = game:GetService("UserInputService")
-local Tools = plr.Backpack:GetChildren()
+	local sin = math.sin
+	local cos = math.cos
+	local rd = math.rad
+	local cf = {a=CFrame.Angles,n=CFrame.new}
+	local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
+	local char = plr.Character
+	local UIS = game:GetService("UserInputService")
+	local Tools = plr.Backpack:GetChildren()
 
-Tools[1].Grip = cf.n(-1.5,-5.5,-1.5) * cf.a(rd(0),rd(0),rd(0))
-Tools[1].Parent = char
+	Tools[1].Grip = cf.n(-1.5,-5.5,-1.5) * cf.a(rd(0),rd(0),rd(0))
+	Tools[1].Parent = char
 
-Tools[2].Grip = cf.n(1,-5.5,-1.5) * cf.a(rd(0),rd(0),rd(0))
-Tools[2].Parent = char
+	Tools[2].Grip = cf.n(1,-5.5,-1.5) * cf.a(rd(0),rd(0),rd(0))
+	Tools[2].Parent = char
 
-Tools[3].Grip = cf.n(6.7,1.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
-Tools[3].Parent = char
+	Tools[3].Grip = cf.n(6.7,1.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
+	Tools[3].Parent = char
 
-Tools[4].Grip = cf.n(9.2,1.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
-Tools[4].Parent = char
+	Tools[4].Grip = cf.n(9.2,1.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
+	Tools[4].Parent = char
 
-Tools[5].Grip = cf.n(11.8,1.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
-Tools[5].Parent = char
+	Tools[5].Grip = cf.n(11.8,1.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
+	Tools[5].Parent = char
 
-Tools[6].Grip = cf.n(3.5,-12.7,-1.5) * cf.a(rd(-0),rd(-0),rd(0))
-Tools[6].Parent = char
+	Tools[6].Grip = cf.n(3.5,-12.7,-1.5) * cf.a(rd(-0),rd(-0),rd(0))
+	Tools[6].Parent = char
 
-Tools[7].Grip = cf.n(5,-12.7,-1.5) * cf.a(rd(-0),rd(-0),rd(0))
-Tools[7].Parent = char
+	Tools[7].Grip = cf.n(5,-12.7,-1.5) * cf.a(rd(-0),rd(-0),rd(0))
+	Tools[7].Parent = char
 
-Tools[8].Grip = cf.n(11.8,-2.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
-Tools[8].Parent = char
+	Tools[8].Grip = cf.n(11.8,-2.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
+	Tools[8].Parent = char
 
-Tools[9].Grip = cf.n(9.9,-2.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
-Tools[9].Parent = char
+	Tools[9].Grip = cf.n(9.9,-2.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
+	Tools[9].Parent = char
 
-Tools[10].Grip = cf.n(-1.5,-9.2,-1.5) * cf.a(rd(0),rd(0),rd(0))
-Tools[10].Parent = char
+	Tools[10].Grip = cf.n(-1.5,-9.2,-1.5) * cf.a(rd(0),rd(0),rd(0))
+	Tools[10].Parent = char
 
-Tools[11].Grip = cf.n(1,-9.2,-1.5) * cf.a(rd(0),rd(0),rd(0))
-Tools[11].Parent = char
+	Tools[11].Grip = cf.n(1,-9.2,-1.5) * cf.a(rd(0),rd(0),rd(0))
+	Tools[11].Parent = char
 
-Tools[12].Grip = cf.n(3,-9.2,-1.5) * cf.a(rd(0),rd(0),rd(0))
-Tools[12].Parent = char
+	Tools[12].Grip = cf.n(3,-9.2,-1.5) * cf.a(rd(0),rd(0),rd(0))
+	Tools[12].Parent = char
 
-Tools[13].Grip = cf.n(5,-9.2,-1.5) * cf.a(rd(0),rd(0),rd(0))
-Tools[13].Parent = char
+	Tools[13].Grip = cf.n(5,-9.2,-1.5) * cf.a(rd(0),rd(0),rd(0))
+	Tools[13].Parent = char
 
-Tools[14].Grip = cf.n(7.5,5.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
-Tools[14].Parent = char
+	Tools[14].Grip = cf.n(7.5,5.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
+	Tools[14].Parent = char
 
-Tools[15].Grip = cf.n(6,5.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
-Tools[15].Parent = char
+	Tools[15].Grip = cf.n(6,5.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
+	Tools[15].Parent = char
 end)
 
 AddCommand("gun", {}, "makes your tool a gun", {1}, function()
-    
-local sin = math.sin
-local cos = math.cos
-local rd = math.rad
-local cf = {a=CFrame.Angles,n=CFrame.new}
-local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
-local char = plr.Character
-local UIS = game:GetService("UserInputService")
-local Tools = plr.Backpack:GetChildren()
 
- Tools[1].Grip = cf.n(0.1,-0.4,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[1].Parent = char
- 
- Tools[2].Grip = cf.n(-0.9,-0.9,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[2].Parent = char
- 
- Tools[3].Grip = cf.n(-1.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[3].Parent = char
- 
- Tools[4].Grip = cf.n(-1.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[4].Parent = char
- 
- Tools[5].Grip = cf.n(-1.5,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[5].Parent = char
- 
- Tools[6].Grip = cf.n(-1.7,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[6].Parent = char
- 
- Tools[7].Grip = cf.n(-1.9,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[7].Parent = char
- 
- Tools[8].Grip = cf.n(-2.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[8].Parent = char
- 
- Tools[9].Grip = cf.n(-2.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[9].Parent = char
- 
- Tools[10].Grip = cf.n(-2.5,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[10].Parent = char
- 
- Tools[11].Grip = cf.n(-2.7,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[11].Parent = char
- 
- Tools[12].Grip = cf.n(-2.9,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[12].Parent = char
- 
- Tools[13].Grip = cf.n(-3.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[13].Parent = char
- 
- Tools[14].Grip = cf.n(-3.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[14].Parent = char
- 
- Tools[15].Grip = cf.n(-3.5,-1,0) * cf.a(rd(10),rd(-90),rd(0))
- Tools[15].Parent = char
+	local sin = math.sin
+	local cos = math.cos
+	local rd = math.rad
+	local cf = {a=CFrame.Angles,n=CFrame.new}
+	local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
+	local char = plr.Character
+	local UIS = game:GetService("UserInputService")
+	local Tools = plr.Backpack:GetChildren()
+
+	Tools[1].Grip = cf.n(0.1,-0.4,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[1].Parent = char
+
+	Tools[2].Grip = cf.n(-0.9,-0.9,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[2].Parent = char
+
+	Tools[3].Grip = cf.n(-1.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[3].Parent = char
+
+	Tools[4].Grip = cf.n(-1.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[4].Parent = char
+
+	Tools[5].Grip = cf.n(-1.5,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[5].Parent = char
+
+	Tools[6].Grip = cf.n(-1.7,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[6].Parent = char
+
+	Tools[7].Grip = cf.n(-1.9,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[7].Parent = char
+
+	Tools[8].Grip = cf.n(-2.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[8].Parent = char
+
+	Tools[9].Grip = cf.n(-2.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[9].Parent = char
+
+	Tools[10].Grip = cf.n(-2.5,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[10].Parent = char
+
+	Tools[11].Grip = cf.n(-2.7,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[11].Parent = char
+
+	Tools[12].Grip = cf.n(-2.9,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[12].Parent = char
+
+	Tools[13].Grip = cf.n(-3.1,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[13].Parent = char
+
+	Tools[14].Grip = cf.n(-3.3,-1.1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[14].Parent = char
+
+	Tools[15].Grip = cf.n(-3.5,-1,0) * cf.a(rd(10),rd(-90),rd(0))
+	Tools[15].Parent = char
 end)
 
 AddCommand("upsidedown", {"dinnerbone"}, "upside down", {2}, function()
@@ -3653,9 +3653,9 @@ end)
 
 AddCommand("customanimation", {"customanim"}, "plays an animation id", {}, function(Caller, Args)		
 
-    --loadstring(game:HttpGet("https://pastebin.com/raw/heaedQMh"))()
+	--loadstring(game:HttpGet("https://pastebin.com/raw/heaedQMh"))()
 	--loadstring(game:HttpGet("https://pastebin.com/raw/9K9jPgxr"))()
-    loadstring(game:HttpGet("https://pastebin.com/raw/UiDNEtL8"))()
+	loadstring(game:HttpGet("https://pastebin.com/raw/UiDNEtL8"))()
 
 	local anim = tonumber(Args[1])
 	local id = anim;
@@ -4225,7 +4225,7 @@ AddCommand("hatrescale", {}, "resizes your hat", {}, function()
 
 	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return end
 
-	
+
 	for _,x in next, Settings.Values do
 		if x then
 			if Settings.OriginalSize then --Specific Path/Settings
@@ -4251,7 +4251,7 @@ AddCommand("hatrescale", {}, "resizes your hat", {}, function()
 end)
 
 AddCommand("legrescale", {}, "resizes your legs", {}, function()
-    local Animate = FindFirstChild(GetCharacter(), "Animate");
+	local Animate = FindFirstChild(GetCharacter(), "Animate");
 	SpoofProperty(Animate, "Disabled");
 	Animate.Disabled = true
 
@@ -4313,16 +4313,16 @@ AddCommand("legrescale", {}, "resizes your legs", {}, function()
 end)
 
 AddCommand("getmass", {}, "checks your left leg mass", {}, function()
-if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then    
-local myPart = game:GetService("Players").LocalPlayer.Character.LeftLowerLeg
-local myMass = myPart:GetMass()
- 
-return format "Leg mass is " ..myMass
-else 
-return format "Need R15 for this command."
-end
+	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then    
+		local myPart = game:GetService("Players").LocalPlayer.Character.LeftLowerLeg
+		local myMass = myPart:GetMass()
+
+		return format "Leg mass is " ..myMass
+	else 
+		return format "Need R15 for this command."
+	end
 end)
-    
+
 
 AddCommand("smallsize", {}, "makes your character small", {}, function()
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then    
@@ -4940,37 +4940,37 @@ AddCommand("stopdupe", {}, "stops the dupe", {}, function()
 end)
 
 AddCommand("savetools", {"st"}, "saves your tools", {1,3}, function(Caller, Args)
-    UnequipTools(GetHumanoid());
-    local Tools = GetChildren(LocalPlayer.Backpack);
-    local Char = GetCharacter();
-    for i, v in next, Tools do
-        SpoofProperty(v, "Parent");
-        v.Parent = Char
-        v.Parent = Services.Workspace
-        firetouchinterest(WaitForChild(Services.Workspace, v.Name).Handle, GetRoot(), 0);
-        wait();
-        firetouchinterest(v.Handle, GetRoot(), 1);
-        WaitForChild(Char, v.Name).Parent = LocalPlayer.Backpack
-    end
-    Utils.Notify(Caller, nil, "Tools are now saved");
-    CWait(GetHumanoid().Died);
-    UnequipTools(GetHumanoid());
-    Tools = GetChildren(LocalPlayer.Backpack);
-    wait(Players.RespawnTime - wait()); -- * #Tools);
-    for i, v in next, Tools do
-        if (IsA(v, "Tool") and FindFirstChild(v, "Handle")) then
-            v.Parent = Char
-            v.Parent = Services.Workspace
-        end
-    end
-    CWait(LocalPlayer.CharacterAdded);
-    WaitForChild(LocalPlayer.Character, "HumanoidRootPart");
-    for i, v in next, Tools do
-        firetouchinterest(v.Handle, GetRoot(), 0);
-        wait();
-        firetouchinterest(v.Handle, GetRoot(), 1);
-    end
-    return "Tools recovered."
+	UnequipTools(GetHumanoid());
+	local Tools = GetChildren(LocalPlayer.Backpack);
+	local Char = GetCharacter();
+	for i, v in next, Tools do
+		SpoofProperty(v, "Parent");
+		v.Parent = Char
+		v.Parent = Services.Workspace
+		firetouchinterest(WaitForChild(Services.Workspace, v.Name).Handle, GetRoot(), 0);
+		wait();
+		firetouchinterest(v.Handle, GetRoot(), 1);
+		WaitForChild(Char, v.Name).Parent = LocalPlayer.Backpack
+	end
+	Utils.Notify(Caller, nil, "Tools are now saved");
+	CWait(GetHumanoid().Died);
+	UnequipTools(GetHumanoid());
+	Tools = GetChildren(LocalPlayer.Backpack);
+	wait(Players.RespawnTime - wait()); -- * #Tools);
+	for i, v in next, Tools do
+		if (IsA(v, "Tool") and FindFirstChild(v, "Handle")) then
+			v.Parent = Char
+			v.Parent = Services.Workspace
+		end
+	end
+	CWait(LocalPlayer.CharacterAdded);
+	WaitForChild(LocalPlayer.Character, "HumanoidRootPart");
+	for i, v in next, Tools do
+		firetouchinterest(v.Handle, GetRoot(), 0);
+		wait();
+		firetouchinterest(v.Handle, GetRoot(), 1);
+	end
+	return "Tools recovered."
 end)
 
 AddCommand("givetools", {}, "gives all of your tools to a player", {3,1,"1"}, function(Caller, Args)
@@ -5418,7 +5418,7 @@ AddCommand("memory", {"mem"}, "shows you your memory usage", {}, function()
 end)
 
 AddCommand("gameoptimizer", {}, "optimize performance", {}, function()
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/L8X/GameOptimizer/main/src.lua", true))()
+	loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/L8X/GameOptimizer/main/src.lua", true))()
 end)
 
 AddCommand("lowgfx", {}, "lowers your graphic", {}, function()
@@ -5461,7 +5461,7 @@ AddCommand("lowgfx", {}, "lowers your graphic", {}, function()
 			elseif child:IsA('Smoke') or child:IsA('Fire') then
 				RunService.Heartbeat:Wait()
 				child:Destroy()
-			
+
 			end
 		end)
 	end)
@@ -5558,28 +5558,28 @@ AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
 	end
 	character.Head:remove() --optional, can be removed
 
-game:GetService("RunService").RenderStepped:wait()
-local v = character:FindFirstChildOfClass("Accessory").Handle
-local temp = Instance.new("BodyPosition")
-temp.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-temp.Parent = v
+	game:GetService("RunService").RenderStepped:wait()
+	local v = character:FindFirstChildOfClass("Accessory").Handle
+	local temp = Instance.new("BodyPosition")
+	temp.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+	temp.Parent = v
 
-game:GetService("RunService").Stepped:wait()
-local temp1 = Instance.new("BodyThrust")
-temp1.Location = Vector3.new(5,0,0)
-temp1.Force = Vector3.new(4000,4000,4000)
-temp1.Parent = v
-local Box = Instance.new("SelectionBox")
-Box.LineThickness = 0.03 
-Box.Color3 = Color3.fromRGB(250,250,250)
-Box.Parent = v
-Box.Adornee = v
-v.CanCollide = false
-v.Transparency = 0.3
-while wait() do
-	temp.Position = game.Players.LocalPlayer:GetMouse().Hit.p + Vector3.new(0,0,0)
-    v.CanCollide = false
-end
+	game:GetService("RunService").Stepped:wait()
+	local temp1 = Instance.new("BodyThrust")
+	temp1.Location = Vector3.new(5,0,0)
+	temp1.Force = Vector3.new(4000,4000,4000)
+	temp1.Parent = v
+	local Box = Instance.new("SelectionBox")
+	Box.LineThickness = 0.03 
+	Box.Color3 = Color3.fromRGB(250,250,250)
+	Box.Parent = v
+	Box.Adornee = v
+	v.CanCollide = false
+	v.Transparency = 0.3
+	while wait() do
+		temp.Position = game.Players.LocalPlayer:GetMouse().Hit.p + Vector3.new(0,0,0)
+		v.CanCollide = false
+	end
 end)
 
 AddCommand("fling", {}, "flings a player", {}, function(Caller, Args)
@@ -5810,28 +5810,13 @@ AddCommand("fling", {}, "flings a player", {}, function(Caller, Args)
 end)
 
 AddCommand("rarmfling", {}, "fling with right arm", {2}, function()
-if not getgenv()._reanimate then getgenv()._reanimate = loadstring(game:HttpGet('https://raw.githubusercontent.com/LighTMolT/wdawdv/main/uku.md'))() end
-return getgenv()._reanimate()
+	if not getgenv()._reanimate then getgenv()._reanimate = loadstring(game:HttpGet('https://raw.githubusercontent.com/LighTMolT/wdawdv/main/uku.md'))() end
+	return getgenv()._reanimate()
 end)
 
 AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()    
-game:GetService("RunService").RenderStepped:wait()
-local character = game.Players.LocalPlayer.Character
-local Char = GetCharacter();
-	local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, Child)
-		return IsA(Child, "Tool");
-	end);
-	for i, v in next, Tools do
-		v.Parent = Char
-	end
-game:GetService("Workspace").LighTMolT.Animate.toolnone.ToolNoneAnim.AnimationId = 1
-wait(1)
-if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then
-character["Right Arm"]:Destroy()
-else
-character["RightHand"]:Destroy()
-end
-UnequipTools(GetHumanoid());
+	game:GetService("RunService").RenderStepped:wait()
+	local character = game.Players.LocalPlayer.Character
 	local Char = GetCharacter();
 	local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, Child)
 		return IsA(Child, "Tool");
@@ -5839,28 +5824,57 @@ UnequipTools(GetHumanoid());
 	for i, v in next, Tools do
 		v.Parent = Char
 	end
-local v = character:FindFirstChildOfClass("Tool").Handle
-local temp = Instance.new("BodyPosition")
-temp.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-temp.Parent = v
-local Radius = 5
-local Speed = 1
-local random = random(tick() / 2, tick());
-game:GetService("RunService").Stepped:wait()
-local temp1 = Instance.new("BodyThrust")
-temp1.Location = Vector3.new(5,0,0)
-temp1.Force = Vector3.new(0,4000,0)
-temp1.Parent = v
-local Box = Instance.new("SelectionBox")
-Box.LineThickness = 0.03 
-Box.Color3 = Color3.fromRGB(250,250,250)
-Box.Parent = v
-Box.Adornee = v
-v.CanCollide = false
-AddConnection(CConnect(Heartbeat, function()
-	temp.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(sin(tick() * Speed) * Radius, 0, cos(tick() * Speed) * Radius), game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
-    v.CanCollide = false
-end), CEnv);
+	game:GetService("Workspace").LighTMolT.Animate.toolnone.ToolNoneAnim.AnimationId = 1
+	wait(1)
+	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then
+		character["Right Arm"]:Destroy()
+	else
+		character["RightHand"]:Destroy()
+	end
+	UnequipTools(GetHumanoid());
+	local Char = GetCharacter();
+	local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, Child)
+		return IsA(Child, "Tool");
+	end);
+	for i, v in next, Tools do
+		v.Parent = Char
+	end
+	local v = character:FindFirstChildOfClass("Tool").Handle
+	local temp = Instance.new("BodyPosition")
+	temp.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+	temp.Parent = v
+	local Radius = 5
+	local Speed = 1
+	local random = random(tick() / 2, tick());
+	game:GetService("RunService").Stepped:wait()
+	local temp1 = Instance.new("BodyThrust")
+	temp1.Location = Vector3.new(5,0,0)
+	temp1.Force = Vector3.new(0,4000,0)
+	temp1.Parent = v
+	local Box = Instance.new("SelectionBox")
+	Box.LineThickness = 0.01 
+	
+	local part = v
+	local selectionBox = Box	
+	local t = 5;
+	function rainbowEffect(itemToBeColored, property)
+		coroutine.wrap(function()
+			while wait() do
+				local hue = tick() % t / t
+				local color = Color3.fromHSV(hue,1,1)
+				itemToBeColored[property] = color
+			end
+		end)()
+	end
+	rainbowEffect(selectionBox, "Color3")
+	
+	Box.Parent = v
+	Box.Adornee = v
+	v.CanCollide = false
+	AddConnection(CConnect(Heartbeat, function()
+		temp.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(sin(tick() * Speed) * Radius, 0, cos(tick() * Speed) * Radius), game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
+		v.CanCollide = false
+	end), CEnv);
 end)
 
 AddCommand("reach", {"swordreach"}, "changes handle size of your tool", {1, 3}, function(Caller, Args, CEnv)
@@ -6244,19 +6258,19 @@ AddCommand("audioreplicate", {"replicate"}, "replicate someones audio", {}, func
 			if (IsA(v2, "Sound") and IsA(v2.Parent.Parent, "Tool")) then
 				local AudioId = split(v2.SoundId, "=")[2]
 				local Character = GetCharacter();
-	                        local Humanoid = GetHumanoid();
+				local Humanoid = GetHumanoid();
 				local Boomboxes = filter(GetChildren(LocalPlayer.Backpack), function(i, v)
-		               if (Sfind(lower(v.Name), "boombox") or FindFirstChildOfClass(v.Handle, "Sound", true)) then
-			               v.Parent = Character
-			               return true
-		            end
-		            return false
-	            end)
-			for i = 1, #Boomboxes do
-		        local Boombox = Boomboxes[i]
-	               	local RemoteEvent = FindFirstChildWhichIsA(Boombox, "RemoteEvent")
-	    	        RemoteEvent.FireServer(RemoteEvent, "PlaySong", AudioId);
-	            end
+					if (Sfind(lower(v.Name), "boombox") or FindFirstChildOfClass(v.Handle, "Sound", true)) then
+						v.Parent = Character
+						return true
+					end
+					return false
+				end)
+				for i = 1, #Boomboxes do
+					local Boombox = Boomboxes[i]
+					local RemoteEvent = FindFirstChildWhichIsA(Boombox, "RemoteEvent")
+					RemoteEvent.FireServer(RemoteEvent, "PlaySong", AudioId);
+				end
 			end
 		end
 	end
@@ -6425,23 +6439,23 @@ AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
 end)
 
 AddCommand("darkbubblechat", {}, "makes bubble chat dark", {}, function()
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
-local Chat = game:GetService("Chat")
-local ChatSettings = require(Chat:WaitForChild("ClientChatModules"):WaitForChild("ChatSettings"))
-local ChatGui = Player:WaitForChild("PlayerGui"):WaitForChild("BubbleChat")
-ChatSettings.BubbleChatEnabled = true -- Turn on bubble chat.
-ChatGui.DescendantAdded:Connect(function(ChatElement) -- OnBubbleChatDraw
-    if ChatElement.Name == "ChatBubble" then
-        ChatElement.ImageColor3 = Color3.fromRGB(30, 30, 30)
-    elseif ChatElement.Name == "ChatBubbleTail" then
-        ChatElement.ImageColor3 = Color3.fromRGB(30, 30, 30)
-    elseif ChatElement.Name == "BubbleText" then
-        ChatElement.TextColor3 = Color3.fromRGB(255, 255, 255)
-    elseif ChatElement.Name == "SmallTalkBubble" then
-        ChatElement.ImageColor3 = Color3.fromRGB(30, 30, 30)
-    end
-  end)
+	local Players = game:GetService("Players")
+	local Player = Players.LocalPlayer
+	local Chat = game:GetService("Chat")
+	local ChatSettings = require(Chat:WaitForChild("ClientChatModules"):WaitForChild("ChatSettings"))
+	local ChatGui = Player:WaitForChild("PlayerGui"):WaitForChild("BubbleChat")
+	ChatSettings.BubbleChatEnabled = true -- Turn on bubble chat.
+	ChatGui.DescendantAdded:Connect(function(ChatElement) -- OnBubbleChatDraw
+		if ChatElement.Name == "ChatBubble" then
+			ChatElement.ImageColor3 = Color3.fromRGB(30, 30, 30)
+		elseif ChatElement.Name == "ChatBubbleTail" then
+			ChatElement.ImageColor3 = Color3.fromRGB(30, 30, 30)
+		elseif ChatElement.Name == "BubbleText" then
+			ChatElement.TextColor3 = Color3.fromRGB(255, 255, 255)
+		elseif ChatElement.Name == "SmallTalkBubble" then
+			ChatElement.ImageColor3 = Color3.fromRGB(30, 30, 30)
+		end
+	end)
 end)
 
 AddCommand("chatlogs", {"logs"}, "enables chatlogs", {}, function()
@@ -7945,8 +7959,8 @@ AddCommand("dex", {"explorer"}, "loads dark explorer", {}, function()
 end)
 
 AddCommand("advertise", {}, "advertises the admin", {}, function()
-local ad = {"Utopia Admin V1 by LighTMolT", "All"}
-game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(table.unpack(ad))
+	local ad = {"Utopia Admin V1 by LighTMolT", "All"}
+	game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(table.unpack(ad))
 end)
 
 AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Utopia admin has made", {}, function()
@@ -9846,8 +9860,8 @@ local VersionLabelIntro = Instance.new("TextLabel")
 local IntroBlurEffect = Instance.new("BlurEffect")
 
 local Settings = {
-    
-    Version = "1.0.0", 
+
+	Version = "1.0.0", 
 }
 
 UtopiaScreenGui.Name = "UtopiaScreenGui"
