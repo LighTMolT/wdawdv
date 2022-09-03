@@ -5570,8 +5570,22 @@ AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
 	temp1.Force = Vector3.new(4000,4000,4000)
 	temp1.Parent = v
 	local Box = Instance.new("SelectionBox")
-	Box.LineThickness = 0.03 
-	Box.Color3 = Color3.fromRGB(250,250,250)
+	Box.LineThickness = 0.03
+	
+	local part = v
+	local selectionBox = Box	
+	local t = 5;
+	function rainbowEffect(itemToBeColored, property)
+		coroutine.wrap(function()
+			while wait() do
+				local hue = tick() % t / t
+				local color = Color3.fromHSV(hue,1,1)
+				itemToBeColored[property] = color
+			end
+		end)()
+	end
+	rainbowEffect(selectionBox, "Color3")
+	
 	Box.Parent = v
 	Box.Adornee = v
 	v.CanCollide = false
