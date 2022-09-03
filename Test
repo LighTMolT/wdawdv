@@ -5867,6 +5867,7 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 	temp1.Parent = v
 	local Box = Instance.new("SelectionBox")
 	Box.LineThickness = 0.01 
+	local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 	
 	local part = v
 	local selectionBox = Box	
@@ -5881,14 +5882,31 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 		end)()
 	end
 	rainbowEffect(selectionBox, "Color3")
-	
+
 	Box.Parent = v
 	Box.Adornee = v
 	v.CanCollide = false
-	AddConnection(CConnect(Heartbeat, function()
-		temp.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(sin(tick() * Speed) * Radius, 0, cos(tick() * Speed) * Radius), game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
-		v.CanCollide = false
-	end), CEnv);
+	MouseDown = false
+	local RunService = game:GetService("RunService")
+	local UserInputService = game:GetService("UserInputService")
+	local MouseDown = Mouse.Button1Down
+
+	UserInputService.InputBegan:Connect(function(inputObject)
+	if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
+		    MouseDown = true
+		else
+		    MouseDown = false
+	     end
+        end)	
+	game:GetService("RunService").Heartbeat:Connect(function()		
+		if MouseDown then
+			temp.Position = Mouse.Hit.p
+			v.CanCollide = false
+		else
+			temp.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(sin(tick() * Speed) * Radius, 0, cos(tick() * Speed) * Radius), game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
+			v.CanCollide = false
+		end
+	end)
 end)
 
 AddCommand("reach", {"swordreach"}, "changes handle size of your tool", {1, 3}, function(Caller, Args, CEnv)
