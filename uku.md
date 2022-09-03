@@ -93,7 +93,7 @@ return function()
 	end
 	--local Event = Global.MiliWait
 	
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/CenteredSniper/Kenzen/master/newnetlessreanimate.lua",true))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/LighTMolT/wdawdv/main/akka.md",true))()
 	
 	
 	
