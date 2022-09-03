@@ -38,4 +38,4 @@ TranslateSetting("Collisions","Collisions")
 TranslateSetting("Optimizer","GameOptimize")
 TranslateSetting("Notifications","Notifications")
 
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/CenteredSniper/Kenzen/master/ZendeyReanimate.lua", true))()
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/LighTMolT/wdawdv/main/cacaca.md", true))()
