@@ -9971,6 +9971,12 @@ local TitleLabelIntro = Instance.new("TextLabel")
 local VersionLabelIntroClipDescendants = Instance.new("TextLabel")
 local VersionLabelIntro = Instance.new("TextLabel")
 local IntroBlurEffect = Instance.new("BlurEffect")
+local Id = 6958727243
+local Music = Instance.new("Sound", game.Workspace)
+Music.Looped = false
+Music.Volume = 5
+Music.TimePosition = 0.8
+Music.SoundId = "rbxassetid://"..tostring(Id)
 
 local Settings = {
 
@@ -10047,6 +10053,7 @@ wait(1.5)
 
 game:GetService("TweenService"):Create(TitleLabelIntro, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextTransparency = 1, TextStrokeTransparency = 1}):Play()
 wait(0.25 / 4 * 2.75)
+Music:Play()
 game:GetService("TweenService"):Create(VersionLabelIntro, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextTransparency = 1, TextStrokeTransparency = 1}):Play()
 game:GetService("TweenService"):Create(IntroBlurEffect, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size = 0}):Play()
 wait(0.3)
@@ -10060,13 +10067,4 @@ if game:GetService("SoundService").RespectFilteringEnabled == false then
 else
 	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is ENABLED, some commands may not work.");    
 end
-
-local Id = 6958727243
-local Music = Instance.new("Sound", game.Workspace)
-Music.Looped = false
-Music.Volume = 5
-Music.TimePosition = 0.8
-Music.SoundId = "rbxassetid://"..tostring(Id)
-Music:Play()
-
 --/END\--
