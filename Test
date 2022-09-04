@@ -5615,6 +5615,128 @@ AddCommand("time", {"settime"}, "sets the games time", {{"night", "day", "dawn"}
 	Lighting.ClockTime = Times[Time] or Time
 end)
 
+AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {}, function()
+
+	local Settings = {
+		Values = {
+			BodyTypeScale = true;
+			BodyProportionScale = true;
+			BodyWidthScale = true;
+			BodyHeightScale = true;
+			BodyDepthScale = true;
+			HeadScale = true;
+		};
+		OriginalSize = true;
+		OriginalPosition = false;
+	}
+
+	local Players = game:GetService("Players")
+	local Player = Players.LocalPlayer
+	local RemoveSeats = true
+	local Character = Player.Character
+	local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
+	if RemoveSeats then
+		for _,x in next, workspace:GetDescendants() do
+			if x:IsA("Seat") then
+				x:Destroy()
+			end
+		end
+	end
+	local WaitFunc = function(x) x.DescendantAdded:wait() task.wait() end
+
+	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return format "Need R15 for this command." end
+
+
+	for _,x in next, Settings.Values do
+		if x then
+			if Settings.OriginalSize then --Specific Path/Settings
+				for _, _os in next, Character:GetDescendants() do
+					if _os.Name == "OriginalSize" and _os:IsA("ValueBase") then
+						_os:Destroy()
+					end
+				end
+			end
+			if Settings.OriginalPosition then
+				for _, _op in next, Character:GetDescendants() do
+					if _op.Name == "OriginalPosition" and _op:IsA("ValueBase") then
+						_op:Destroy()
+					end
+				end
+			end
+			if Humanoid:FindFirstChild(tostring(_)) then
+				Humanoid:FindFirstChild(tostring(_)):Destroy()
+			end
+			WaitFunc(Character)
+		end
+	end
+
+
+	local character = game.Players.LocalPlayer.Character
+	game.Players.LocalPlayer.Character = nil
+	game.Players.LocalPlayer.Character = character
+	wait(game.Players.RespawnTime + 0.05)
+	game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead,false)
+
+	for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+		if v.Name == "Torso" or v.Name == "UpperTorso" then
+			v:Destroy()
+		end
+	end
+	character.HumanoidRootPart:Destroy()
+
+	for i,v in pairs(character:GetChildren()) do
+		if v:IsA("Accessory") then
+			sethiddenproperty(v,"BackendAccoutrementState", 0) --any integer 0-3 works but 4, as 4 is the default state for in character, 0 is for when it has collision in character or other circumstances, 2 is workspace, 1 is unknown if you know or figure out please let me know
+			--BackendAccoutrementState is a replicated property similar to NetworkIsSleeping and is further documented in reweld
+		end
+	end
+
+	for i,v in pairs(character:GetChildren()) do
+		if v:IsA("BasePart") and v.Name ~= "Head" then
+			v:Destroy() --trigger childremoving (can also remove body colors or animate localscript)
+			--we can also trigger childadded with a tool or something else to weld the hats to our head
+		end
+	end
+	character.Head:remove() --optional, can be removed
+
+	game:GetService("RunService").RenderStepped:wait()
+	local v = character:FindFirstChild("PirateCaptain_HatAccessory").Handle
+	local temp = Instance.new("BodyPosition")
+	temp.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+	temp.Parent = v
+
+	game:GetService("RunService").Stepped:wait()
+	local temp1 = Instance.new("BodyThrust")
+	temp1.Location = Vector3.new(5,0,0)
+	temp1.Force = Vector3.new(40000,40000,40000)
+	temp1.Parent = v
+	local Box = Instance.new("SelectionBox")
+	Box.LineThickness = 0.03
+	
+	local part = v
+	local selectionBox = Box	
+	local t = 5;
+	function rainbowEffect(itemToBeColored, property)
+		coroutine.wrap(function()
+			while wait() do
+				local hue = tick() % t / t
+				local color = Color3.fromHSV(hue,1,1)
+				itemToBeColored[property] = color
+			end
+		end)()
+	end
+	rainbowEffect(selectionBox, "Color3")
+	
+	Box.Parent = v
+	Box.Adornee = v
+	v.CanCollide = false
+	v.Transparency = 0.3
+	while wait() do
+		temp.Position = game.Players.LocalPlayer:GetMouse().Hit.p + Vector3.new(0,0,0)
+		v.CanCollide = false
+	end
+end)
+
 AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
 
 	local character = game.Players.LocalPlayer.Character
