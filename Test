@@ -5190,7 +5190,7 @@ AddCommand("drophats", {}, "removes all the hats from your character", {3}, func
 	character.Head:remove() --optional, can be removed
 end)
 
-AddCommand("nomeshhats", {}, "makes your hats block", {2}, function()
+AddCommand("demeshhats", {}, "makes your hats block", {2}, function()
 	local character = game.Players.LocalPlayer.Character
 	for _,v in pairs(character:FindFirstChildOfClass('Humanoid'):GetAccessories()) do
 		for i,c in pairs(v:GetDescendants()) do
@@ -5210,7 +5210,7 @@ AddCommand("noface", {}, "removes your face", {3}, function()
 	end
 end)
 
-AddCommand("nomeshtools", {}, "makes your tool a block", {3}, function()
+AddCommand("demeshtools", {}, "makes your tool a block", {3}, function()
 	local character = game.Players.LocalPlayer.Character
 	local Char = GetCharacter();
 	local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, Child)
@@ -5238,90 +5238,6 @@ end)
 
 AddCommand("nogravity", {"nograv", "ungravity"}, "removes the gravity", {}, function()
 	Services.Workspace.Gravity = 192
-end)
-
-AddCommand("rainbow", {}, "makes your character rainbow", {}, function()
-	if game.PlaceId == 679157400 then
-		getgenv().loop = true;
-		getgenv().lbc = true;
-		local remotepath = game:GetService("ReplicatedStorage")
-
-		spawn(function()
-			while lbc == true do
-				local args = {[1] = "Paint",[2] = "all",[3] = BrickColor.new(1004)}
-				remotepath.MainEvent:FireServer(unpack(args))
-				wait(0.10)
-				local args = {[1] = "Paint",[2] = "all",[3] = BrickColor.new(1017)}
-				remotepath.MainEvent:FireServer(unpack(args))
-				wait(0.10)
-				local args = {[1] = "Paint",[2] = "all",[3] = BrickColor.new(1009)}
-				remotepath.MainEvent:FireServer(unpack(args))
-				wait(0.10)
-				local args = {[1] = "Paint",[2] = "all",[3] = BrickColor.new(1020)}
-				remotepath.MainEvent:FireServer(unpack(args))
-				wait(0.10)
-				local args = {[1] = "Paint",[2] = "all",[3] = BrickColor.new(1018)}
-				remotepath.MainEvent:FireServer(unpack(args))
-				wait(0.10)
-				local args = {[1] = "Paint",[2] = "all",[3] = BrickColor.new(1031)}
-				remotepath.MainEvent:FireServer(unpack(args))
-				wait(0.10)
-				local args = {[1] = "Paint",[2] = "all",[3] = BrickColor.new(1031)}
-				remotepath.MainEvent:FireServer(unpack(args))
-			end
-		end)
-
-		while true do
-			local args = {
-				[1] = "RP",
-				[2] = "\\\\\\Rainbow///"
-			}
-			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
-			wait(0.10)
-			local args = {
-				[1] = "RP",
-				[2] = "\\\\\rAinbow//"
-			}
-			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
-			wait(0.10)
-			local args = {
-				[1] = "RP",
-				[2] = "\\\\raInbow/"
-			}
-			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
-			wait(0.10)
-			local args = {
-				[1] = "RP",
-				[2] = "\\\\\raiNbow//"
-			}
-			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
-			wait(0.10)
-			local args = {
-				[1] = "RP",
-				[2] = "\\\\\\rainBow///"
-			}
-			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
-			wait(0.10)
-			local args = {
-				[1] = "RP",
-				[2] = "\\\\\rainbOw//"
-			}
-			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
-			wait(0.10)
-			local args = {
-				[1] = "RP",
-				[2] = "\\\\rainboW/"
-			}
-			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
-			wait(0.10)
-			local args = {
-				[1] = "RP",
-				[2] = "\\\\rainboW/"
-			}
-			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
-		end
-	else return format "Game Unsupported."
-	end
 end)
 
 AddCommand("ignore", {}, "puts a players character in lighting", {"1"}, function(Caller, Args)
