@@ -7219,7 +7219,7 @@ AddCommand("commands", {"cmds"}, "shows you all the commands listed in Hyperion 
 	end
 	Commands.Visible = true
 	Utils.TweenAllTransToObject(Commands, .25, CommandsTransparencyClone);
-	return "Commands Loaded"
+	return "Commands loaded."
 end)
 
 AddCommand("unload", {}, "kills the script", {}, function(Caller)
