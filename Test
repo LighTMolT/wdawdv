@@ -7012,7 +7012,7 @@ AddCommand("unfloat", {"nofloat"}, "stops float", {}, function(Caller, Args, CEn
 		Disconnect(Floating[1]);
 		Destroy(Floating[2]);
 		LoadCommand("float").CmdEnv = {}
-		return "stopped floating"
+		return "Stopped floating."
 	end
 	return "Floating disabled."
 end)
