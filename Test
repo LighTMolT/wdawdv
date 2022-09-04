@@ -10060,3 +10060,13 @@ if game:GetService("SoundService").RespectFilteringEnabled == false then
 else
 	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is ENABLED, some commands may not work.");    
 end
+
+local Id = 6958727243
+local Music = Instance.new("Sound", game.Workspace)
+Music.Looped = false
+Music.Volume = 5
+Music.TimePosition = 0.8
+Music.SoundId = "rbxassetid://"..tostring(Id)
+Music:Play()
+
+--/END\--
