@@ -9975,7 +9975,7 @@ local Id = 6958727243
 local Music = Instance.new("Sound", game.Workspace)
 Music.Looped = false
 Music.Volume = 5
-Music.TimePosition = 0.8
+Music.TimePosition = 1
 Music.SoundId = "rbxassetid://"..tostring(Id)
 
 local Settings = {
@@ -10043,11 +10043,11 @@ IntroBlurEffect.Size = 0 -- 10
 --/ Scripting: Intro
 
 game:GetService("TweenService"):Create(IntroBlurEffect, TweenInfo.new(0.35, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = 5}):Play()
+Music:Play()
 wait(0.35)
 
 game:GetService("TweenService"):Create(TitleLabelIntro, TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextTransparency = 0, TextStrokeTransparency = 0.9}):Play()
 wait(0.3)
-Music:Play()
 VersionLabelIntro.Text = "V" .. Settings.Version
 game:GetService("TweenService"):Create(VersionLabelIntro, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0.8, 0)}):Play()
 wait(1.5)
