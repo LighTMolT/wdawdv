@@ -3218,7 +3218,7 @@ AddCommand("r15", {}, "changes your humanoidrigtype to R15 if possible", {}, fun
 end)
 
 AddCommand("lowhold", {}, "makes you low holding a tool", {1}, function()
-	game:GetService("Workspace").LighTMolT.Animate.toolnone.ToolNoneAnim.AnimationId = 1
+	game:GetService("Players").LocalPlayer.Character.Animate.toolnone.ToolNoneAnim.AnimationId = 1
 
 	local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
 	local Tools = plr.Backpack:GetChildren()
@@ -5843,7 +5843,7 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 	for i, v in next, Tools do
 		v.Parent = Char
 	end
-	game:GetService("Workspace").LighTMolT.Animate.toolnone.ToolNoneAnim.AnimationId = 1
+	game:GetService("Players").LocalPlayer.Character.Animate.toolnone.ToolNoneAnim.AnimationId = 1
 	wait(1)
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then
 		character["Right Arm"]:Destroy()
