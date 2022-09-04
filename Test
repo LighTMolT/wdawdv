@@ -1,5 +1,5 @@
 --[[
-	Utopia Admin - 20/7/2022
+	Hyperion Admin - 20/7/2022
 ]]
 
 local game = game
@@ -21,7 +21,7 @@ do
 		local UserInputService = GetService(game, "UserInputService");
 		local CommandBarPrefix = GetConfig().CommandBarPrefix
 		local StringKeyCode = UserInputService.GetStringForKeyCode(UserInputService, Enum.KeyCode[CommandBarPrefix]);
-		return Notify(nil, "Loaded", "Utopia admin is already loaded.", nil),
+		return Notify(nil, "Loaded", "Hyperion admin is already loaded.", nil),
 		Notify(nil, "Your Prefix is", string.format("%s (%s)", StringKeyCode, CommandBarPrefix));
 	end
 end
@@ -683,7 +683,7 @@ do
 			end
 		end
 
-		-- ik this is horrible but Utopia admin v3 has a better way of doing hooks
+		-- ik this is horrible but Hyperion admin v3 has a better way of doing hooks
 		if (Method == "children" or Method == "GetChildren" or Method ==  "getChildren" or Method == "GetDescendants" or Method == "getDescendants") then
 			return filter(__Namecall(...), function(i, instance)
 				return not isProtected(instance);
@@ -1132,58 +1132,58 @@ local PluginSettings = {
 local WriteConfig = function(Destroy)
 	local JSON = JSONEncode(Services.HttpService, Settings);
 	local PluginJSON = JSONEncode(Services.HttpService, PluginSettings);
-	if (isfolder("Utopia-admin") and Destroy) then
-		delfolder("Utopia-admin");
-		writefile("Utopia-admin/config.json", JSON);
-		writefile("Utopia/admin/pluings/plugin-conf.json", PluginJSON);
+	if (isfolder("Hyperion-admin") and Destroy) then
+		delfolder("Hyperion-admin");
+		writefile("Hyperion-admin/config.json", JSON);
+		writefile("Hyperion/admin/pluings/plugin-conf.json", PluginJSON);
 	else
-		makefolder("Utopia-admin");
-		makefolder("Utopia-admin/plugins");
-		makefolder("Utopia-admin/chatlogs");
-		writefile("Utopia-admin/config.json", JSON);
-		writefile("Utopia-admin/plugins/plugin-conf.json", PluginJSON);
+		makefolder("Hyperion-admin");
+		makefolder("Hyperion-admin/plugins");
+		makefolder("Hyperion-admin/chatlogs");
+		writefile("Hyperion-admin/config.json", JSON);
+		writefile("Hyperion-admin/plugins/plugin-conf.json", PluginJSON);
 	end
 end
 
 local GetConfig = function()
-	if (isfolder("Utopia-admin") and isfile("Utopia-admin/config.json")) then
-		return JSONDecode(Services.HttpService, readfile("Utopia-admin/config.json"));
+	if (isfolder("Hyperion-admin") and isfile("Hyperion-admin/config.json")) then
+		return JSONDecode(Services.HttpService, readfile("Hyperion-admin/config.json"));
 	else
 		WriteConfig();
-		return JSONDecode(Services.HttpService, readfile("Utopia-admin/config.json"));
+		return JSONDecode(Services.HttpService, readfile("Hyperion-admin/config.json"));
 	end
 end
 
 local GetPluginConfig = function()
-	if (isfolder("Utopia-admin") and isfolder("Utopia-admin/plugins") and isfile("Utopia-admin/plugins/plugin-conf.json")) then
-		local JSON = JSONDecode(Services.HttpService, readfile("Utopia-admin/plugins/plugin-conf.json"));
+	if (isfolder("Hyperion-admin") and isfolder("Hyperion-admin/plugins") and isfile("Hyperion-admin/plugins/plugin-conf.json")) then
+		local JSON = JSONDecode(Services.HttpService, readfile("Hyperion-admin/plugins/plugin-conf.json"));
 		return JSON
 	else
 		WriteConfig();
-		return JSONDecode(Services.HttpService, readfile("Utopia-admin/plugins/plugin-conf.json"));
+		return JSONDecode(Services.HttpService, readfile("Hyperion-admin/plugins/plugin-conf.json"));
 	end
 end
 
 local SetPluginConfig = function(conf)
-	if (isfolder("Utopia-admin") and isfolder("Utopia-admin/plugins") and isfile("Utopia-admin/plugins/plugin-conf.json")) then
+	if (isfolder("Hyperion-admin") and isfolder("Hyperion-admin/plugins") and isfile("Hyperion-admin/plugins/plugin-conf.json")) then
 		WriteConfig();
 	end
 	local NewConfig = GetPluginConfig();
 	for i, v in next, conf do
 		NewConfig[i] = v
 	end
-	writefile("Utopia-admin/plugins/plugin-conf.json", JSONEncode(Services.HttpService, NewConfig));
+	writefile("Hyperion-admin/plugins/plugin-conf.json", JSONEncode(Services.HttpService, NewConfig));
 end
 
 local SetConfig = function(conf)
-	if (not isfolder("Utopia-admin") and isfile("Utopia-admin/config.json")) then
+	if (not isfolder("Hyperion-admin") and isfile("Hyperion-admin/config.json")) then
 		WriteConfig();
 	end
 	local NewConfig = GetConfig();
 	for i, v in next, conf do
 		NewConfig[i] = v
 	end
-	writefile("Utopia-admin/config.json", JSONEncode(Services.HttpService, NewConfig));
+	writefile("Hyperion-admin/config.json", JSONEncode(Services.HttpService, NewConfig));
 end
 
 local CurrentConfig = GetConfig();
@@ -1551,7 +1551,7 @@ local IsSupportedExploit = isfile and isfolder and writefile and readfile
 
 local GetThemeConfig
 local WriteThemeConfig = function(Conf)
-	if (IsSupportedExploit and isfolder("Utopia-admin")) then
+	if (IsSupportedExploit and isfolder("Hyperion-admin")) then
 		local ToHSV = Color3.new().ToHSV
 		local ValuesToEncode = deepsearchset(Values, function(i, v)
 			return typeof(v) == 'Color3'
@@ -1560,14 +1560,14 @@ local WriteThemeConfig = function(Conf)
 			return {H, S, V, "Color3"}
 		end)
 		local Data = JSONEncode(Services.HttpService, ValuesToEncode);
-		writefile("Utopia-admin/Theme.json", Data);
+		writefile("Hyperion-admin/Theme.json", Data);
 	end
 end
 
 GetThemeConfig = function()
-	if (IsSupportedExploit and isfolder("Utopia-admin")) then
-		if (isfile("Utopia-admin/Theme.json")) then
-			local Success, Data = pcall(JSONDecode, Services.HttpService, readfile("Utopia-admin/Theme.json"));
+	if (IsSupportedExploit and isfolder("Hyperion-admin")) then
+		if (isfile("Hyperion-admin/Theme.json")) then
+			local Success, Data = pcall(JSONDecode, Services.HttpService, readfile("Hyperion-admin/Theme.json"));
 			if (not Success or type(Data) ~= 'table') then
 				WriteThemeConfig();
 				return Values
@@ -2716,7 +2716,7 @@ do
 	end));
 end
 
-AddCommand("commandcount", {"cc"}, "shows you how many commands there is in Utopia admin", {}, function(Caller)
+AddCommand("commandcount", {"cc"}, "shows you how many commands there is in Hyperion admin", {}, function(Caller)
 	Utils.Notify(Caller, "Amount of Commands", format("There are currently %s commands.", #filter(CommandsTable, function(i,v)
 		return indexOf(CommandsTable, v) == i
 	end)))
@@ -7082,7 +7082,7 @@ AddCommand("blacklist", {"bl"}, "blacklists a whitelisted user", {"1"}, function
 end)
 
 local CommandsLoaded = false
-AddCommand("commands", {"cmds"}, "shows you all the commands listed in utopia admin", {}, function()
+AddCommand("commands", {"cmds"}, "shows you all the commands listed in Hyperion admin", {}, function()
 	if (not CommandsLoaded) then
 		local CommandsList = Commands.Frame.List
 		Utils.SmoothScroll(CommandsList, .14);
@@ -7831,7 +7831,7 @@ AddCommand("nojumpcooldown", {}, "removes a jumpcooldown if any in games", {}, f
 end)
 
 local LoadConfig, ConfigLoaded;
-AddCommand("config", {"conf"}, "shows Utopia admin config", {}, function(Caller, Args, CEnv)
+AddCommand("config", {"conf"}, "shows Hyperion admin config", {}, function(Caller, Args, CEnv)
 	if (not ConfigLoaded) then
 		if (not CEnv[1]) then
 			LoadConfig();
@@ -7868,7 +7868,7 @@ AddCommand("rejoinre", {"rjre"}, "rejoins and tps you to your old position", {3}
 	local Pos = GetRoot().CFrame
 	local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
 	if (queue_on_teleport) then
-		queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/Utopiac/Utopia-admin/main/main.lua\"))()", tostring(Pos)));
+		queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/Hyperionc/Hyperion-admin/main/main.lua\"))()", tostring(Pos)));
 	end
 	ExecuteCommand("rejoin", {}, LocalPlayer);
 end)
@@ -7991,11 +7991,11 @@ AddCommand("dex", {"explorer"}, "loads dark explorer", {}, function()
 end)
 
 AddCommand("advertise", {}, "advertises the admin", {}, function()
-	local ad = {"Utopia Admin V1 by LighTMolT", "All"}
+	local ad = {"Hyperion Admin V1 by LighTMolT", "All"}
 	game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(table.unpack(ad))
 end)
 
-AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Utopia admin has made", {}, function()
+AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Hyperion admin has made", {}, function()
 	local MessageClone = Clone(Console.Frame.List);
 
 	Utils.ClearAllObjects(Console.Frame.List)
@@ -8390,9 +8390,9 @@ end), Connections.UI, true);
 
 AddConnection(CConnect(ChatLogs.Save.MouseButton1Click, function()
 	local GameName = Services.MarketplaceService.GetProductInfo(Services.MarketplaceService, game.PlaceId).Name
-	local String =  format("Utopia Admin Chatlogs for %s (%s)\n\n", GameName, os.date());
+	local String =  format("Hyperion Admin Chatlogs for %s (%s)\n\n", GameName, os.date());
 	local TimeSaved = gsub(tostring(os.date("%x")), "/", "-") .. " " .. gsub(tostring(os.date("%X")), ":", "-");
-	local Name = format("Utopia-admin/chatlogs/%s (%s).txt", GameName, TimeSaved);
+	local Name = format("Hyperion-admin/chatlogs/%s (%s).txt", GameName, TimeSaved);
 	local Children = GetChildren(ChatLogs.Frame.List);
 	for i = 1, #Children do
 		local v = Children[i]
@@ -8406,17 +8406,17 @@ end), Connections.UI, true);
 
 AddConnection(CConnect(HttpLogs.Save.MouseButton1Click, function()
 	local Children = GetChildren(HttpLogs.Frame.List);
-	local Logs =  format("Utopia Admin HttpLogs for %s\n\n", os.date());
+	local Logs =  format("Hyperion Admin HttpLogs for %s\n\n", os.date());
 	for i = 1, #Children do
 		local v = Children[i]
 		if (not IsA(v, "UIListLayout")) then
 			Logs = format("%s%s\n", Logs, v.Text);
 		end
 	end
-	if (not isfolder("Utopia-admin/httplogs")) then
-		makefolder("Utopia-admin/httplogs");
+	if (not isfolder("Hyperion-admin/httplogs")) then
+		makefolder("Hyperion-admin/httplogs");
 	end
-	writefile(format("Utopia-admin/httplogs/HttpLogs for %s", gsub(tostring(os.date("%X")), ":", "-")) .. ".txt", gsub(Logs, "%b<>", ""));
+	writefile(format("Hyperion-admin/httplogs/HttpLogs for %s", gsub(tostring(os.date("%X")), ":", "-")) .. ".txt", gsub(Logs, "%b<>", ""));
 	Utils.Notify(LocalPlayer, "Saved", "Http logs saved!");
 end), Connections.UI, true);
 
@@ -8424,7 +8424,7 @@ AddConnection(CConnect(Console.Save.MouseButton1Click, function()
 	local GameName = Services.MarketplaceService.GetProductInfo(Services.MarketplaceService, game.PlaceId).Name
 	local TimeSaved = gsub(tostring(os.date("%x")), "/", "-") .. " " .. gsub(tostring(os.date("%X")), ":", "-");
 	local Children = GetChildren(Console.Frame.List);
-	local String =  format("Utopia Admin logs %s\nGame: %s - %d\n\n", TimeSaved, GameName, game.PlaceId);
+	local String =  format("Hyperion Admin logs %s\nGame: %s - %d\n\n", TimeSaved, GameName, game.PlaceId);
 	local Names = { ["P"] = "OUTPUT", ["W"] = "WARNING", ["E"] = "ERROR" }
 	for i = 1, #Children do
 		local v = Children[i]
@@ -8432,7 +8432,7 @@ AddConnection(CConnect(Console.Save.MouseButton1Click, function()
 			String = format("%s[%s] %s\n", String, Names[sub(v.Name, 1, 1)] or "", v.Text);
 		end
 	end
-	writefile("Utopia-admin/logs.txt", String);
+	writefile("Hyperion-admin/logs.txt", String);
 	Utils.Notify(LocalPlayer, "Saved", "Console Logs saved!");
 end), Connections.UI, true);
 
@@ -9352,12 +9352,12 @@ PluginLibrary = {
 do
 	local IsDebug = IsSupportedExploit and PluginConf.PluginDebug
 
-	Plugins = IsSupportedExploit and map(filter(listfiles("Utopia-admin/plugins"), function(i, v)
+	Plugins = IsSupportedExploit and map(filter(listfiles("Hyperion-admin/plugins"), function(i, v)
 		return lower(split(v, ".")[#split(v, ".")]) == "lua"
 	end), function(i, v)
 		local splitted = split(v, "\\");
 		if (identifyexecutor and identifyexecutor() == "ScriptWare") then
-			return {splitted[#splitted], loadfile("Utopia-admin/plugins/" .. v)}
+			return {splitted[#splitted], loadfile("Hyperion-admin/plugins/" .. v)}
 		else
 			return {splitted[#splitted], loadfile(v)}
 		end
@@ -9447,7 +9447,7 @@ do
 		end
 
 		if (IsSupportedExploit) then
-			if (not isfolder("Utopia-admin") and not isfolder("Utopia-admin/plugins") and not isfolder("Utopia-admin/plugin-conf.json") or not isfolder("Utopia-admin/chatlogs")) then
+			if (not isfolder("Hyperion-admin") and not isfolder("Hyperion-admin/plugins") and not isfolder("Hyperion-admin/plugin-conf.json") or not isfolder("Hyperion-admin/chatlogs")) then
 				WriteConfig();
 			end
 		end
@@ -9478,7 +9478,7 @@ do
 			PluginConf = GetPluginConfig();
 			IsDebug = PluginConf.PluginDebug
 
-			Plugins = map(filter(listfiles("Utopia-admin/plugins"), function(i, v)
+			Plugins = map(filter(listfiles("Hyperion-admin/plugins"), function(i, v)
 				return lower(split(v, ".")[#split(v, ".")]) == "lua"
 			end), function(i, v)
 				return {split(v, "\\")[2], loadfile(v)}
@@ -9884,7 +9884,7 @@ getgenv().F_A = {
 	GetConfig = GetConfig
 }
 
-local UtopiaScreenGui = Instance.new("ScreenGui")
+local HyperionScreenGui = Instance.new("ScreenGui")
 local Intro = Instance.new("Folder")
 local TitleLabelIntro = Instance.new("TextLabel")
 local VersionLabelIntroClipDescendants = Instance.new("TextLabel")
@@ -9896,12 +9896,12 @@ local Settings = {
 	Version = "1.0.0", 
 }
 
-UtopiaScreenGui.Name = "UtopiaScreenGui"
-UtopiaScreenGui.Parent = game:GetService("CoreGui")
-UtopiaScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+HyperionScreenGui.Name = "HyperionScreenGui"
+HyperionScreenGui.Parent = game:GetService("CoreGui")
+HyperionScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 Intro.Name = "Intro"
-Intro.Parent = UtopiaScreenGui
+Intro.Parent = HyperionScreenGui
 
 TitleLabelIntro.Name = "TitleLabelIntro"
 TitleLabelIntro.Parent = Intro
@@ -9911,7 +9911,7 @@ TitleLabelIntro.BackgroundTransparency = 1.000
 TitleLabelIntro.Position = UDim2.new(0.5, 0, 0.5, 0)
 TitleLabelIntro.Size = UDim2.new(0.300000012, 0, 0.100000001, 0)
 TitleLabelIntro.Font = Enum.Font.SourceSansBold
-TitleLabelIntro.Text = "< Utopia Admin >"
+TitleLabelIntro.Text = "< Hyperion Admin >"
 TitleLabelIntro.TextColor3 = Color3.fromRGB(252,252,252)
 TitleLabelIntro.TextSize = 45.000
 TitleLabelIntro.TextTransparency = 1.000
@@ -9973,7 +9973,7 @@ wait(0.3)
 --/ Scripting: Intro
 
 Utils.Notify(LocalPlayer, "Loaded", format("Script loaded in %.3f seconds.", (tick()) - _L.start));
-Utils.Notify(LocalPlayer, "Welcome", "Utopia Admin loaded succesfully.");
+Utils.Notify(LocalPlayer, "Welcome", "Hyperion Admin loaded succesfully.");
 if game:GetService("SoundService").RespectFilteringEnabled == false then 
 	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is DISABLED, extra commands enabled.");
 else
