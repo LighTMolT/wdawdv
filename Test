@@ -5945,7 +5945,7 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 	temp.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
 	temp.Parent = v
 	local Radius = 5
-	local Speed = 1
+	local Speed = 1.5
 	local random = random(tick() / 2, tick());
 	game:GetService("RunService").Stepped:wait()
 	local temp1 = Instance.new("BodyThrust")
