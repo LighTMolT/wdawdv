@@ -4261,15 +4261,10 @@ AddCommand("legrescale", {}, "resizes your legs", {}, function()
 	end
 end)
 
-AddCommand("getmass", {}, "checks your left leg mass", {}, function()
-	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then    
+AddCommand("getmass", {}, "checks your humanoid mass", {}, function()
 		local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 		local myMass = myPart:GetMass()
-
 		return format "HumanoidRootPart mass is " ..myMass
-	else 
-		return format "Need R15 for this command."
-	end
 end)
 
 
