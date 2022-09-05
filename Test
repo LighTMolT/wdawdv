@@ -6655,21 +6655,15 @@ AddCommand("revertnolights", {"lights"}, "reverts nolights", {}, function()
 end)
 
 AddCommand("fullbright", {}, "turns on fullbright", {}, function(Caller, Args, CEnv)
-	local Lighting = Services.Lighting
-	for i, v in next, GetDescendants(game) do
-		if (IsA(v, "PointLight") or IsA(v, "SurfaceLight") or IsA(v, "SpotLight")) then
-			CEnv[v] = v.Range
-			SpoofInstance(v);
-			v.Enabled = true
-			v.Shadows = false
-			v.Range = math.huge
-		end
-	end
-	SpoofProperty(Lighting, "GlobalShadows");
+	Lighting.Brightness = 2
+	Lighting.ClockTime = 14
+	Lighting.FogEnd = 100000
 	Lighting.GlobalShadows = false
-	return "Fullbright enabled."
+	Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+	SpoofProperty(Lighting, "GlobalShadows");
+	return format "Fullbright enabled."
 end)
-
+	
 AddCommand("nofullbright", {}, "reverts fullbright", {}, function()
 	local Lighting = Services.Lighting
 	local Lights = LoadCommand("fullbright").CmdEnv
