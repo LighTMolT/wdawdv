@@ -9941,7 +9941,7 @@ wait(0.3)
 
 --/ Scripting: Intro
 
-Utils.Notify(LocalPlayer, "Loaded", format("Hyperion Admin loaded in %.3f seconds.", (tick()) - _L.start));
+Utils.Notify(LocalPlayer, "Welcome", format("Hyperion Admin loaded in %.3f seconds.", (tick()) - _L.start));
 if game:GetService("SoundService").RespectFilteringEnabled == false then 
 	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is DISABLED, extra commands enabled.");
 else
