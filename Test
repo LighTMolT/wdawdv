@@ -74,6 +74,8 @@ game.Changed
 
 local Destroy, Clone = game.Destroy, game.Clone
 
+local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+
 local Heartbeat, Stepped, RenderStepped;
 do
 	local RunService = Services.RunService;
@@ -92,62 +94,13 @@ local function getplr(name)
 	end
 end
 
-local function getBp()
-	return game:GetService("Players").LocalPlayer.Backpack
-end
-
-local function attachTool(Tool,cf)
-	for i,v in pairs(Tool:GetDescendants()) do
-		if not (v:IsA("BasePart") or v:IsA("Mesh") or v:IsA("SpecialMesh")) then
-			v:Destroy()
+game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
+	if State == Enum.TeleportState.Started then
+		if queueteleport then
+			queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test'))()")
 		end
 	end
-	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then
-		local rgrip1 = Instance.new("Weld")
-		rgrip1.Name = "RightGrip"
-		rgrip1.Part0 = game:GetService("Players").LocalPlayer.Character["Right Arm"] 
-		rgrip1.Part1 = Tool.Handle
-		rgrip1.C0 = cf
-		rgrip1.C1 = Tool.Grip
-		rgrip1.Parent = game:GetService("Players").LocalPlayer.Character["Right Arm"] 
-		Tool.Parent = getBp()
-		Tool.Parent = game:GetService("Players").LocalPlayer.Character.Humanoid
-		Tool.Parent = game:GetService("Players").LocalPlayer.Character
-		Tool.Handle:BreakJoints()
-		Tool.Parent = getBp()
-		Tool.Parent = game:GetService("Players").LocalPlayer.Character.Humanoid
-		local rgrip2 = Instance.new("Weld")
-		rgrip2.Name = "RightGrip"
-		rgrip2.Part0 = game:GetService("Players").LocalPlayer.Character["Right Arm"] 
-		rgrip2.Part1 = Tool.Handle
-		rgrip2.C0 = cf
-		rgrip2.C1 = Tool.Grip
-		rgrip2.Parent = game:GetService("Players").LocalPlayer.Character["Right Arm"] 
-		return rgrip2
-	elseif game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
-		local rgrip1 = Instance.new("Weld")
-		rgrip1.Name = "RightGrip"
-		rgrip1.Part0 = game:GetService("Players").LocalPlayer.Character["RightHand"] 
-		rgrip1.Part1 = Tool.Handle
-		rgrip1.C0 = cf
-		rgrip1.C1 = Tool.Grip
-		rgrip1.Parent = game:GetService("Players").LocalPlayer.Character["RightHand"] 
-		Tool.Parent = getBp()
-		Tool.Parent = game:GetService("Players").LocalPlayer.Character.Humanoid
-		Tool.Parent = game:GetService("Players").LocalPlayer.Character
-		Tool.Handle:BreakJoints()
-		Tool.Parent = getBp()
-		Tool.Parent = game:GetService("Players").LocalPlayer.Character.Humanoid
-		local rgrip2 = Instance.new("Weld")
-		rgrip2.Name = "RightGrip"
-		rgrip2.Part0 = game:GetService("Players").LocalPlayer.Character["RightHand"] 
-		rgrip2.Part1 = Tool.Handle
-		rgrip2.C0 = cf
-		rgrip2.C1 = Tool.Grip
-		rgrip2.Parent = game:GetService("Players").LocalPlayer.Character["RightHand"] 
-		return rgrip2
-	end
-end
+end)
 
 local JSONEncode, JSONDecode, GenerateGUID = 
 	Services.HttpService.JSONEncode, 
@@ -7018,10 +6971,7 @@ AddCommand("instantleave", {}, "leaves the game you're currently in", {}, functi
 end)
 
 AddCommand("rejoin", {"rj"}, "rejoins the game you're currently in", {}, function(Caller)
-	if (Caller == LocalPlayer) then
-		if (syn) then
-			syn.queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test\"))()");
-		end
+	if (Caller == LocalPlayer) then		
 		Services.TeleportService.Teleport(Services.TeleportService, game.PlaceId);
 		return "Rejoining..."
 	else
@@ -7072,7 +7022,7 @@ AddCommand("serverhop", {"shop"}, "switches servers (optional: min, max (default
 
 		local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
 		if (queue_on_teleport and not Args[2]) then
-			queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test\"))()");
+			--queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test\"))()");
 		end;
 
 		Services.TeleportService:TeleportToPlaceInstance(game.PlaceId, Server.id);    
