@@ -8072,7 +8072,7 @@ AddCommand("dex", {"explorer"}, "loads dark explorer", {}, function()
 end)
 
 AddCommand("advertise", {}, "advertises the admin", {}, function()
-	local ad = {"Hyperion Admin V1 by LighTMolT", "All"}
+	local ad = {"Hyperion admin v1 by LighTMolT", "All"}
 	game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(table.unpack(ad))
 end)
 
