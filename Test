@@ -6654,18 +6654,17 @@ AddCommand("revertnolights", {"lights"}, "reverts nolights", {}, function()
 	return "Reverted lights in game."
 end)
 
-AddCommand("fullbright", {}, "turns on fullbright", {}, function(Caller, Args, CEnv)
+AddCommand("fullbright", {"fb"}, "turns on fullbright", {}, function(Caller, Args, CEnv)
         local Lighting = Services.Lighting
 	Lighting.Brightness = 2
 	Lighting.ClockTime = 14
 	Lighting.FogEnd = 100000
 	Lighting.GlobalShadows = false
-	Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
-	SpoofProperty(Lighting, "GlobalShadows");
+	Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)	
 	return format "Fullbright enabled."
 end)
 	
-AddCommand("nofullbright", {}, "reverts fullbright", {}, function()
+AddCommand("nofullbright", {"unfb"}, "reverts fullbright", {}, function()
 	local Lighting = Services.Lighting
 	local Lights = LoadCommand("fullbright").CmdEnv
 	for i, v in next, Lights do
