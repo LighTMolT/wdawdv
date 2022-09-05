@@ -2885,19 +2885,6 @@ AddCommand("bring", {}, "brings a user", {1}, function(Caller, Args)
 	end
 end)
 
-AddCommand("netsleep", {"netlag"}, "networksleep players", {}, function(Caller, Args)
-	local Target = getplr(Args[1]);
-	game:GetService("RunService").Heartbeat:Connect(function()
-		if game.Players[Target.Name].Character then
-			for _,Children in pairs(game.Players[Target.Name].Character:GetDescendants()) do
-				if Children:IsA("Part") or Children:IsA("BasePart") then
-					sethiddenproperty(Children, "NetworkIsSleeping", true)
-				end
-			end
-		end
-	end)
-end)
-
 AddCommand("remotespy", {"rspy"}, "spy remotes in game", {}, function()
 	loadstring(game:HttpGet("https://github.com/exxtremestuffs/SimpleSpySource/raw/master/SimpleSpy.lua"))()
 end)
