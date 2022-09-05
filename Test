@@ -5382,7 +5382,7 @@ AddCommand("time", {"settime"}, "sets the games time", {{"night", "day", "dawn"}
 	Lighting.ClockTime = Times[Time] or Time
 end)
 
-AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {}, function()
+AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, function()
 
 	local Settings = {
 		Values = {
