@@ -3695,9 +3695,9 @@ AddCommand("antichat", {}, "can't be banned for swearing", {}, function()
 	OldFunctionHook = HookFunction(PostMessage.fire, PostMessageHook)	
 end)
 
-AddCommand("antivoid", {}, "can't be voided", {}, function()
+AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
 	workspace.FallenPartsDestroyHeight = 0/1/0
-	return format "Antivoid enabled."
+	return format "Destroyheight removed."
 end)
 
 AddCommand("antiattach", {"antitools"}, "enables antiattach", {}, function()
