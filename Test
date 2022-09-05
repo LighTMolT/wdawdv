@@ -4059,62 +4059,6 @@ AddCommand("touchfling", {}, "enables invisible forcefield", {}, function()
 	end)
 end)
 
-AddCommand("bigsize", {}, "makes your character big", {}, function()
-	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
-		local LocalPlayer = game:GetService("Players").LocalPlayer
-		local Character = LocalPlayer.Character
-		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
-
-		function rm()
-			for i,v in pairs(Character:GetDescendants()) do
-				if v:IsA("BasePart") then
-					if v.Name == "Handle" or v.Name == "Head" then
-						if Character.Head:FindFirstChild("OriginalSize") then
-							Character.Head.OriginalSize:Destroy()
-						end
-					else
-						for i,cav in pairs(v:GetDescendants()) do
-							if cav:IsA("Attachment") then
-								if cav:FindFirstChild("OriginalPosition") then
-									cav.OriginalPosition:Destroy()  
-								end
-							end
-						end
-						v:FindFirstChild("OriginalSize"):Destroy()
-						if v:FindFirstChild("AvatarPartScaleType") then
-							v:FindFirstChild("AvatarPartScaleType"):Destroy()
-						end
-					end
-				end
-			end
-		end
-
-		rm()
-		wait(0.1)
-		Humanoid:FindFirstChild("BodyProportionScale"):Destroy()
-		wait(0.2)
-		rm()
-		wait(0.1)
-		Humanoid:FindFirstChild("BodyHeightScale"):Destroy()
-		wait(0.2)
-		rm()
-		wait(0.1)
-		Humanoid:FindFirstChild("BodyWidthScale"):Destroy()
-		wait(0.2)
-		rm()
-		wait(0.1)
-		Humanoid:FindFirstChild("BodyDepthScale"):Destroy()
-		wait(0.2)
-		rm()
-		wait()
-		wait(0.1)
-		Humanoid:FindFirstChild("HeadScale"):Destroy()
-		wait(0.2)
-	else
-		return format "Need R15 for this command."
-	end
-end)
-
 AddCommand("headrescale", {}, "resizes your head", {}, function()
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
 		local Size = 6 --max size is 6
@@ -4140,7 +4084,7 @@ AddCommand("headrescale", {}, "resizes your head", {}, function()
 			Head = Character.Head
 		end
 
-		if Humanoid.RigType == Enum.HumanoidRigType.R6 then return end
+		if Humanoid.RigType == Enum.HumanoidRigType.R6 then return format "Need R15 for this command." end
 
 		coroutine.wrap(function()
 			while Character do
@@ -4228,7 +4172,7 @@ AddCommand("hatrescale", {}, "resizes your hat", {}, function()
 	end
 	local WaitFunc = function(x) x.DescendantAdded:wait() task.wait() end
 
-	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return end
+	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return format "Need R15 for this command." end
 
 
 	for _,x in next, Settings.Values do
@@ -4287,7 +4231,7 @@ AddCommand("legrescale", {}, "resizes your legs", {}, function()
 	end
 	local WaitFunc = function(x) x.DescendantAdded:wait() task.wait() end
 
-	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return end
+	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return format "Need R15 for this command." end
 
 	Character.LeftUpperLeg.LeftKneeRigAttachment:Destroy()
 	Character.LeftLowerLeg.LeftAnkleRigAttachment:Destroy()
@@ -4319,17 +4263,17 @@ end)
 
 AddCommand("getmass", {}, "checks your left leg mass", {}, function()
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then    
-		local myPart = game:GetService("Players").LocalPlayer.Character.LeftLowerLeg
+		local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 		local myMass = myPart:GetMass()
 
-		return format "Leg mass is " ..myMass
+		return format "HumanoidRootPart mass is " ..myMass
 	else 
 		return format "Need R15 for this command."
 	end
 end)
 
 
-AddCommand("smallsize", {}, "makes your character small", {}, function()
+AddCommand("rescale", {}, "rescales your body", {}, function()
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then    
 		local LocalPlayer = game:GetService("Players").LocalPlayer
 		local Character = LocalPlayer.Character
