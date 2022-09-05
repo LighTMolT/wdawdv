@@ -6655,6 +6655,7 @@ AddCommand("revertnolights", {"lights"}, "reverts nolights", {}, function()
 end)
 
 AddCommand("fullbright", {}, "turns on fullbright", {}, function(Caller, Args, CEnv)
+        local Lighting = Services.Lighting
 	Lighting.Brightness = 2
 	Lighting.ClockTime = 14
 	Lighting.FogEnd = 100000
