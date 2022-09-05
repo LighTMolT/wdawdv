@@ -2410,17 +2410,17 @@ end
 local CommandRequirements = {
 	[1] = {
 		Func = HasTool,
-		Message = "You need a tool for this command"
+		Message = "You need a tool for this command."
 	},
 	[2] = {
 		Func = isR6,
-		Message = "You need to be R6 for this command"
+		Message = "You need to be R6 for this command."
 	},
 	[3] = {
 		Func = function()
 			return GetCharacter() ~= nil
 		end,
-		Message = "You need to be spawned for this command"
+		Message = "You need to be spawned for this command."
 	}
 }
 
