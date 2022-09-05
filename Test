@@ -9972,11 +9972,11 @@ local VersionLabelIntroClipDescendants = Instance.new("TextLabel")
 local VersionLabelIntro = Instance.new("TextLabel")
 local IntroBlurEffect = Instance.new("BlurEffect")
 local Id = 6958727243
-local Music = Instance.new("Sound", game.Workspace)
-Music.Looped = false
-Music.Volume = 5
-Music.TimePosition = 1
-Music.SoundId = "rbxassetid://"..tostring(Id)
+local Startup = Instance.new("Sound", game.Workspace)
+Startup.Looped = false
+Startup.Volume = 5
+Startup.TimePosition = 1
+Startup.SoundId = "rbxassetid://"..tostring(Id)
 
 local Settings = {
 
@@ -10043,7 +10043,7 @@ IntroBlurEffect.Size = 0 -- 10
 --/ Scripting: Intro
 
 game:GetService("TweenService"):Create(IntroBlurEffect, TweenInfo.new(0.35, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = 5}):Play()
-Music:Play()
+Startup:Play()
 wait(0.35)
 
 game:GetService("TweenService"):Create(TitleLabelIntro, TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextTransparency = 0, TextStrokeTransparency = 0.9}):Play()
@@ -10054,6 +10054,7 @@ wait(1.5)
 
 game:GetService("TweenService"):Create(TitleLabelIntro, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextTransparency = 1, TextStrokeTransparency = 1}):Play()
 wait(0.25 / 4 * 2.75)
+Startup:Destroy()
 game:GetService("TweenService"):Create(VersionLabelIntro, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextTransparency = 1, TextStrokeTransparency = 1}):Play()
 game:GetService("TweenService"):Create(IntroBlurEffect, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size = 0}):Play()
 wait(0.3)
