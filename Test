@@ -4219,7 +4219,6 @@ end)
 
 
 AddCommand("rescale", {}, "rescales your body", {4}, function()
-	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then    
 		local LocalPlayer = game:GetService("Players").LocalPlayer
 		local Character = LocalPlayer.Character
 		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
@@ -4260,9 +4259,6 @@ AddCommand("rescale", {}, "rescales your body", {4}, function()
 		wait(0.2)
 		Humanoid:FindFirstChild("HeadScale"):Destroy()
 		wait(0.2)
-	else
-		return 
-	end
 end)
 
 AddCommand("toolhats", {}, "makes your hats holdable", {}, function()
