@@ -1,5 +1,5 @@
 --[[
-	Hyperion Admin - 20/7/2022
+	< Hyperion Admin >
 ]]
 
 local game = game
@@ -2371,6 +2371,15 @@ local isR6 = function(plr)
 	return false
 end
 
+local isR15 = function(plr)
+	plr = plr or LocalPlayer
+	local Humanoid = GetHumanoid(plr);
+	if (Humanoid) then
+		return Humanoid.RigType == Enum.HumanoidRigType.R15
+	end
+	return false
+end
+
 local isSat = function(plr)
 	plr = plr or LocalPlayer
 	local Humanoid = GetHumanoid(plr)
@@ -2421,7 +2430,11 @@ local CommandRequirements = {
 			return GetCharacter() ~= nil
 		end,
 		Message = "You need to be spawned for this command."
-	}
+	},
+	[4] = {
+		Func = isR15,
+		Message = "You need to be R15 for this command."
+	},
 }
 
 local AddCommand = function(name, aliases, description, options, func, isplugin)
@@ -3024,11 +3037,8 @@ AddCommand("headless", {}, "removes your head", {2}, function()
 	return format "Headless loading..."
 end)
 
-AddCommand("split", {}, "splits your body in half", {3}, function()
-	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
-		game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
-	else return format "Need R15 for this command."
-	end
+AddCommand("split", {}, "splits your body in half", {4}, function()
+game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
 end)
 
 AddCommand("ragdoll", {}, "makes you ragdoll", {2}, function()
@@ -3999,7 +4009,7 @@ AddCommand("touchfling", {}, "enables invisible forcefield", {}, function()
 	end)
 end)
 
-AddCommand("headrescale", {}, "resizes your head", {}, function()
+AddCommand("headrescale", {}, "resizes your head", {4}, function()
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
 		local Size = 6 --max size is 6
 		local SetHandleSize = true
@@ -4024,7 +4034,7 @@ AddCommand("headrescale", {}, "resizes your head", {}, function()
 			Head = Character.Head
 		end
 
-		if Humanoid.RigType == Enum.HumanoidRigType.R6 then return format "Need R15 for this command." end
+		if Humanoid.RigType == Enum.HumanoidRigType.R6 then return end
 
 		coroutine.wrap(function()
 			while Character do
@@ -4083,7 +4093,7 @@ AddCommand("headrescale", {}, "resizes your head", {}, function()
 	end
 end)
 
-AddCommand("hatrescale", {}, "resizes your hat", {}, function()
+AddCommand("hatrescale", {}, "resizes your hat", {4}, function()
 
 	local Settings = {
 		Values = {
@@ -4112,7 +4122,7 @@ AddCommand("hatrescale", {}, "resizes your hat", {}, function()
 	end
 	local WaitFunc = function(x) x.DescendantAdded:wait() task.wait() end
 
-	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return format "Need R15 for this command." end
+	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return end
 
 
 	for _,x in next, Settings.Values do
@@ -4139,7 +4149,7 @@ AddCommand("hatrescale", {}, "resizes your hat", {}, function()
 	end
 end)
 
-AddCommand("legrescale", {}, "resizes your legs", {}, function()
+AddCommand("legrescale", {}, "resizes your legs", {4}, function()
 	local Animate = FindFirstChild(GetCharacter(), "Animate");
 	SpoofProperty(Animate, "Disabled");
 	Animate.Disabled = true
@@ -4171,7 +4181,7 @@ AddCommand("legrescale", {}, "resizes your legs", {}, function()
 	end
 	local WaitFunc = function(x) x.DescendantAdded:wait() task.wait() end
 
-	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return format "Need R15 for this command." end
+	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return end
 
 	Character.LeftUpperLeg.LeftKneeRigAttachment:Destroy()
 	Character.LeftLowerLeg.LeftAnkleRigAttachment:Destroy()
@@ -4208,7 +4218,7 @@ AddCommand("getmass", {}, "checks your humanoid mass", {}, function()
 end)
 
 
-AddCommand("rescale", {}, "rescales your body", {}, function()
+AddCommand("rescale", {}, "rescales your body", {4}, function()
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then    
 		local LocalPlayer = game:GetService("Players").LocalPlayer
 		local Character = LocalPlayer.Character
@@ -4251,7 +4261,7 @@ AddCommand("rescale", {}, "rescales your body", {}, function()
 		Humanoid:FindFirstChild("HeadScale"):Destroy()
 		wait(0.2)
 	else
-		return format "Need R15 for this command."
+		return 
 	end
 end)
 
@@ -5401,7 +5411,7 @@ AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {}, fun
 	end
 	local WaitFunc = function(x) x.DescendantAdded:wait() task.wait() end
 
-	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return format "Need R15 for this command." end
+	if Humanoid.RigType == Enum.HumanoidRigType.R6 then return end
 
 
 	for _,x in next, Settings.Values do
