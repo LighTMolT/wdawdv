@@ -6204,9 +6204,9 @@ end)
 
 AddCommand("checksound", {}, "checks if sound can be played  ", {}, function()
 	if game:GetService("SoundService").RespectFilteringEnabled == false then
-		Utils.Notify(Caller, "Sound Check", "Sounds CAN be heard.")
+		Utils.Notify(Caller, "Sound Check", "Sounds CAN be exploited.")
 	else if game:GetService("SoundService").RespectFilteringEnabled == true then
-			Utils.Notify(Caller, "Sound Check", "Sounds CAN'T be heard.")
+			Utils.Notify(Caller, "Sound Check", "Sounds CAN'T be exploited.")
 		end
 	end
 end)
@@ -9941,6 +9941,6 @@ Utils.Notify(LocalPlayer, "Welcome", format("Hyperion Admin loaded in %.3f secon
 if game:GetService("SoundService").RespectFilteringEnabled == false then 
 	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is DISABLED, extra commands enabled.");
 else
-	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is ENABLED, some commands may not work.");    
+	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is ENABLED, audio commands will not replicate.");    
 end
 --/END\--
