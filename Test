@@ -3009,11 +3009,8 @@ AddCommand("netless", {}, "gives you network of character", {}, function()
 end)
 
 AddCommand("partownership", {}, "gives you ownership of unanchored parts", {}, function()
-	Utils.Notify(Caller, "Ownership", "PartOwnership enabled.")
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/your4eyes/RobloxScripts/main/Net_Library.lua"))()
-	coroutine.resume(Network["PartOwnership"]["Enable"])
-	Network.RetainPart(Part)
-	
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/LighTMolT/wdawdv/main/owne.md"))()
+	Utils.Notify(Caller, "Ownership", "PartOwnership enabled.")	
 end)
 
 AddCommand("reanimate", {}, "reanimates your character", {3}, function()
