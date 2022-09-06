@@ -5973,7 +5973,7 @@ AddCommand("swordaura", {"saura"}, "sword aura", {3}, function(Caller, Args, CEn
 	return "Sword aura enabled with distance " .. SwordDistance
 end)
 
-AddCommand("noswordaura", {"noaura"}, "stops the sword aura", {}, function()
+AddCommand("noswordaura", {}, "stops the sword aura", {}, function()
 	local Aura = LoadCommand("swordaura").CmdEnv
 	if (not next(Aura)) then
 		return "sword aura is not enabled"
@@ -5982,7 +5982,7 @@ AddCommand("noswordaura", {"noaura"}, "stops the sword aura", {}, function()
 	return "Sword aura disabled."
 end)
 
-AddCommand("freeze", {}, "freezes your character", {3}, function(Caller, Args)
+AddCommand("anchor", {}, "freezes your character", {3}, function()
 	local BaseParts = filter(GetChildren(GetCharacter(v)), function(i, v)
 		return IsA(v, "BasePart");
 	end)
@@ -5990,17 +5990,17 @@ AddCommand("freeze", {}, "freezes your character", {3}, function(Caller, Args)
 		SpoofProperty(v, "Anchored");
 		v.Anchored = true
 	end
-	return "Freeze enabled."
+	return "Anchor enabled."
 end)
 
-AddCommand("unfreeze", {"thaw"}, "unfreezes your character", {3}, function(Caller, Args)
+AddCommand("unanchor", {"thaw"}, "unfreezes your character", {3}, function()
 	local BaseParts = filter(GetChildren(GetCharacter(v)), function(i, v)
 		return IsA(v, "BasePart");
 	end)
 	for i, v in next, BaseParts do
 		v.Anchored = false
 	end
-	return "Freeze disabled."
+	return "Anchor disabled."
 end)
 
 AddCommand("streamermode", {}, "changes names of everyone to something random", {}, function(Caller, Args, CEnv)
