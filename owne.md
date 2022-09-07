@@ -33,6 +33,7 @@ local Bypasses = {
     ["slut"] = "sl{{aieixzvzx:ut}}",
     ["stfu"] = "st{{aieixzvzx:fu}}",
     ["squirt"] = "squi{{aieixzvzx:rt}}",
+    ["sex"] = "s{{aieixzvzx:ex}}",
     ["tits"] = "ti{{aieixzvzx:ts}}",
     ["terrorist"] = "terror{{aieixzvzx:ist}}",
     ["whore"] = "who{{aieixzvzx:re}}",
