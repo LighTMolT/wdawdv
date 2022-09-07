@@ -3675,23 +3675,9 @@ AddCommand("playsounds", {}, "plays all game sounds", {}, function()
 	end
 end)
 
-AddCommand("antichat", {}, "can't be banned for swearing", {}, function()
-	local CloneFunction = clonefunction
-	local CheckCaller = CloneFunction(checkcaller)
-	local HookFunction = CloneFunction(hookfunction)
-	Utils.Notify(Caller, "Command", "Antichat enabled.")
-	local LocalPlayer = game.Players.PlayerAdded:wait()
-	local PostMessage = require(LocalPlayer:WaitForChild("PlayerScripts", 1/0):WaitForChild("ChatScript", 1/0):WaitForChild("ChatMain", 1/0)).MessagePosted
-	getgenv().MessageEvent = Instance.new("BindableEvent")
-	local OldFunctionHook
-	local PostMessageHook = function(self, msg)
-		if not CheckCaller() and self == PostMessage then
-			MessageEvent:Fire(msg)
-			return
-		end
-		return OldFunctionHook(self, msg)		
-	end
-	OldFunctionHook = HookFunction(PostMessage.fire, PostMessageHook)	
+AddCommand("antichatlog", {}, "can't be banned for swearing", {}, function()
+loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/Anti%20Chat%20Logger.lua"))();	
+Utils.Notify(Caller, "Command", "Antichat enabled.")	
 end)
 
 AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
@@ -9936,7 +9922,7 @@ wait(0.3)
 
 --/ Scripting: Intro
 
-Utils.Notify(LocalPlayer, "Welcome", format("Hyperion Admin loaded in %.3f seconds.", (tick()) - _L.start));
+Utils.Notify(LocalPlayer, "Welcome", format("Hyperion Admin has loaded in %.3f seconds.", (tick()) - _L.start));
 if game:GetService("SoundService").RespectFilteringEnabled == false then 
 	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is DISABLED, audio commands will replicate.");
 else
