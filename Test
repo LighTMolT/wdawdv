@@ -3677,7 +3677,12 @@ end)
 
 AddCommand("antichatlog", {}, "can't be banned for swearing", {}, function()
 loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/Anti%20Chat%20Logger.lua"))();	
-Utils.Notify(Caller, "Command", "Antichat enabled.")	
+Utils.Notify(Caller, "Command", "Antichatlog enabled.")	
+end)
+
+AddCommand("chatbypass", {}, "bypasses chat filter", {}, function()
+loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatBypass.lua"))();	
+Utils.Notify(Caller, "Command", "Chatbypass enabled.")	
 end)
 
 AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
