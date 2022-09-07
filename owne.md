@@ -14,6 +14,7 @@ local Bypasses = {
     ["dyke"] = "dy{{aieixzvzx:ke}}",
     ["faggot"] = "fa{{aieixzvzx:ggot}}",
     ["fuck"] = "fu{{aieixzvzx:ck}}",
+    ["fucking"] = "fu{{aieixzvzx:cking}}",
     ["gaylord"] = "gayl{{aieixzvzx:ord}}",
     ["hentai"] = "hen{{aieixzvzx:tai}}",
     ["kike"] = "ki{{aieixzvzx:ke}}",
