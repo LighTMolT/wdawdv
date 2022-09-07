@@ -1,4 +1,4 @@
--- Execute and say badw words to your hearts content! You can also add more if you know a bit of lua and how this works lol
+
 local Bypasses = {
     ["ass"] = "as{{aieixzvzx:s}}",
     ["asshole"] = "as{{aieixzvzx:shole}}",
