@@ -8,6 +8,7 @@ local Bypasses = {
     ["butt"] = "bu{{aieixzvzx:tt}}",
     ["butthole"] = "but{{aieixzvzx:thole}}",
     ["cock"] = "co{{aieixzvzx:ck}}",
+    ["clitoris"] = "cli{{aieixzvzx:toris}}",
     ["cunt"] = "cu{{aieixzvzx:nt}}",
     ["cum"] = "cu{{aieixzvzx:m}}",
     ["dick"] = "di{{zczxczvz:ck}}",
