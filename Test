@@ -3680,9 +3680,9 @@ loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere
 Utils.Notify(Caller, "Command", "Antichatlog enabled.")	
 end)
 
-AddCommand("chatbypass", {}, "bypasses chat filter", {}, function()
+AddCommand("chatbypasser", {}, "bypasses chat filter", {}, function()
 loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatBypass.lua"))();	
-Utils.Notify(Caller, "Command", "Chatbypass enabled.")	
+Utils.Notify(Caller, "Command", "Bypassing chat filter...")	
 end)
 
 AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
