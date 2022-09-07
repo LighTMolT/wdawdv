@@ -4,6 +4,7 @@ local Bypasses = {
     ["asshole"] = "as{{aieixzvzx:shole}}",
     ["bitch"] = "bit{{aieixzvzx:ch}}",
     ["boobs"] = "boo{{aieixzvzx:bs}}",
+    ["blowjob"] = "blowj{{aieixzvzx:ob}}",
     ["butt"] = "bu{{aieixzvzx:tt}}",
     ["butthole"] = "but{{aieixzvzx:thole}}",
     ["cock"] = "co{{aieixzvzx:ck}}",
