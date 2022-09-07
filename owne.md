@@ -1,6 +1,6 @@
 
 local Bypasses = {
-    ["ass"] = "a{{aieixzvzx:ss}}",
+    ["ass"] = "as{{aieixzvzx:s}}",
     ["asshole"] = "as{{aieixzvzx:shole}}",
     ["bitch"] = "bit{{aieixzvzx:ch}}",
     ["boobs"] = "boo{{aieixzvzx:bs}}",
