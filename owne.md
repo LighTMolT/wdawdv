@@ -21,6 +21,7 @@ local Bypasses = {
     ["fucking"] = "fu{{aieixzvzx:cking}}",
     ["gaylord"] = "gayl{{aieixzvzx:ord}}",
     ["hentai"] = "hen{{aieixzvzx:tai}}",
+    ["hail"] = "ha{{aieixzvzx:il}}",
     ["hitler"] = "hit{{aieixzvzx:ler}}",
     ["kike"] = "ki{{aieixzvzx:ke}}",
     ["lmao"] = "lma{{aieixzvzx:o}}",
