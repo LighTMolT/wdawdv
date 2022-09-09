@@ -3682,7 +3682,7 @@ end)
 
 AddCommand("chatbypasser", {}, "bypasses chat filter", {}, function()
 loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/LighTMolT/wdawdv/main/owne.md"))();	
-Utils.Notify(Caller, "Command", "Bypassing chat filter...")	
+Utils.Notify(Caller, "Command", "ChatFilter bypassed.")	
 end)
 
 AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
