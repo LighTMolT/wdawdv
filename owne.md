@@ -12,6 +12,7 @@ local Bypasses = {
     ["cunt"] = "cu{{aieixzvzx:nt}}",
     ["cum"] = "cu{{aieixzvzx:m}}",
     ["cums"] = "cu{{aieixzvzx:ms}}",
+    ["cumming"] = "cu{{aieixzvzx:mming}}",
     ["dick"] = "di{{zczxczvz:ck}}",
     ["dicks"] = "di{{zczxczvz:cks}}",
     ["dyke"] = "dy{{aieixzvzx:ke}}",
