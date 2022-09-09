@@ -27,6 +27,7 @@ local Bypasses = {
     ["lmao"] = "lma{{aieixzvzx:o}}",
     ["masturbate"] = "mastu{{aieixzvzx:rbate}}",
     ["motherfucker"] = "motherf{{aieixzvzx:ucker}}",
+    ["moron"] = "mo{{aieixzvzx:ron}}",
     ["nazi"] = "na{{aieixzvzx:zi}}",
     ["nazism"] = "naz{{aieixzvzx:ism}}",
     ["nazist"] = "naz{{aieixzvzx:ist}}",
