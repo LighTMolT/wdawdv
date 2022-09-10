@@ -7100,27 +7100,6 @@ AddCommand("serverhop", {"shop"}, "switches servers (optional: min, max (default
 	end
 end);
 
-AddCommand("whitelist", {"wl"}, "whitelists a user so they can use commands", {"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	for i, v in next, Target do
-		AdminUsers[#AdminUsers + 1] = v
-		Utils.Notify(v, "Whitelisted", format("You (%s) are whitelisted to use commands", v.Name));
-	end
-end)
-
-AddCommand("whitelisted", {"whitelistedusers"}, "shows all the users whitelisted to use commands", {}, function(Caller)
-	return next(AdminUsers) and concat(map(AdminUsers, function(i,v) return v.Name end), ", ") or "no users whitelisted"
-end)
-
-AddCommand("blacklist", {"bl"}, "blacklists a whitelisted user", {"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	for i, v in next, Target do
-		if (Tfind(AdminUsers, v)) then
-			AdminUsers[indexOf(AdminUsers, v)] = nil
-		end
-	end
-end)
-
 local CommandsLoaded = false
 AddCommand("commands", {"cmds"}, "shows you all the commands listed in Hyperion admin", {}, function()
 	if (not CommandsLoaded) then
