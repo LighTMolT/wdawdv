@@ -5144,7 +5144,7 @@ AddCommand("noface", {}, "removes your face", {3}, function()
 	end
 end)
 
-AddCommand("demeshtools", {"dtools"}, "makes your tool a block", {3}, function()
+AddCommand("demeshtools", {"dtools"}, "makes your tool a block", {1}, function()
 	local character = game.Players.LocalPlayer.Character
 	local Char = GetCharacter();
 	local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, Child)
@@ -5165,16 +5165,16 @@ AddCommand("demeshtools", {"dtools"}, "makes your tool a block", {3}, function()
 	UnequipTools(GetHumanoid());
 end)
 
-AddCommand("gravity", {"grav"}, "sets the worksapaces gravity", {"1"}, function(Caller, Args)
+AddCommand("gravity", {"grav"}, "changes the gravity to arg", {}, function(Caller, Args)
 	SpoofProperty(Services.Workspace, "Gravity");
 	Services.Workspace.Gravity = tonumber(Args[1]) or Services.Workspace.Gravity
 end)
 
-AddCommand("nogravity", {"nograv", "ungravity"}, "removes the gravity", {}, function()
+AddCommand("nogravity", {"nograv", "ungravity"}, "changes the gravity to default (196.2)", {}, function()
 	Services.Workspace.Gravity = 192
 end)
 
-AddCommand("ignore", {}, "puts a players character in lighting", {"1"}, function(Caller, Args)
+AddCommand("ignore", {}, "puts a players character in lighting", {}, function(Caller, Args)
 	local Target = GetPlayer(Args[1]);
 	for i, v in next, Target do
 		if (v.Character) then
@@ -5185,7 +5185,7 @@ AddCommand("ignore", {}, "puts a players character in lighting", {"1"}, function
 	end
 end)
 
-AddCommand("loopignore", {}, "loop of delete command", {"1"}, function(Caller, Args, CEnv)
+AddCommand("loopignore", {}, "loop of delete command", {}, function(Caller, Args, CEnv)
 	local Target = GetPlayer(Args[1]);
 	for i, v in next, Target do
 		if (v.Character) then
@@ -6541,6 +6541,13 @@ end)
 AddCommand("newbubblechat", {}, "enables the new bubblechat on client", {}, function()
 local Chat = game:FindService("Chat")
 Chat.BubbleChatEnabled = true
+Utils.Notify(Caller, "Bubble Chat", "Enabled!")
+end)
+
+AddCommand("oldbubblechat", {}, "disables the new bubblechat on client", {}, function()
+local Chat = game:FindService("Chat")
+Chat.BubbleChatEnabled = false
+Utils.Notify(Caller, "Bubble Chat", "Disabled!")
 end)
 
 AddCommand("chatlogs", {"logs"}, "enables chatlogs", {}, function()
@@ -6587,7 +6594,7 @@ AddCommand("buildertools", {"btools"}, "gives you btools", {3}, function(Caller,
 		Bin.BinType = i		
 		Bin.Parent = BP
 	end
-	return "Buildertools loaded."
+	Utils.Notify(Caller, "Btools", "Got Btools!")
 end)
 
 AddCommand("spin", {}, "spins your character (optional: speed)", {}, function(Caller, Args, CEnv)
