@@ -2423,7 +2423,7 @@ local CommandRequirements = {
 	},
 	[2] = {
 		Func = isR6,
-		Message = "You need to be R6 for this command."
+		Message = "This command doesn't work on R15."
 	},
 	[3] = {
 		Func = function()
@@ -2433,7 +2433,7 @@ local CommandRequirements = {
 	},
 	[4] = {
 		Func = isR15,
-		Message = "You need to be R15 for this command."
+		Message = "This command doesn't work on R6."
 	},
 }
 
