@@ -19,6 +19,7 @@ local Bypasses = {
     ["dick"] = "di{{zczxczvz:ck}}",
     ["dicks"] = "di{{zczxczvz:cks}}",
     ["dyke"] = "dy{{aieixzvzx:ke}}",
+    ["ejaculate"] = "ejacu{{aieixzvzx:late}}",
     ["ejaculation"] = "ejacu{{aieixzvzx:lation}}",
     ["faggot"] = "fa{{aieixzvzx:ggot}}",
     ["fuck"] = "fu{{aieixzvzx:ck}}",
