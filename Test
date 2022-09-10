@@ -2296,7 +2296,7 @@ do
 
 		Console.Frame.List.CanvasSize = UDim2.fromOffset(0, Console.Frame.List.UIListLayout.AbsoluteContentSize.Y);
 		AmountWarn = AmountWarn + 1
-		Utils.Notify(Plr, "Warning", Text);
+		Utils.Notify(Plr, "Hyperion Admin", Text);
 	end
 
 	Utils.Error = function(Text, Caller, FromNotif)
