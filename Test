@@ -1,5 +1,5 @@
 --[[
-	< Molt's Admin >
+	< Hyperion Admin >
 ]]
 
 local game = game
@@ -8010,7 +8010,7 @@ AddCommand("dex", {"explorer"}, "loads dark explorer", {}, function()
 end)
 
 AddCommand("advertise", {}, "advertises the admin", {}, function()
-	local ad = {"Molt's admin v1", "All"}
+	local ad = {"Hyperion admin v1 by LighTMolT", "All"}
 	game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(table.unpack(ad))
 end)
 
