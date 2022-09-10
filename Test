@@ -5124,7 +5124,7 @@ AddCommand("drophats", {}, "removes all the hats from your character", {3}, func
 	character.Head:remove() --optional, can be removed
 end)
 
-AddCommand("demeshhats", {}, "makes your hats block", {2}, function()
+AddCommand("demeshhats", {"dhats"}, "makes your hats block", {2}, function()
 	local character = game.Players.LocalPlayer.Character
 	for _,v in pairs(character:FindFirstChildOfClass('Humanoid'):GetAccessories()) do
 		for i,c in pairs(v:GetDescendants()) do
@@ -5144,7 +5144,7 @@ AddCommand("noface", {}, "removes your face", {3}, function()
 	end
 end)
 
-AddCommand("demeshtools", {}, "makes your tool a block", {3}, function()
+AddCommand("demeshtools", {"dtools"}, "makes your tool a block", {3}, function()
 	local character = game.Players.LocalPlayer.Character
 	local Char = GetCharacter();
 	local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, Child)
