@@ -28,6 +28,7 @@ local Bypasses = {
     ["hentai"] = "hen{{aieixzvzx:tai}}",
     ["hail"] = "ha{{aieixzvzx:il}}",
     ["hitler"] = "hit{{aieixzvzx:ler}}",
+    ["hot"] = "h{{aieixzvzx:ot}}",
     ["kike"] = "ki{{aieixzvzx:ke}}",
     ["lmao"] = "lma{{aieixzvzx:o}}",
     ["masturbate"] = "mastu{{aieixzvzx:rbate}}",
