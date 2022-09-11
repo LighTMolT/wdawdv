@@ -7810,7 +7810,7 @@ AddCommand("hidename", {"hidetag"}, "hides your nametag (billboardgui)", {3}, fu
 			Destroy(v);
 		end
 	end
-	return "Removed billboardgui."
+	return "Hidden!"
 end)
 
 AddCommand("nojumpcooldown", {}, "removes a jumpcooldown if any in games", {}, function()
