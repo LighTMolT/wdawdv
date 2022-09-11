@@ -3677,12 +3677,12 @@ end)
 
 AddCommand("antichatlog", {}, "can't be banned for swearing", {}, function()
 loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/Anti%20Chat%20Logger.lua"))();	
-Utils.Notify(Caller, "Command", "Antichatlog enabled.")	
+Utils.Notify(Caller, "Command", "Enabled!")	
 end)
 
-AddCommand("chatbypasser", {}, "bypasses chat filter", {}, function()
+AddCommand("filterbypass", {}, "bypasses chat filter", {}, function()
 loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/LighTMolT/wdawdv/main/owne.md"))();	
-Utils.Notify(Caller, "Command", "Chat filter bypassed.")	
+Utils.Notify(Caller, "Command", "Bypassed!")	
 end)
 
 AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
@@ -4084,7 +4084,6 @@ AddCommand("headrescale", {}, "resizes your head", {4}, function()
 end)
 
 AddCommand("hatrescale", {}, "resizes your hat", {4}, function()
-
 	local Settings = {
 		Values = {
 			BodyTypeScale = true;
@@ -4251,7 +4250,7 @@ AddCommand("rescale", {}, "rescales your body", {4}, function()
 		wait(0.2)
 end)
 
-AddCommand("toolhats", {}, "makes your hats holdable", {}, function()
+AddCommand("toolhats", {}, "makes your hats holdable", {3}, function()
 	local lp = game.Players.LocalPlayer
 	local char = lp.Character
 
@@ -4335,7 +4334,7 @@ AddCommand("toolhats", {}, "makes your hats holdable", {}, function()
 	end
 end)
 
-AddCommand("bodybomb", {}, "makes your character bomb other players", {}, function()
+AddCommand("bodybomb", {}, "makes your character bomb other players", {3}, function()
 	loadstring(game:HttpGet('https://github.com/DigitalityScripts/roblox-scripts/raw/main/loop%20fling%20all'))()
 end)
 
