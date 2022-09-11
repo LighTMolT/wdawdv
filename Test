@@ -6707,8 +6707,7 @@ AddCommand("noxray", {"unxray"}, "stops xray", {}, function(Caller, Args)
 	Utils.Notify(Caller, "Xray", "Disabled!")
 end)
 
-AddCommand("removelights", {"nolights"}, "removes all lights", {}, function(Caller, Args, CEnv)
-	SpoofProperty(Lighting, "GlobalShadows");
+AddCommand("removelights", {"nolights"}, "removes all lights", {}, function(Caller, Args, CEnv)	
 	for i, v in next, GetDescendants(game) do
 		if (IsA(v, "PointLight") or IsA(v, "SurfaceLight") or IsA(v, "SpotLight")) then
 			CEnv[v] = v.Parent
@@ -6716,7 +6715,7 @@ AddCommand("removelights", {"nolights"}, "removes all lights", {}, function(Call
 		end
 	end
 	Lighting.GlobalShadows = true
-	Utils.Notify(Caller, "Removelights", "Removed!")
+	Utils.Notify(Caller, "Lights", "Removed!")
 end)
 
 AddCommand("revertnolights", {"lights"}, "reverts nolights", {}, function()
