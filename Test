@@ -5459,13 +5459,20 @@ AddCommand("displaynames", {}, "enables/disables display names (on/off)", {{"on"
 	end
 end)
 
-AddCommand("time", {"settime"}, "sets the games time", {{"night", "day", "dawn"}}, function(Caller, Args)
+AddCommand("daytime", {"day"}, "sets the games time to day", {}, function()
 	local Lighting = Services.Lighting
-	local Time = Args[1] and lower(Args[1]) or 14
-	local Times = {["night"]=0,["day"]=14,["dawn"]=6}
+	local Time = 14
 	SpoofProperty(Lighting, "ClockTime", true);
-	Lighting.ClockTime = Times[Time] or Time
-	Utils.Notify(Caller, "Time", "Time set to "..Time)
+	Lighting.ClockTime = Time
+	Utils.Notify(Caller, "Time", "Day!")
+end)
+
+AddCommand("nighttime", {"night"}, "sets the games time to night", {}, function()
+	local Lighting = Services.Lighting
+	local Time = 0
+	SpoofProperty(Lighting, "ClockTime", true);
+	Lighting.ClockTime = Time
+	Utils.Notify(Caller, "Time", "Night!")
 end)
 
 AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, function()
@@ -6536,13 +6543,13 @@ AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
 end)
 
 AddCommand("newbubblechat", {}, "enables the new bubblechat on client", {}, function()
-	local Chat = game:FindService("Chat")
+	local Chat = Services.Chat
 	Chat.BubbleChatEnabled = true
 	Utils.Notify(Caller, "BubbleChat", "Enabled!")
 end)
 
 AddCommand("oldbubblechat", {}, "disables the new bubblechat on client", {}, function()
-	local Chat = game:FindService("Chat")
+	local Chat = Services.Chat
 	Chat.BubbleChatEnabled = false
 	Utils.Notify(Caller, "BubbleChat", "Disabled!")
 end)
