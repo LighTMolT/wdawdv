@@ -3009,10 +3009,10 @@ AddCommand("netless", {}, "gives you network of character", {}, function()
 end)
 
 AddCommand("partownership", {"ownership"}, "gives you ownership of unanchored parts", {}, function()
-        Utils.Notify(Caller, "Ownership", "PartOwnership enabled.")	
+	Utils.Notify(Caller, "Ownership", "PartOwnership enabled.")	
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/your4eyes/RobloxScripts/main/Net_Library.lua"))()
-        coroutine.resume(Network["PartOwnership"]["Enable"])
-        Network.RetainPart(Part)
+	coroutine.resume(Network["PartOwnership"]["Enable"])
+	Network.RetainPart(Part)
 end)
 
 AddCommand("reanimate", {}, "reanimates your character", {3}, function()
@@ -3037,7 +3037,7 @@ AddCommand("headless", {}, "removes your head", {2}, function()
 end)
 
 AddCommand("split", {}, "splits your body in half", {4}, function()
-game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
+	game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
 end)
 
 AddCommand("ragdoll", {}, "makes you ragdoll", {2}, function()
@@ -3334,6 +3334,7 @@ AddCommand("blockholder", {}, "gives you an item to hold blocks", {}, function()
 			end
 		end)
 	end)
+	Utils.Notify(Caller, "Blockholder", "Got Blockholder!")
 end)
 
 
@@ -3603,17 +3604,13 @@ AddCommand("2006animations", {"2006anims"}, "old roblox animations", {}, functio
 		local _, time = wait(0.1)
 		move(time)
 	end
+	Utils.Notify(Caller, "2006animations", "Loaded!")
 end)
 
-AddCommand("customanimation", {"customanim"}, "plays an animation id", {}, function(Caller, Args)		
-
-	--loadstring(game:HttpGet("https://pastebin.com/raw/heaedQMh"))()
-	--loadstring(game:HttpGet("https://pastebin.com/raw/9K9jPgxr"))()
+AddCommand("customanimation", {"customanim"}, "plays an animation id", {3}, function(Caller, Args)		
 	loadstring(game:HttpGet("https://pastebin.com/raw/UiDNEtL8"))()
-
 	local anim = tonumber(Args[1])
 	local id = anim;
-
 	local kfs = game:GetObjects('rbxassetid://' .. tostring(id))[1];
 	local poses = {};
 	local frames = {};
@@ -3673,21 +3670,22 @@ AddCommand("playsounds", {}, "plays all game sounds", {}, function()
 			sound:Play()
 		end
 	end
+	Utils.Notify(Caller, "Playsounds", "Sounds played!")
 end)
 
 AddCommand("antichatlog", {}, "can't be banned for swearing", {}, function()
-loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/Anti%20Chat%20Logger.lua"))();	
-Utils.Notify(Caller, "Command", "Enabled!")	
+	loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/Anti%20Chat%20Logger.lua"))();	
+	Utils.Notify(Caller, "Antichatlog", "Enabled!")	
 end)
 
 AddCommand("filterbypass", {}, "bypasses chat filter", {}, function()
-loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/LighTMolT/wdawdv/main/owne.md"))();	
-Utils.Notify(Caller, "Command", "Bypassed!")	
+	loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/LighTMolT/wdawdv/main/owne.md"))();	
+	Utils.Notify(Caller, "Filterbypass", "Bypassed!")	
 end)
 
 AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
 	workspace.FallenPartsDestroyHeight = 0/1/0
-	return format "Destroyheight removed."
+	return format "Destroyheight removed!"
 end)
 
 AddCommand("antiattach", {"antitools"}, "enables antiattach", {}, function()
@@ -3737,12 +3735,11 @@ AddCommand("antiattach", {"antitools"}, "enables antiattach", {}, function()
 	end
 	onchar(lp.Character)
 	charcon = lp.CharacterAdded:Connect(onchar)
-	return format "Antiattach enabled."
+	Utils.Notify(Caller, "Antiattach", "Enabled!")
 end)
 
 AddCommand("antifling", {}, "can't be flinged ", {}, function()
 	repeat task.wait() until game:IsLoaded()
-	--Added a second hook cuz in some reason hookmetamethod doesnt work in Synapse X
 	local PhysicsService = game:GetService("PhysicsService")
 	local Workspace = game:GetService("Workspace")
 
@@ -3947,7 +3944,7 @@ AddCommand("antifling", {}, "can't be flinged ", {}, function()
 	Players.PlayerRemoving:Connect(function(Player)
 		NoCollider[Player.Name]:Disconnect()
 	end)
-	return format "Enabled!"
+	Utils.Notify(Caller, "Antifling", "Enabled!")
 end)
 
 AddCommand("touchfling", {}, "enables invisible forcefield", {}, function()
@@ -3997,6 +3994,7 @@ AddCommand("touchfling", {}, "enables invisible forcefield", {}, function()
 			end
 		end
 	end)
+	Utils.Notify(Caller, "Touchfling", "Enabled!")
 end)
 
 AddCommand("headrescale", {}, "resizes your head", {4}, function()
@@ -4081,6 +4079,7 @@ AddCommand("headrescale", {}, "resizes your head", {4}, function()
 		end
 		Humanoid.HipHeight = 8.5
 	end
+	Utils.Notify(Caller, "Headrescale", "Rescaled!")
 end)
 
 AddCommand("hatrescale", {}, "resizes your hat", {4}, function()
@@ -4136,6 +4135,7 @@ AddCommand("hatrescale", {}, "resizes your hat", {4}, function()
 			WaitFunc(Character)
 		end
 	end
+	Utils.Notify(Caller, "Hatrescale", "Rescaled!")
 end)
 
 AddCommand("legrescale", {}, "resizes your legs", {4}, function()
@@ -4198,56 +4198,58 @@ AddCommand("legrescale", {}, "resizes your legs", {4}, function()
 			WaitFunc(Character)
 		end
 	end
+	Utils.Notify(Caller, "Legrescale", "Rescaled!")
 end)
 
 AddCommand("getmass", {}, "checks your humanoid mass", {}, function()
-		local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-		local myMass = myPart:GetMass()
-		return format "HumanoidRootPart mass is " ..myMass
+	local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+	local myMass = myPart:GetMass()
+	Utils.Notify(Caller, "Getmass", "HumanoidRootPart mass is "..myMass)
 end)
 
 
 AddCommand("rescale", {}, "rescales your body", {4}, function()
-		local LocalPlayer = game:GetService("Players").LocalPlayer
-		local Character = LocalPlayer.Character
-		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+	local LocalPlayer = game:GetService("Players").LocalPlayer
+	local Character = LocalPlayer.Character
+	local Humanoid = Character:FindFirstChildOfClass("Humanoid")
 
-		local function rm()
-			for i,v in pairs(Character:GetDescendants()) do
-				if v:IsA("BasePart") then
-					if v.Name ~= "Head" then
-						for i,cav in pairs(v:GetDescendants()) do
-							if cav:IsA("Attachment") then
-								if cav:FindFirstChild("OriginalPosition") then
-									cav.OriginalPosition:Destroy()
-								end
+	local function rm()
+		for i,v in pairs(Character:GetDescendants()) do
+			if v:IsA("BasePart") then
+				if v.Name ~= "Head" then
+					for i,cav in pairs(v:GetDescendants()) do
+						if cav:IsA("Attachment") then
+							if cav:FindFirstChild("OriginalPosition") then
+								cav.OriginalPosition:Destroy()
 							end
 						end
-						v:FindFirstChild("OriginalSize"):Destroy()
-						if v:FindFirstChild("AvatarPartScaleType") then
-							v:FindFirstChild("AvatarPartScaleType"):Destroy()
-						end
+					end
+					v:FindFirstChild("OriginalSize"):Destroy()
+					if v:FindFirstChild("AvatarPartScaleType") then
+						v:FindFirstChild("AvatarPartScaleType"):Destroy()
 					end
 				end
 			end
 		end
+	end
 
-		rm()
-		wait(0.2)
-		Humanoid:FindFirstChild("BodyTypeScale"):Destroy()
-		wait(0.2) 
-		rm()
-		wait(0.2)
-		Humanoid:FindFirstChild("BodyWidthScale"):Destroy()
-		wait(0.2) 
-		rm()
-		wait(0.2)
-		Humanoid:FindFirstChild("BodyDepthScale"):Destroy()
-		wait(0.2) 
-		rm()
-		wait(0.2)
-		Humanoid:FindFirstChild("HeadScale"):Destroy()
-		wait(0.2)		
+	rm()
+	wait(0.2)
+	Humanoid:FindFirstChild("BodyTypeScale"):Destroy()
+	wait(0.2) 
+	rm()
+	wait(0.2)
+	Humanoid:FindFirstChild("BodyWidthScale"):Destroy()
+	wait(0.2) 
+	rm()
+	wait(0.2)
+	Humanoid:FindFirstChild("BodyDepthScale"):Destroy()
+	wait(0.2) 
+	rm()
+	wait(0.2)
+	Humanoid:FindFirstChild("HeadScale"):Destroy()
+	wait(0.2)
+	Utils.Notify(Caller, "Rescale", "Rescaled!")
 end)
 
 AddCommand("toolhats", {}, "makes your hats holdable", {3}, function()
@@ -4336,7 +4338,7 @@ end)
 
 AddCommand("bodybomb", {}, "makes your character bomb other players", {3}, function()
 	loadstring(game:HttpGet('https://github.com/DigitalityScripts/roblox-scripts/raw/main/loop%20fling%20all'))()
-	Utils.Notify(Caller, "Command", "Loading...")
+	Utils.Notify(Caller, "Bodybomb", "Loading...")
 end)
 
 AddCommand("setcreatorid", {"setcreator"}, "sets your id to the owner one", {}, function()
@@ -4589,7 +4591,7 @@ AddCommand("lvoid", {}, "resize and voids a user", {1,4}, function(Caller, Args)
 end)
 
 AddCommand("rocket", {}, "rocket a user", {1,"1"}, function(Caller, Args)
-        local Target = GetPlayer(Args[1]);
+	local Target = GetPlayer(Args[1]);
 	local Target2 = Args[2] and GetPlayer(Args[2]);
 	local OldPos = GetRoot(Caller).CFrame
 
@@ -4758,13 +4760,13 @@ AddCommand("view", {}, "views a user", {3,"1"}, function(Caller, Args, CEnv)
 		CWait(Heartbeat);
 		Camera.CameraSubject = Target.Character
 	end), CEnv);
-	return "Viewing " .. Target.Name
+	Utils.Notify(Caller, "View", "Viewing" ..Target.Name)
 end)
 
 AddCommand("unview", {"unv"}, "unviews a user", {3}, function(Caller, Args)
 	DisableAllCmdConnections("view");
 	Camera.CameraSubject = GetCharacter();
-	return "Unviewing."
+	Utils.Notify(Caller, "View", "Unviewing!")
 end)
 
 AddCommand("invisible", {"invis"}, "makes yourself invisible", {3}, function(Caller, Args, CEnv)
@@ -4799,7 +4801,7 @@ AddCommand("invisible", {"invis"}, "makes yourself invisible", {3}, function(Cal
 			end
 		end
 	end
-	return "You are now invisible."
+	Utils.Notify(Caller, "Invisible", "Now invisible!")
 end)
 
 AddCommand("uninvisible", {"uninvis", "visible", "vis"}, "gives you back visiblity", {3}, function(Caller, Args, CEnv)
@@ -4818,7 +4820,7 @@ AddCommand("uninvisible", {"uninvis", "visible", "vis"}, "gives you back visibli
 				i.Transparency = v
 			end
 		end
-		return "You are now visible."
+		Utils.Notify(Caller, "Invisible", "Now visible!")
 	end
 	return "You are already visible."
 end)
@@ -4988,11 +4990,11 @@ end)
 AddCommand("stopdupe", {}, "stops the dupe", {}, function()
 	local Dupe = LoadCommand("dupetools").CmdEnv
 	if (not next(Dupe)) then
-		return "you are not duping tools"
+		return "You are not duping tools."
 	end
 	LoadCommand("dupetools").CmdEnv[1] = false
 	DisableAllCmdConnections("dupetools");
-	return "Dupetools stopped."
+	Utils.Notify(Caller, "Dupetools", "Stopped!")
 end)
 
 AddCommand("givetools", {}, "gives all of your tools to a player", {3,1,"1"}, function(Caller, Args)
@@ -5080,6 +5082,7 @@ AddCommand("removerarm", {"rrarm"}, "removes right arm from your character", {3}
 	elseif game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then		
 		game.Players.LocalPlayer.Character["RightUpperArm"]:Destroy()		
 	end
+	Utils.Notify(Caller, "Removerarm", "Removed!")
 end)
 
 AddCommand("removehats", {"nohats"}, "removes all the hats from your character", {3}, function()
@@ -5092,6 +5095,7 @@ AddCommand("removehats", {"nohats"}, "removes all the hats from your character",
 			end
 		end
 	end
+	Utils.Notify(Caller, "Removehats", "Removed!")
 end)
 
 AddCommand("drophats", {}, "removes all the hats from your character", {3}, function()
@@ -5118,6 +5122,7 @@ AddCommand("drophats", {}, "removes all the hats from your character", {3}, func
 		end
 	end
 	character.Head:remove()
+	Utils.Notify(Caller, "Drophats", "Dropped!")
 end)
 
 AddCommand("demeshhats", {"dhats"}, "makes your hats block", {2}, function()
@@ -5129,6 +5134,7 @@ AddCommand("demeshhats", {"dhats"}, "makes your hats block", {2}, function()
 			end
 		end
 	end
+	Utils.Notify(Caller, "Demeshhats", "Demeshed!")
 end)
 
 AddCommand("noface", {}, "removes your face", {3}, function()
@@ -5159,6 +5165,7 @@ AddCommand("demeshtools", {"dtools"}, "makes your tool a block", {1}, function()
 		end
 	end
 	UnequipTools(GetHumanoid());
+	Utils.Notify(Caller, "Demeshtools", "Demeshed!")
 end)
 
 AddCommand("gravity", {"grav"}, "changes the gravity to arg", {}, function(Caller, Args)
@@ -5224,7 +5231,7 @@ AddCommand("sit", {}, "makes you sit", {3}, function(Caller, Args, CEnv)
 	local Humanoid = GetHumanoid();
 	SpoofProperty(Humanoid, "Sit", false);
 	Humanoid.Sit = true
-	return "Now sitting."
+	Utils.Notify(Caller, "Sit", "Sitting!")
 end)
 
 
@@ -5237,7 +5244,7 @@ AddCommand("antikill", {}, "fakes your humanoid sit", {3}, function(Caller, Args
 			hum.Sit = true
 		end
 	end
-	return "Enabled!"
+	Utils.Notify(Caller, "Antikill", "Enabled!")
 end)
 
 AddCommand("unantikill", {"noantikill"}, "removes humanoid seated", {3}, function(Caller, Args, CEnv)
@@ -5249,7 +5256,7 @@ AddCommand("unantikill", {"noantikill"}, "removes humanoid seated", {3}, functio
 			hum.Sit = false
 		end
 	end
-	return "Disabled!"
+	Utils.Notify(Caller, "Antikill", "Disabled!")
 end)
 
 AddCommand("infinitejump", {"infjump"}, "infinite jump no cooldown", {3}, function(Caller, Args, CEnv)
@@ -5259,7 +5266,7 @@ AddCommand("infinitejump", {"infjump"}, "infinite jump no cooldown", {3}, functi
 			ChangeState(Humanoid, 3);
 		end
 	end), CEnv);
-	return "Enabled!"
+	Utils.Notify(Caller, "Infinitejump", "Enabled!")
 end)
 
 AddCommand("noinfinitejump", {"uninfjump"}, "removes infinite jump", {}, function()
@@ -5268,7 +5275,7 @@ AddCommand("noinfinitejump", {"uninfjump"}, "removes infinite jump", {}, functio
 		return "you are not infinite jumping"
 	end
 	DisableAllCmdConnections("infinitejump");
-	return "Disabled!"
+	Utils.Notify(Caller, "Infinitejump", "Disabled!")
 end)
 
 AddCommand("headsit", {}, "sits on the players head", {"1"}, function(Caller, Args, CEnv)
@@ -5292,7 +5299,7 @@ AddCommand("unheadsit", {"noheadsit"}, "unheadsits on the target", {3}, function
 	for i, v in next, Looped do
 		Disconnect(v);
 	end
-	return "Headsit disabled."
+	Utils.Notify(Caller, "Headsit", "Disabled!")
 end)
 
 AddCommand("headstand", {}, "stands on a players head", {"1",3}, function(Caller, Args, CEnv)
@@ -5312,7 +5319,7 @@ AddCommand("unheadstand", {"noheadstand"}, "unheadstands on the target", {3}, fu
 	for i, v in next, Looped do
 		Disconnect(v);
 	end
-	return "Headstand disabled."
+	Utils.Notify(Caller, "Headstand", "Disabled!")
 end)
 
 AddCommand("setspawn", {}, "sets your spawn location to the location you are at", {3}, function(Caller, Args, CEnv)
@@ -5396,6 +5403,7 @@ AddCommand("lowgfx", {}, "lowers your graphic", {}, function()
 			end
 		end)
 	end)
+	Utils.Notify(Caller, "LowGFX", "Enabled!")
 end)
 
 AddCommand("fps", {"frames"}, "shows you your framerate", {}, function()
@@ -5434,7 +5442,7 @@ AddCommand("displaynames", {}, "enables/disables display names (on/off)", {{"on"
 			ShowName(v);
 		end
 		AddConnection(CConnect(Players.PlayerAdded, ShowName));
-		return "Displayname enabled."
+		return "Displaynames enabled."
 	elseif (lower(Option) == "on") then
 		for i, v in next, LoadCommand("displaynames").CmdEnv do
 			if (type(v) == 'userdata' and v.Disconnect) then
@@ -5447,7 +5455,7 @@ AddCommand("displaynames", {}, "enables/disables display names (on/off)", {{"on"
 				v = nil
 			end
 		end
-		return "Displayname disabled."
+		Utils.Notify(Caller, "Displaynames", "Disabled!")
 	end
 end)
 
@@ -5457,10 +5465,10 @@ AddCommand("time", {"settime"}, "sets the games time", {{"night", "day", "dawn"}
 	local Times = {["night"]=0,["day"]=14,["dawn"]=6}
 	SpoofProperty(Lighting, "ClockTime", true);
 	Lighting.ClockTime = Times[Time] or Time
+	Utils.Notify(Caller, "Time", "Time set to "..Time)
 end)
 
 AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, function()
-
 	local Settings = {
 		Values = {
 			BodyTypeScale = true;
@@ -5527,21 +5535,17 @@ AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, fu
 		end
 	end
 	character.HumanoidRootPart:Destroy()
-
 	for i,v in pairs(character:GetChildren()) do
 		if v:IsA("Accessory") then
-			sethiddenproperty(v,"BackendAccoutrementState", 0) --any integer 0-3 works but 4, as 4 is the default state for in character, 0 is for when it has collision in character or other circumstances, 2 is workspace, 1 is unknown if you know or figure out please let me know
-			--BackendAccoutrementState is a replicated property similar to NetworkIsSleeping and is further documented in reweld
+			sethiddenproperty(v,"BackendAccoutrementState", 0) 
 		end
 	end
-
 	for i,v in pairs(character:GetChildren()) do
 		if v:IsA("BasePart") and v.Name ~= "Head" then
-			v:Destroy() --trigger childremoving (can also remove body colors or animate localscript)
-			--we can also trigger childadded with a tool or something else to weld the hats to our head
+			v:Destroy() 
 		end
 	end
-	character.Head:remove() --optional, can be removed
+	character.Head:remove() 
 
 	game:GetService("RunService").RenderStepped:wait()
 	local v = character:FindFirstChild("PirateCaptain_HatAccessory").Handle
@@ -5556,7 +5560,7 @@ AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, fu
 	temp1.Parent = v
 	local Box = Instance.new("SelectionBox")
 	Box.LineThickness = 0.03
-	
+
 	local part = v
 	local selectionBox = Box	
 	local t = 5;
@@ -5570,7 +5574,7 @@ AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, fu
 		end)()
 	end
 	rainbowEffect(selectionBox, "Color3")
-	
+
 	Box.Parent = v
 	Box.Adornee = v
 	v.CanCollide = false
@@ -5595,21 +5599,17 @@ AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
 		end
 	end
 	character.HumanoidRootPart:Destroy()
-
 	for i,v in pairs(character:GetChildren()) do
 		if v:IsA("Accessory") then
-			sethiddenproperty(v,"BackendAccoutrementState", 0) --any integer 0-3 works but 4, as 4 is the default state for in character, 0 is for when it has collision in character or other circumstances, 2 is workspace, 1 is unknown if you know or figure out please let me know
-			--BackendAccoutrementState is a replicated property similar to NetworkIsSleeping and is further documented in reweld
+			sethiddenproperty(v,"BackendAccoutrementState", 0) 
 		end
 	end
-
 	for i,v in pairs(character:GetChildren()) do
 		if v:IsA("BasePart") and v.Name ~= "Head" then
-			v:Destroy() --trigger childremoving (can also remove body colors or animate localscript)
-			--we can also trigger childadded with a tool or something else to weld the hats to our head
+			v:Destroy() 
 		end
 	end
-	character.Head:remove() --optional, can be removed
+	character.Head:remove() 
 
 	game:GetService("RunService").RenderStepped:wait()
 	local v = character:FindFirstChildOfClass("Accessory").Handle
@@ -5624,7 +5624,7 @@ AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
 	temp1.Parent = v
 	local Box = Instance.new("SelectionBox")
 	Box.LineThickness = 0.03
-	
+
 	local part = v
 	local selectionBox = Box	
 	local t = 5;
@@ -5638,7 +5638,7 @@ AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
 		end)()
 	end
 	rainbowEffect(selectionBox, "Color3")
-	
+
 	Box.Parent = v
 	Box.Adornee = v
 	v.CanCollide = false
@@ -5921,7 +5921,7 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 	local Box = Instance.new("SelectionBox")
 	Box.LineThickness = 0.01 
 	local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
-	
+
 	local part = v
 	local selectionBox = Box	
 	local t = 5;
@@ -5945,15 +5945,15 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 
 
 
-local MouseDown = false
+	local MouseDown = false
 
-Mouse.Button1Down:connect(function()
-     MouseDown = true
-end)
+	Mouse.Button1Down:connect(function()
+		MouseDown = true
+	end)
 
-Mouse.Button1Up:connect(function()
-     MouseDown = false
-end)
+	Mouse.Button1Up:connect(function()
+		MouseDown = false
+	end)
 
 	game:GetService("RunService").Heartbeat:Connect(function()		
 		if MouseDown then
@@ -5976,7 +5976,7 @@ AddCommand("reach", {"swordreach"}, "changes handle size of your tool", {1, 3}, 
 	SpoofProperty(Handle, "Massless");
 	Handle.Size = Vector3New(Size.X, Size.Y, tonumber(Amount or 30));
 	Handle.Massless = true
-	return "Reach enabled."
+	Utils.Notify(Caller, "Reach", "Reach set to "..Amount)
 end)
 
 AddCommand("noreach", {"noswordreach"}, "removes sword reach", {}, function()
@@ -5988,12 +5988,11 @@ AddCommand("noreach", {"noswordreach"}, "removes sword reach", {}, function()
 		i.Size = v
 	end
 	LoadCommand("reach").CmdEnv = {}
-	return "Reach disabled."
+	Utils.Notify(Caller, "Reach", "Disabled!")
 end)
 
 AddCommand("swordaura", {"saura"}, "sword aura", {3}, function(Caller, Args, CEnv)
 	DisableAllCmdConnections("swordaura");
-
 	local SwordDistance = tonumber(Args[1]) or 10
 	local Tool = FindFirstChildWhichIsA(GetCharacter(), "Tool") or FindFirstChildWhichIsA(LocalPlayer.Backpack, "Tool");
 	local PlayersTbl = filter(GetPlayers(Players), function(i, v)
@@ -6050,8 +6049,7 @@ AddCommand("swordaura", {"saura"}, "sword aura", {3}, function(Caller, Args, CEn
 	AddConnection(CConnect(Players.PlayerRemoving, function(Plr)
 		PlayersTbl[indexOf(PlayersTbl, Plr)] = nil
 	end), CEnv);
-
-	return "Sword aura enabled with distance " .. SwordDistance
+	Utils.Notify(Caller, "Swordaura", "Swordaura set with distance ".. SwordDistance)
 end)
 
 AddCommand("noswordaura", {}, "stops the sword aura", {}, function()
@@ -6060,7 +6058,7 @@ AddCommand("noswordaura", {}, "stops the sword aura", {}, function()
 		return "sword aura is not enabled"
 	end
 	DisableAllCmdConnections("swordaura");
-	return "Sword aura disabled."
+	Utils.Notify(Caller, "Swordaura", "Disabled!")
 end)
 
 AddCommand("anchor", {}, "freezes your character", {3}, function()
@@ -6071,7 +6069,7 @@ AddCommand("anchor", {}, "freezes your character", {3}, function()
 		SpoofProperty(v, "Anchored");
 		v.Anchored = true
 	end
-	return "Anchor enabled."
+	Utils.Notify(Caller, "Anchor", "Enabled!")
 end)
 
 AddCommand("unanchor", {"thaw"}, "unfreezes your character", {3}, function()
@@ -6081,7 +6079,7 @@ AddCommand("unanchor", {"thaw"}, "unfreezes your character", {3}, function()
 	for i, v in next, BaseParts do
 		v.Anchored = false
 	end
-	return "Anchor disabled."
+	Utils.Notify(Caller, "Anchor", "Disabled!")
 end)
 
 AddCommand("streamermode", {}, "changes names of everyone to something random", {}, function(Caller, Args, CEnv)
@@ -6110,7 +6108,7 @@ AddCommand("streamermode", {}, "changes names of everyone to something random", 
 	AddConnection(CConnect(game.DescendantAdded, function(x)
 		Hide(nil, x);
 	end), CEnv);
-	return "Streamer mode enabled."
+	Utils.Notify(Caller, "Streamermode", "Enabled!")
 end)
 
 AddCommand("nostreamermode", {"unstreamermode"}, "removes all the changed names", {}, function(Caller, Args, CEnv)
@@ -6122,6 +6120,7 @@ AddCommand("nostreamermode", {"unstreamermode"}, "removes all the changed names"
 			i.Text = v
 		end
 	end
+	Utils.Notify(Caller, "Streamermode", "Disabled!")
 end)
 
 AddCommand("fireclickdetectors", {"clickdetectors", "fcd"}, "fires all the click detectors", {3}, function(Caller, Args)
@@ -6395,7 +6394,7 @@ AddCommand("truesightguis", {}, "true sight on all guis", {}, function(Caller, A
 			v.Visible = true
 		end
 	end
-	return "Truesight for guis enabled."
+	Utils.Notify(Caller, "Truesightguis", "Enabled!")
 end)
 
 AddCommand("notruesightguis", {}, "removes truesight on guis", {}, function(Caller, Args)
@@ -6403,7 +6402,7 @@ AddCommand("notruesightguis", {}, "removes truesight on guis", {}, function(Call
 	for i, v in next, Guis do
 		i.Visible = v
 	end
-	return "Truesight for guis disabled."
+	Utils.Notify(Caller, "Truesightguis", "Disabled!")
 end)
 
 local EspLib;
@@ -6479,18 +6478,18 @@ AddCommand("age", {}, "ages a player", {"1"}, function(Caller, Args)
 		local t = os.date("*t", os.time());
 		t.day = t.day - tonumber(AccountAge);
 		local CreatedAt = os.date("%d/%m/%y", os.time(t));
-		Utils.Notify(Caller, "Command", format("%s's age is %s (%s)", v.Name, AccountAge, CreatedAt));
+		Utils.Notify(Caller, "Age", format("%s's age is %s (%s)", v.Name, AccountAge, CreatedAt));
 	end
 end)
 
 AddCommand("hidesales", {"nosales"}, "no purchase prompt notifications will be shown", {}, function()
 	game:GetService("CoreGui").PurchasePrompt.Enabled = false
-	return "You'll no longer receive sale prompts."
+	Utils.Notify(Caller, "Hidesales", "Enabled!")
 end)
 
 AddCommand("showsales", {}, "purchase prompt notifications will be shown", {}, function()
 	game:GetService("CoreGui").PurchasePrompt.Enabled = true
-	return "You'll receive sale prompts."
+	Utils.Notify(Caller, "Hidesales", "Disabled!")
 end)
 
 AddCommand("volume", {"vol"}, "changes your game volume", {}, function(Caller, Args)
@@ -6504,19 +6503,19 @@ AddCommand("volume", {"vol"}, "changes your game volume", {}, function(Caller, A
 end)
 
 AddCommand("respawn", {"gr"}, "resets your character", {3}, function()
-    local Player = game:GetService("Players").LocalPlayer
-    local Character = Player.Character
-    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
-    local function anchor(model)
-        for i,v in pairs(model:GetChildren()) do
-            if v:IsA("BasePart") then v.Anchored = true end
-            anchor(v)
-        end
-    end
-    anchor(Character)
-    Humanoid.Health = 0
-    Player.CharacterAdded:Wait()
-    return "Respawned."
+	local Player = game:GetService("Players").LocalPlayer
+	local Character = Player.Character
+	local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+	local function anchor(model)
+		for i,v in pairs(model:GetChildren()) do
+			if v:IsA("BasePart") then v.Anchored = true end
+			anchor(v)
+		end
+	end
+	anchor(Character)
+	Humanoid.Health = 0
+	Player.CharacterAdded:Wait()
+	Utils.Notify(Caller, "Respawn", "Respawned!")
 end)
 
 AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
@@ -6533,19 +6532,19 @@ AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
 	local OldPos = Character.HumanoidRootPart.CFrame
 	Humanoid.Health = 0
 	Player.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame = OldPos
-	return "Character refreshed."
+	Utils.Notify(Caller, "Refresh", "Refreshed!")
 end)
 
 AddCommand("newbubblechat", {}, "enables the new bubblechat on client", {}, function()
-local Chat = game:FindService("Chat")
-Chat.BubbleChatEnabled = true
-Utils.Notify(Caller, "Bubble Chat", "Enabled!")
+	local Chat = game:FindService("Chat")
+	Chat.BubbleChatEnabled = true
+	Utils.Notify(Caller, "BubbleChat", "Enabled!")
 end)
 
 AddCommand("oldbubblechat", {}, "disables the new bubblechat on client", {}, function()
-local Chat = game:FindService("Chat")
-Chat.BubbleChatEnabled = false
-Utils.Notify(Caller, "Bubble Chat", "Disabled!")
+	local Chat = game:FindService("Chat")
+	Chat.BubbleChatEnabled = false
+	Utils.Notify(Caller, "BubbleChat", "Disabled!")
 end)
 
 AddCommand("chatlogs", {"logs"}, "enables chatlogs", {}, function()
@@ -6616,7 +6615,7 @@ AddCommand("unspin", {}, "unspins your character", {}, function(Caller, Args)
 		Destroy(v);
 	end
 	LoadCommand("spin").CmdEnv = {}
-	return "Stopped spinning."
+	Utils.Notify(Caller, "Spin", "Disabled!")
 end)
 
 AddCommand("goto", {"to"}, "teleports yourself to the other character", {3, "1"}, function(Caller, Args)
@@ -6676,7 +6675,6 @@ AddCommand("truesight", {}, "shows all the transparent stuff", {}, function(Call
 			amount = amount + 1
 		end
 	end
-
 	return format("%d items shown in %.3f (s)", amount, (tick()) - time);
 end)
 
@@ -6697,7 +6695,7 @@ AddCommand("xray", {}, "see through wallks", {}, function(Caller, Args, CEnv)
 			v.Transparency = 0.3
 		end
 	end
-	return "Xray eanbled."
+	Utils.Notify(Caller, "Xray", "Enabled!")
 end)
 
 AddCommand("noxray", {"unxray"}, "stops xray", {}, function(Caller, Args)
@@ -6706,7 +6704,7 @@ AddCommand("noxray", {"unxray"}, "stops xray", {}, function(Caller, Args)
 	for i, v in next, showing do
 		i.Transparency = v
 	end
-	return "Xray disabled."
+	Utils.Notify(Caller, "Xray", "Disabled!")
 end)
 
 AddCommand("removelights", {"nolights"}, "removes all lights", {}, function(Caller, Args, CEnv)
@@ -6718,7 +6716,7 @@ AddCommand("removelights", {"nolights"}, "removes all lights", {}, function(Call
 		end
 	end
 	Lighting.GlobalShadows = true
-	return "Removed all lights."
+	Utils.Notify(Caller, "Removelights", "Removed!")
 end)
 
 AddCommand("revertnolights", {"lights"}, "reverts nolights", {}, function()
@@ -6726,19 +6724,19 @@ AddCommand("revertnolights", {"lights"}, "reverts nolights", {}, function()
 	for i, v in next, Lights do
 		i.Parent = v
 	end
-	return "Reverted lights in game."
+	Utils.Notify(Caller, "Lights", "Reverted lights!")
 end)
 
 AddCommand("fullbright", {"fb"}, "turns on fullbright", {}, function(Caller, Args, CEnv)
-        local Lighting = Services.Lighting
+	local Lighting = Services.Lighting
 	Lighting.Brightness = 2
 	Lighting.ClockTime = 14
 	Lighting.FogEnd = 100000
 	Lighting.GlobalShadows = false
 	Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)	
-	return format "Fullbright enabled."
+	Utils.Notify(Caller, "Fullbright", "Enabled!")
 end)
-	
+
 AddCommand("nofullbright", {"unfb"}, "reverts fullbright", {}, function()
 	local Lighting = Services.Lighting
 	local Lights = LoadCommand("fullbright").CmdEnv
@@ -6746,7 +6744,7 @@ AddCommand("nofullbright", {"unfb"}, "reverts fullbright", {}, function()
 		i.Range = v
 	end
 	Lighting.GlobalShadows = true
-	return "Fullbright disabled."
+	Utils.Notify(Caller, "Fullbright", "Disabled!")
 end)
 
 AddCommand("swim", {}, "allows you to use the swim state", {3}, function(Caller, Args, CEnv)
@@ -6763,7 +6761,7 @@ AddCommand("swim", {}, "allows you to use the swim state", {3}, function(Caller,
 		CWait(Humanoid.Died);
 		Services.Workspace.Gravity = 198
 	end)()
-	return "Swimming enabled."
+	Utils.Notify(Caller, "Swim", "Enabled!")
 end)
 
 AddCommand("unswim", {"noswim"}, "removes swim", {}, function(Caller, Args)
@@ -6773,19 +6771,19 @@ AddCommand("unswim", {"noswim"}, "removes swim", {}, function(Caller, Args)
 	end
 	ChangeState(Humanoid, LoadCommand("swim").CmdEnv[1]);
 	Services.Workspace.Gravity = 198
-	return "Swimming disabled."
+	Utils.Notify(Caller, "Swim", "Disabled!")
 end)
 
 AddCommand("disableanims", {"noanims"}, "disables character animations", {3}, function(Caller, Args)
 	local Animate = FindFirstChild(GetCharacter(), "Animate");
 	SpoofProperty(Animate, "Disabled");
 	Animate.Disabled = true
-	return "Animations disabled."
+	Utils.Notify(Caller, "Disableanims", "Enabled!")
 end)
 
 AddCommand("enableanims", {"anims"}, "enables character animations", {3}, function(Caller, Args)
 	FindFirstChild(GetCharacter(), "Animate").Disabled = false
-	return "Animations enabled."
+	Utils.Notify(Caller, "Disableanims", "Disabled!")
 end)
 
 AddCommand("buggedfly", {}, "fly your character", {3}, function(Caller, Args, CEnv)
@@ -6975,13 +6973,14 @@ AddCommand("unfloat", {"nofloat"}, "stops float", {}, function(Caller, Args, CEn
 		LoadCommand("float").CmdEnv = {}
 		return "Stopped floating."
 	end
-	return "Floating disabled."
+	Utils.Notify(Caller, "Float", "Disabled!")
 end)
 
 AddCommand("fov", {}, "sets your fov", {}, function(Caller, Args)
 	local Amount = tonumber(Args[1]) or 70
 	SpoofProperty(Camera, "FieldOfView");
 	Camera.FieldOfView = Amount
+	Utils.Notify(Caller, "Fov", "Fov set to "..Amount)
 end)
 
 AddCommand("noclip", {}, "noclips your character", {3}, function(Caller, Args, CEnv)
@@ -7005,10 +7004,10 @@ AddCommand("noclip", {}, "noclips your character", {3}, function(Caller, Args, C
 			Part.Transparency = OldTransparency
 		end
 	end), CEnv);
-	Utils.Notify(Caller, "Command", "Noclip enabled.");
+	Utils.Notify(Caller, "Noclip", "Enabled!");
 	CWait(GetHumanoid().Died);
 	DisableAllCmdConnections("noclip");
-	return "Noclip disabled."
+	return "Noclip Disabled!"
 end)
 
 AddCommand("clip", {"unnoclip"}, "disables noclip", {}, function(Caller, Args)
@@ -7090,8 +7089,7 @@ AddCommand("serverhop", {"shop"}, "switches servers (optional: min, max (default
 		end
 
 		local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
-		if (queue_on_teleport and not Args[2]) then
-			--queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test\"))()");
+		if (queue_on_teleport and not Args[2]) then			
 		end;
 
 		Services.TeleportService:TeleportToPlaceInstance(game.PlaceId, Server.id);    
@@ -7100,7 +7098,7 @@ AddCommand("serverhop", {"shop"}, "switches servers (optional: min, max (default
 end);
 
 local CommandsLoaded = false
-AddCommand("commands", {"cmds"}, "shows you all the commands listed in Hyperion admin", {}, function()
+AddCommand("commandlist", {"cmds"}, "shows you all the commands listed in Hyperion admin", {}, function()
 	if (not CommandsLoaded) then
 		local CommandsList = Commands.Frame.List
 		Utils.SmoothScroll(CommandsList, .14);
@@ -7122,7 +7120,7 @@ AddCommand("commands", {"cmds"}, "shows you all the commands listed in Hyperion 
 	end
 	Commands.Visible = true
 	Utils.TweenAllTransToObject(Commands, .25, CommandsTransparencyClone);
-	return "Commands loaded."
+	Utils.Notify(Caller, "Commandlist", "Loaded!")
 end)
 
 AddCommand("unload", {}, "kills the script", {}, function(Caller)
@@ -7309,22 +7307,6 @@ AddCommand("unorbit", {"noorbit"}, "unorbits yourself from the other player", {}
 	DisableAllCmdConnections("orbit");
 	return "Orbit stopped."
 end)
-
--- AddCommand("bypass", {"clientbypass"}, "client sided bypass", {3}, function()
---     AddConnection(CConnect(LocalPlayer.CharacterAdded, function()
---         WaitForChild(GetCharacter(), "Humanoid");
---         wait(.4);
---         SpoofInstance(GetHumanoid());
---         SpoofInstance(GetRoot(), isR6() and GetCharacter().Torso or GetCharacter().UpperTorso);
---         ProtectInstance(GetRoot());
---         ProtectInstance(GetHumanoid());
---     end));
---     local Char = GetCharacter();
---     Char.BreakJoints(Char);
---     CommandsTable["goto"].Function = CommandsTable["tweento"].Function
---     CommandsTable["to"].Function = CommandsTable["tweento"].Function
---     return "clientsided bypass enabled"
--- end)
 
 AddCommand("shiftlock", {}, "enables shiftlock in your game (some games have it off)", {}, function()
 	if (LocalPlayer.DevEnableMouseLock) then
