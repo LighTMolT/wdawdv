@@ -3947,7 +3947,7 @@ AddCommand("antifling", {}, "can't be flinged ", {}, function()
 	Players.PlayerRemoving:Connect(function(Player)
 		NoCollider[Player.Name]:Disconnect()
 	end)
-	return format "Antifling enabled."
+	return format "Enabled!"
 end)
 
 AddCommand("touchfling", {}, "enables invisible forcefield", {}, function()
@@ -4247,7 +4247,7 @@ AddCommand("rescale", {}, "rescales your body", {4}, function()
 		rm()
 		wait(0.2)
 		Humanoid:FindFirstChild("HeadScale"):Destroy()
-		wait(0.2)
+		wait(0.2)		
 end)
 
 AddCommand("toolhats", {}, "makes your hats holdable", {3}, function()
@@ -4336,6 +4336,7 @@ end)
 
 AddCommand("bodybomb", {}, "makes your character bomb other players", {3}, function()
 	loadstring(game:HttpGet('https://github.com/DigitalityScripts/roblox-scripts/raw/main/loop%20fling%20all'))()
+	Utils.Notify(Caller, "Command", "Loading...")
 end)
 
 AddCommand("setcreatorid", {"setcreator"}, "sets your id to the owner one", {}, function()
@@ -4351,6 +4352,7 @@ end)
 
 AddCommand("playerlist", {}, "enables player list", {}, function()
 	game:GetService("StarterGui"):SetCoreGuiEnabled('PlayerList', true)
+	Utils.Notify(Caller, "PlayerList", "Enabled!")
 end)
 
 AddCommand("void", {}, "voids a user", {1,"1"}, function(Caller, Args)
@@ -5037,12 +5039,12 @@ AddCommand("grabtools", {}, "once a tool is added to workspace it will be grabbe
 			UnequipTools(GetHumanoid());
 		end
 	end), CEnv)
-	return "Tools will be grabbed automatically."
+	Utils.Notify(Caller, "Grabtools", "Enabled!")
 end)
 
 AddCommand("ungrabtools", {"unloopgrabtools"}, "stops grabtools", {}, function()
 	DisableAllCmdConnections("grabtools");
-	return "Auto grabtools disabled."
+	Utils.Notify(Caller, "Grabtools", "Disabled!")
 end)
 
 AddCommand("droptools", {"dt"}, "drops all of your tools", {1,3}, function()
@@ -5093,7 +5095,6 @@ AddCommand("removehats", {"nohats"}, "removes all the hats from your character",
 end)
 
 AddCommand("drophats", {}, "removes all the hats from your character", {3}, function()
-
 	local character = game.Players.LocalPlayer.Character
 	game.Players.LocalPlayer.Character = nil
 	game.Players.LocalPlayer.Character = character
@@ -5106,21 +5107,17 @@ AddCommand("drophats", {}, "removes all the hats from your character", {3}, func
 		end
 	end
 	character.HumanoidRootPart:Destroy()
-
 	for i,v in pairs(character:GetChildren()) do
 		if v:IsA("Accessory") then
-			sethiddenproperty(v,"BackendAccoutrementState", 0) --any integer 0-3 works but 4, as 4 is the default state for in character, 0 is for when it has collision in character or other circumstances, 2 is workspace, 1 is unknown if you know or figure out please let me know
-			--BackendAccoutrementState is a replicated property similar to NetworkIsSleeping and is further documented in reweld
+			sethiddenproperty(v,"BackendAccoutrementState", 0) 
 		end
 	end
-
 	for i,v in pairs(character:GetChildren()) do
 		if v:IsA("BasePart") and v.Name ~= "Head" then
-			v:Destroy() --trigger childremoving (can also remove body colors or animate localscript)
-			--we can also trigger childadded with a tool or something else to weld the hats to our head
+			v:Destroy() 
 		end
 	end
-	character.Head:remove() --optional, can be removed
+	character.Head:remove()
 end)
 
 AddCommand("demeshhats", {"dhats"}, "makes your hats block", {2}, function()
@@ -5167,10 +5164,12 @@ end)
 AddCommand("gravity", {"grav"}, "changes the gravity to arg", {}, function(Caller, Args)
 	SpoofProperty(Services.Workspace, "Gravity");
 	Services.Workspace.Gravity = tonumber(Args[1]) or Services.Workspace.Gravity
+	Utils.Notify(Caller, "Gravity", "Gravity set!")
 end)
 
 AddCommand("nogravity", {"nograv", "ungravity"}, "changes the gravity to default (196.2)", {}, function()
 	Services.Workspace.Gravity = 192
+	Utils.Notify(Caller, "Gravity", "Gravity set to default!")
 end)
 
 AddCommand("ignore", {}, "puts a players character in lighting", {}, function(Caller, Args)
@@ -5238,7 +5237,7 @@ AddCommand("antikill", {}, "fakes your humanoid sit", {3}, function(Caller, Args
 			hum.Sit = true
 		end
 	end
-	return "Antikill enabled."
+	return "Enabled!"
 end)
 
 AddCommand("unantikill", {"noantikill"}, "removes humanoid seated", {3}, function(Caller, Args, CEnv)
@@ -5250,7 +5249,7 @@ AddCommand("unantikill", {"noantikill"}, "removes humanoid seated", {3}, functio
 			hum.Sit = false
 		end
 	end
-	return "Antikill disabled."
+	return "Disabled!"
 end)
 
 AddCommand("infinitejump", {"infjump"}, "infinite jump no cooldown", {3}, function(Caller, Args, CEnv)
@@ -5260,7 +5259,7 @@ AddCommand("infinitejump", {"infjump"}, "infinite jump no cooldown", {3}, functi
 			ChangeState(Humanoid, 3);
 		end
 	end), CEnv);
-	return "Infinite jump enabled."
+	return "Enabled!"
 end)
 
 AddCommand("noinfinitejump", {"uninfjump"}, "removes infinite jump", {}, function()
@@ -5269,7 +5268,7 @@ AddCommand("noinfinitejump", {"uninfjump"}, "removes infinite jump", {}, functio
 		return "you are not infinite jumping"
 	end
 	DisableAllCmdConnections("infinitejump");
-	return "Infinite jump disabled."
+	return "Disabled!"
 end)
 
 AddCommand("headsit", {}, "sits on the players head", {"1"}, function(Caller, Args, CEnv)
