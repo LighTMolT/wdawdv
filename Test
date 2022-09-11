@@ -10001,8 +10001,8 @@ wait(0.3)
 
 Utils.Notify(LocalPlayer, "Welcome", format("Hyperion Admin has loaded in %.3f seconds.", (tick()) - _L.start));
 if game:GetService("SoundService").RespectFilteringEnabled == false then 
-	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is DISABLED, audio commands will replicate.");
+	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "Filtering is DISABLED, audio commands will replicate.");
 else
-	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "RFE is ENABLED, audio commands will NOT replicate.");    
+	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "Filtering is ENABLED, audio commands will NOT replicate.");    
 end
 --/END\--
