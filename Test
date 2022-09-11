@@ -4760,7 +4760,7 @@ AddCommand("view", {}, "views a user", {3,"1"}, function(Caller, Args, CEnv)
 		CWait(Heartbeat);
 		Camera.CameraSubject = Target.Character
 	end), CEnv);
-	Utils.Notify(Caller, "View", "Viewing" ..Target.Name)
+	Utils.Notify(Caller, "View", "Viewing " ..Target.Name)
 end)
 
 AddCommand("unview", {"unv"}, "unviews a user", {3}, function(Caller, Args)
