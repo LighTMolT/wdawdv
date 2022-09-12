@@ -3339,8 +3339,11 @@ end)
 
 AddCommand("r15v2", {}, "old r15 roblox animations", {4}, function()
 local Player = game:GetService("Players").LocalPlayer	
-	    Utils.Notify(Caller, "R15v2", "Loaded!")
-		Player.Character.Animate:Destroy()
+	        Utils.Notify(Caller, "R15v2", "Loaded!")
+		Player.Character.Animate.Disabled = true
+		for i,v in pairs(Player.Character.Humanoid:GetPlayingAnimationTracks()) do
+		    v:Stop()
+		end
 		local a = game:GetObjects("rbxassetid://6816103163")[1]
 		local function b()
 			local c = Instance.new("LocalScript", Close)
