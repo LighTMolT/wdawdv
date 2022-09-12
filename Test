@@ -4204,7 +4204,7 @@ end)
 
 AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
 	workspace.FallenPartsDestroyHeight = 0/1/0
-	return format "Destroyheight removed!"
+	Utils.Notify(Caller, "Destroyheight", "Removed!")
 end)
 
 AddCommand("antiattach", {"antitools"}, "enables antiattach", {}, function()
