@@ -7009,12 +7009,14 @@ AddCommand("age", {}, "ages a player", {"1"}, function(Caller, Args)
 end)
 
 AddCommand("hidesales", {"nosales"}, "no purchase prompt notifications will be shown", {}, function()
-	game:GetService("CoreGui").PurchasePrompt.Enabled = false
+        local CoreGui = Services.CoreGui
+	CoreGui.PurchasePrompt.Enabled = false
 	Utils.Notify(Caller, "Hidesales", "Enabled!")
 end)
 
 AddCommand("showsales", {}, "purchase prompt notifications will be shown", {}, function()
-	game:GetService("CoreGui").PurchasePrompt.Enabled = true
+        local CoreGui = Services.CoreGui
+	CoreGui.PurchasePrompt.Enabled = true
 	Utils.Notify(Caller, "Hidesales", "Disabled!")
 end)
 
