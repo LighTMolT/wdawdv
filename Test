@@ -4183,6 +4183,35 @@ AddCommand("customanimation", {"customanim"}, "plays an animation id", {3}, func
 	end
 end)
 
+AddCommand("dance", {}, "plays a random dance animation", {3}, function()
+	local Humanoid = game:FindService("Players").LocalPlayer.Character.Humanoid
+	local Player = game:GetService("Players").LocalPlayer
+	Anim = Instance.new("Animation")
+	if Humanoid.RigType == Enum.HumanoidRigType.R15 then
+		r15dances = {4555808220, 4555782893, 3333432454, 4049037604}
+		local value = math.random(1, #r15dances)
+		picked_value = r15dances[value]
+	else
+		r6dances = {33796059, 429730430, 429730430, 45834924}
+		local value = math.random(1, #r6dances)
+		picked_value = r6dances[value]
+	end	
+	Utils.Notify(Caller, "Dance", "Playing dance animation! ID: " .. picked_value)
+	Anim.AnimationId = ("rbxassetid://" .. picked_value)
+	Hi = Player.Character.Humanoid:LoadAnimation(Anim)
+	Hi:Play()
+	Hi:AdjustSpeed(1)
+end)
+
+AddCommand("undance", {}, "stops the dance animation", {}, function()
+	local Player = game:GetService("Players").LocalPlayer   
+	local ActiveTracks = Player.Character.Humanoid:GetPlayingAnimationTracks()
+	for _, v in pairs(ActiveTracks) do
+		v:Stop()
+	end    
+	Utils.Notify(Caller, "Dance", "Disabled!")
+end)
+
 AddCommand("playsounds", {}, "plays all game sounds", {}, function()
 	for _, sound in next, workspace:GetDescendants() do
 		if sound:IsA("Sound") then
