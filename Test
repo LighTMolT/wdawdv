@@ -7556,7 +7556,6 @@ AddCommand("unfloat", {"nofloat"}, "stops float", {}, function(Caller, Args, CEn
 		LoadCommand("float").CmdEnv = {}
 		Utils.Notify(Caller, "Float", "Disabled!");
 	end
-	Utils.Notify(Caller, "Float", "Disabled!")
 end)
 
 AddCommand("fov", {}, "sets your fov", {}, function(Caller, Args)
