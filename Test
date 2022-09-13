@@ -7525,7 +7525,7 @@ AddCommand("float", {}, "floats your character", {}, function(Caller, Args, CEnv
 				Root.CFrame = Root.CFrame * CFrameNew(0, 1.5, 0);
 			end
 		end), CEnv)
-		return "Floating enabled."
+		Utils.Notify(Caller, "Float", "Enabled!");
 	end
 end)
 
@@ -7535,7 +7535,7 @@ AddCommand("unfloat", {"nofloat"}, "stops float", {}, function(Caller, Args, CEn
 		Disconnect(Floating[1]);
 		Destroy(Floating[2]);
 		LoadCommand("float").CmdEnv = {}
-		return "Stopped floating."
+		Utils.Notify(Caller, "Float", "Disabled!");
 	end
 	Utils.Notify(Caller, "Float", "Disabled!")
 end)
@@ -7571,15 +7571,15 @@ AddCommand("noclip", {}, "noclips your character", {3}, function(Caller, Args, C
 	Utils.Notify(Caller, "Noclip", "Enabled!");
 	CWait(GetHumanoid().Died);
 	DisableAllCmdConnections("noclip");
-	return "Noclip Disabled!"
+	Utils.Notify(Caller, "Noclip", "Disabled!");
 end)
 
 AddCommand("clip", {"unnoclip"}, "disables noclip", {}, function(Caller, Args)
 	if (not next(LoadCommand("noclip").CmdEnv)) then
-		return "You aren't in noclip."
+		Utils.Notify(Caller, "Noclip", "Already clipped!");
 	else
 		DisableAllCmdConnections("noclip");
-		return "Noclip disabled."
+		Utils.Notify(Caller, "Noclip", "Disabled!");
 	end
 end)
 
@@ -7837,7 +7837,7 @@ AddCommand("blink", {"blinkws"}, "cframe speed", {}, function(Caller, Args, CEnv
 			end
 		end
 	end)();
-	return "Blink speed enabled."
+	Utils.Notify(Caller, "Blink", "Enabled!");
 end)
 
 AddCommand("unblink", {"noblinkws", "unblink", "noblink"}, "stops cframe speed", {}, function()
@@ -7846,7 +7846,7 @@ AddCommand("unblink", {"noblinkws", "unblink", "noblink"}, "stops cframe speed",
 		return "Blink is already disabled."
 	end
 	LoadCommand("blink").CmdEnv = {}
-	return "Blink speed disabled."
+	Utils.Notify(Caller, "Blink", "Disabled!");
 end)
 
 AddCommand("orbit", {}, "orbits a yourself around another player", {3, "1"}, function(Caller, Args, CEnv)
@@ -7877,7 +7877,7 @@ AddCommand("shiftlock", {}, "enables shiftlock in your game (some games have it 
 		return "Shiftlock is already on."
 	end
 	LocalPlayer.DevEnableMouseLock = true
-	return "Shiftlock enabled."
+	Utils.Notify(Caller, "Shiftlock", "Enabled!");
 end)
 
 AddCommand("copyname", {"copyusername"}, "copies a users name to your clipboard", {"1"}, function(Caller, Args)
@@ -8303,7 +8303,7 @@ AddCommand("clicktp", {}, "tps you to where your mouse is when you click", {}, f
 
 	CEnv[1] = Tool
 	CEnv[2] = Tool2
-	return "Click to teleport."
+	Utils.Notify(Caller, "Clicktp", "Got teleport tools!");
 end)
 
 AddCommand("friend", {"fr"}, "sends a friend request to the player", {"1"}, function(Caller, Args)
@@ -8328,7 +8328,7 @@ AddCommand("setzoomdistance", {"szd", "maxzoom"}, "sets your cameras zoom distan
 	local ZoomDistance = tonumber(Args[1]) or 1000
 	LocalPlayer.CameraMaxZoomDistance = ZoomDistance
 	LocalPlayer.CameraMode = Enum.CameraMode.Classic
-	return "Set zoom distance to " .. ZoomDistance
+	Utils.Notify(Caller, "Zoomdistance", "Zoom distance set to " .. ZoomDistance);	
 end)
 
 AddCommand("equiptools", {}, "equips all of your tools", {1}, function()
