@@ -5740,6 +5740,12 @@ AddCommand("demeshtools", {"dtools"}, "makes your tool a block", {1}, function()
 	Utils.Notify(Caller, "Demeshtools", "Demeshed!")
 end)
 
+AddCommand("setfpscap", {"fpscap"}, "changes the fps to arg", {}, function(Caller, Args)
+        local fpscap = tonumber(Args[1])
+        setfpscap(fpscap)
+        Utils.Notify(Caller, "FPS", "Fps set to " .. fpscap)
+end)
+
 AddCommand("gravity", {"grav"}, "changes the gravity to arg", {}, function(Caller, Args)
 	SpoofProperty(Services.Workspace, "Gravity");
 	Services.Workspace.Gravity = tonumber(Args[1])
