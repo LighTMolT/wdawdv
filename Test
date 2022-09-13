@@ -3342,6 +3342,25 @@ AddCommand("blockholder", {}, "gives you an item to hold blocks", {}, function()
 	Utils.Notify(Caller, "Blockholder", "Got Blockholder!")
 end)
 
+AddCommand("removeconstraint", {"noconstraint"}, "makes your character impossible to ragdoll", {3}, function()
+local Player = game:GetService("Players").LocalPlayer.Character
+local antiragdoll = true
+
+antiragdoll = antiragdoll and function(v)
+	if v:IsA("HingeConstraint") or v:IsA("BallSocketConstraint") then
+		v.Parent = nil
+	end
+end
+
+if antiragdoll then
+	for i, v in pairs(Player:GetDescendants()) do
+		antiragdoll(v)
+	end
+	Player.DescendantAdded:Connect(antiragdoll)
+end
+	Utils.Notify(Caller, "Constraints", "Removed!")
+end)
+
 AddCommand("r15v2", {}, "old r15 roblox animations", {4}, function()
 	local Player = game:GetService("Players").LocalPlayer	
 	Utils.Notify(Caller, "R15v2", "Loaded!")
