@@ -2693,7 +2693,7 @@ AddCommand("walkspeed", {"ws", "speed"}, "changes your walkspeed to the second a
 	CEnv[1] = Humanoid.WalkSpeed
 	SpoofProperty(Humanoid, "WalkSpeed");
 	Humanoid.WalkSpeed = tonumber(Args[1]) or 16
-	return "Your walkspeed is now " .. Humanoid.WalkSpeed
+	Utils.Notify(Caller, "Walkspeed", "Walkspeed set to " .. Humanoid.WalkSpeed)		
 end)
 
 AddCommand("jumppower", {"jp"}, "changes your jumpower to the second argument", {}, function(Caller, Args, CEnv)
@@ -2703,15 +2703,15 @@ AddCommand("jumppower", {"jp"}, "changes your jumpower to the second argument", 
 	SpoofProperty(Humanoid, "UseJumpPower");
 	Humanoid.UseJumpPower = true
 	Humanoid.JumpPower = tonumber(Args[1]) or 50
-	return "Your jumppower is now " .. Humanoid.JumpPower
+	Utils.Notify(Caller, "Jumppower", "Jumppower set to " .. Humanoid.JumpPower)	
 end)
 
 AddCommand("hipheight", {"hh"}, "changes your hipheight to the second argument", {}, function(Caller, Args, CEnv)
 	local Humanoid = GetHumanoid();
 	CEnv[1] = Humanoid.HipHeight
 	SpoofProperty(Humanoid, "HipHeight");
-	Humanoid.HipHeight = tonumber(Args[1]) or 0
-	return "Your hipheight is now " .. Humanoid.HipHeight
+	Humanoid.HipHeight = tonumber(Args[1]) or 0	
+	Utils.Notify(Caller, "Hipheight", "Hipheight set to " .. Humanoid.HipHeight)
 end)
 
 _L.KillCam = {};
@@ -2746,7 +2746,7 @@ AddCommand("kill", {}, "kills someone", {"1", 1, 3}, function(Caller, Args)
 			if (TChar) then
 				if (isSat(v)) then
 					if (#Target == 1) then
-						Utils.Notify(Caller or LocalPlayer, nil, v.Name .. " is sitting down, could not kill.");
+						Utils.Notify(Caller or LocalPlayer, nil, v.Name .. " is sitting down, could not kill!");
 					end
 					continue
 				end
@@ -2768,7 +2768,7 @@ AddCommand("kill", {}, "kills someone", {"1", 1, 3}, function(Caller, Args)
 				firetouchinterest(TargetRoot, Tool.Handle, 0);
 				firetouchinterest(TargetRoot, Tool.Handle, 1);
 			else
-				Utils.Notify(Caller or LocalPlayer, "Fail", v.Name .. " is dead or does not have a root part, could not kill.");
+				Utils.Notify(Caller or LocalPlayer, "Fail", v.Name .. " is dead or does not have a root part, could not kill!");
 			end
 		end
 	end)()
@@ -2794,7 +2794,7 @@ AddCommand("loopkill", {}, "loopkill loopkills a character", {3,"1"}, function(C
 		Humanoid = ReplaceHumanoid(Humanoid);
 		ChangeState(Humanoid, 15);
 		if (isR6(Target[1])) then
-			Utils.Notify(LocalPlayer, "Loopkill", "the player have R6 rigtype, it will only kill every 2 respawns.")
+			Utils.Notify(LocalPlayer, "Loopkill", "R6 rigtype detected, it will only kill every 2 respawns!")
 		end
 		for i = 1, #Target do
 			local v = Target[i]
@@ -2827,7 +2827,7 @@ end)
 
 AddCommand("unloopkill", {"unlkill"}, "unloopkills a user", {3,"1"}, function(Caller, Args)
 	LoadCommand("loopkill").CmdEnv = {}
-	return "Loopkill disabled."
+	Utils.Notify(Caller, "Loopkill", "Disabled!")
 end)
 
 AddCommand("bring", {}, "brings a user", {1}, function(Caller, Args)
@@ -3033,7 +3033,7 @@ end)
 
 AddCommand("headless", {}, "removes your head", {2}, function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/yc0STZCK"))()
-	return format "Headless loading..."
+	Utils.Notify(Caller, "Headless", "Loading...")
 end)
 
 AddCommand("split", {}, "splits your body in half", {4}, function()
@@ -3230,6 +3230,8 @@ AddCommand("swas", {"hail"}, "creates a swas with tools", {1}, function()
 
 	Tools[15].Grip = cf.n(6,5.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
 	Tools[15].Parent = char
+	
+	Utils.Notify(Caller, "Swastika", "Loaded!")
 end)
 
 AddCommand("gun", {}, "makes your tool a gun", {1}, function()
@@ -3287,10 +3289,13 @@ AddCommand("gun", {}, "makes your tool a gun", {1}, function()
 
 	Tools[15].Grip = cf.n(-3.5,-1,0) * cf.a(rd(10),rd(-90),rd(0))
 	Tools[15].Parent = char
+	
+	Utils.Notify(Caller, "Gun", "Loaded!")
 end)
 
 AddCommand("upsidedown", {"dinnerbone"}, "upside down", {2}, function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/E5jQW0Y8"))()
+	Utils.Notify(Caller, "Upsidedown", "Loaded!")
 end)
 
 AddCommand("lay", {"laydown"}, "lays on the floor", {}, function()
@@ -3338,443 +3343,416 @@ AddCommand("blockholder", {}, "gives you an item to hold blocks", {}, function()
 end)
 
 AddCommand("r15v2", {}, "old r15 roblox animations", {4}, function()
-local Player = game:GetService("Players").LocalPlayer	
-	        Utils.Notify(Caller, "R15v2", "Loaded!")
-		Player.Character.Animate.Disabled = true
-		for i,v in pairs(Player.Character.Humanoid:GetPlayingAnimationTracks()) do
-		    v:Stop()
+	local Player = game:GetService("Players").LocalPlayer	
+	Utils.Notify(Caller, "R15v2", "Loaded!")
+	Player.Character.Animate.Disabled = true
+	for i,v in pairs(Player.Character.Humanoid:GetPlayingAnimationTracks()) do
+		v:Stop()
+	end
+	local a = game:GetObjects("rbxassetid://6816103163")[1]
+	local function b()
+		local c = Instance.new("LocalScript", Close)
+		c.Name = "Animate"
+		c.Parent = Player.Character
+		for d, e in next, a:GetDescendants() do
+			if e:IsA("StringValue") then
+				e.Parent = c
+			end
 		end
-		local a = game:GetObjects("rbxassetid://6816103163")[1]
-		local function b()
-			local c = Instance.new("LocalScript", Close)
-			c.Name = "Animate"
-			c.Parent = Player.Character
-			for d, e in next, a:GetDescendants() do
-				if e:IsA("StringValue") then
-					e.Parent = c
+		function waitForChild(f, g)
+			local h = nil
+			local i = f:findFirstChild(g)
+			if i then
+				return i
+			end
+			while true do
+				h = f.ChildAdded:wait()
+				if h.Name == g then
+					break
 				end
 			end
-			function waitForChild(f, g)
-				local h = nil
-				local i = f:findFirstChild(g)
-				if i then
-					return i
-				end
+			return h
+		end
+		local j = c.Parent
+		local k = waitForChild(j, "Humanoid")
+		k.CameraOffset = Vector3.new(0, 0, 0)
+		math.randomseed(os.time())
+		local l = {}
+		function configureAnimationSet(m, n)
+			if l[m] then
+				local o, p, q = pairs(l[m].connections)
 				while true do
-					h = f.ChildAdded:wait()
-					if h.Name == g then
+					local r, s = o(p, q)
+					if r then
+					else
 						break
 					end
+					q = r
+					s:disconnect()
 				end
-				return h
 			end
-			local j = c.Parent
-			local k = waitForChild(j, "Humanoid")
-			k.CameraOffset = Vector3.new(0, 0, 0)
-			math.randomseed(os.time())
-			local l = {}
-			function configureAnimationSet(m, n)
-				if l[m] then
-					local o, p, q = pairs(l[m].connections)
-					while true do
-						local r, s = o(p, q)
-						if r then
-						else
-							break
+			l[m] = {}
+			l[m].count = 0
+			l[m].totalWeight = 0
+			l[m].connections = {}
+			local t = c:FindFirstChild(m)
+			if t then
+				table.insert(
+					l[m].connections,
+					t.ChildAdded:connect(
+						function(u)
+							configureAnimationSet(m, n)
 						end
-						q = r
-						s:disconnect()
+					)
+				)
+				table.insert(
+					l[m].connections,
+					t.ChildRemoved:connect(
+						function(v)
+							configureAnimationSet(m, n)
+						end
+					)
+				)
+				local w = 1
+				local x, y, z = pairs(t:GetChildren())
+				while true do
+					local A, B = x(y, z)
+					if A then
+					else
+						break
 					end
-				end
-				l[m] = {}
-				l[m].count = 0
-				l[m].totalWeight = 0
-				l[m].connections = {}
-				local t = c:FindFirstChild(m)
-				if t then
-					table.insert(
-						l[m].connections,
-						t.ChildAdded:connect(
-							function(u)
-								configureAnimationSet(m, n)
-							end
-						)
-					)
-					table.insert(
-						l[m].connections,
-						t.ChildRemoved:connect(
-							function(v)
-								configureAnimationSet(m, n)
-							end
-						)
-					)
-					local w = 1
-					local x, y, z = pairs(t:GetChildren())
-					while true do
-						local A, B = x(y, z)
-						if A then
-						else
-							break
-						end
-						z = A
-						if B:IsA("Animation") then
-							table.insert(
-								l[m].connections,
-								B.Changed:connect(
-									function(C)
-										configureAnimationSet(m, n)
-									end
-								)
+					z = A
+					if B:IsA("Animation") then
+						table.insert(
+							l[m].connections,
+							B.Changed:connect(
+								function(C)
+									configureAnimationSet(m, n)
+								end
 							)
-							l[m][w] = {}
-							l[m][w].anim = B
-							local D = B:FindFirstChild("Weight")
-							if D == nil then
-								l[m][w].weight = 1
-							else
-								l[m][w].weight = D.Value
-							end
-							l[m].count = l[m].count + 1
-							l[m].totalWeight = l[m].totalWeight + l[m][w].weight
-							w = w + 1
-						end
-					end
-				end
-				if l[m].count <= 0 then
-					local E, F, G = pairs(n)
-					while true do
-						local H, I = E(F, G)
-						if H then
+						)
+						l[m][w] = {}
+						l[m][w].anim = B
+						local D = B:FindFirstChild("Weight")
+						if D == nil then
+							l[m][w].weight = 1
 						else
-							break
+							l[m][w].weight = D.Value
 						end
-						G = H
-						l[m][H] = {}
-						l[m][H].anim = Instance.new("Animation")
-						l[m][H].anim.Name = m
-						l[m][H].anim.AnimationId = I.id
-						l[m][H].weight = I.weight
 						l[m].count = l[m].count + 1
-						l[m].totalWeight = l[m].totalWeight + I.weight
+						l[m].totalWeight = l[m].totalWeight + l[m][w].weight
+						w = w + 1
 					end
 				end
 			end
-			local J = {
-				idle = {
-					{id = "rbxasset://R15021216/idle_stretch.xml", weight = 1},
-					{id = "rbxasset://R15021216/idle_look.xml", weight = 1},
-					{id = "rbxasset://R15021216/idle.xml", weight = 9}
-				},
-				walk = {{id = "rbxasset://R15021216/run.xml", weight = 10}},
-				run = {{id = "rbxasset://R15021216/run.xml", weight = 10}},
-				jump = {{id = "rbxasset://R15021216/jump.xml", weight = 10}},
-				fall = {{id = "rbxasset://R15021216/falling.xml", weight = 10}},
-				climb = {{id = "rbxasset://R15021216/climb.xml", weight = 10}},
-				sit = {{id = "http://www.roblox.com/asset/?id=393915321", weight = 10}},
-				toolnone = {{id = "http://www.roblox.com/asset/?id=393915542", weight = 10}},
-				toolslash = {{id = "http://www.roblox.com/asset/?id=393915542", weight = 10}},
-				toollunge = {{id = "http://www.roblox.com/asset/?id=393915542", weight = 10}},
-				wave = {{id = "http://www.roblox.com/asset/?id=393915710", weight = 10}},
-				point = {{id = "http://www.roblox.com/asset/?id=393915866", weight = 10}},
-				dance = {
-					{id = "http://www.roblox.com/asset/?id=393916260", weight = 10},
-					{id = "http://www.roblox.com/asset/?id=393916456", weight = 10},
-					{id = "http://www.roblox.com/asset/?id=393916635", weight = 10}
-				},
-				dance2 = {
-					{id = "http://www.roblox.com/asset/?id=393916791", weight = 10},
-					{id = "http://www.roblox.com/asset/?id=393916989", weight = 10},
-					{id = "http://www.roblox.com/asset/?id=393917195", weight = 10}
-				},
-				dance3 = {
-					{id = "http://www.roblox.com/asset/?id=393917375", weight = 10},
-					{id = "http://www.roblox.com/asset/?id=393917556", weight = 10},
-					{id = "http://www.roblox.com/asset/?id=393917721", weight = 10}
-				},
-				laugh = {{id = "http://www.roblox.com/asset/?id=393916166", weight = 10}},
-				cheer = {{id = "http://www.roblox.com/asset/?id=393916016", weight = 10}}
-			}
-			function scriptChildModified(K)
-				local L = J[K.Name]
-				if L then
-					configureAnimationSet(K.Name, L)
+			if l[m].count <= 0 then
+				local E, F, G = pairs(n)
+				while true do
+					local H, I = E(F, G)
+					if H then
+					else
+						break
+					end
+					G = H
+					l[m][H] = {}
+					l[m][H].anim = Instance.new("Animation")
+					l[m][H].anim.Name = m
+					l[m][H].anim.AnimationId = I.id
+					l[m][H].weight = I.weight
+					l[m].count = l[m].count + 1
+					l[m].totalWeight = l[m].totalWeight + I.weight
 				end
 			end
-			c.ChildAdded:connect(scriptChildModified)
-			c.ChildRemoved:connect(scriptChildModified)
-			for M, N in pairs(J) do
-				configureAnimationSet(M, N)
+		end
+		local J = {
+			idle = {
+				{id = "rbxasset://R15021216/idle_stretch.xml", weight = 1},
+				{id = "rbxasset://R15021216/idle_look.xml", weight = 1},
+				{id = "rbxasset://R15021216/idle.xml", weight = 9}
+			},
+			walk = {{id = "rbxasset://R15021216/run.xml", weight = 10}},
+			run = {{id = "rbxasset://R15021216/run.xml", weight = 10}},
+			jump = {{id = "rbxasset://R15021216/jump.xml", weight = 10}},
+			fall = {{id = "rbxasset://R15021216/falling.xml", weight = 10}},
+			climb = {{id = "rbxasset://R15021216/climb.xml", weight = 10}},
+			sit = {{id = "http://www.roblox.com/asset/?id=393915321", weight = 10}},
+			toolnone = {{id = "http://www.roblox.com/asset/?id=393915542", weight = 10}},
+			toolslash = {{id = "http://www.roblox.com/asset/?id=393915542", weight = 10}},
+			toollunge = {{id = "http://www.roblox.com/asset/?id=393915542", weight = 10}},
+			wave = {{id = "http://www.roblox.com/asset/?id=393915710", weight = 10}},
+			point = {{id = "http://www.roblox.com/asset/?id=393915866", weight = 10}},
+			dance = {
+				{id = "http://www.roblox.com/asset/?id=393916260", weight = 10},
+				{id = "http://www.roblox.com/asset/?id=393916456", weight = 10},
+				{id = "http://www.roblox.com/asset/?id=393916635", weight = 10}
+			},
+			dance2 = {
+				{id = "http://www.roblox.com/asset/?id=393916791", weight = 10},
+				{id = "http://www.roblox.com/asset/?id=393916989", weight = 10},
+				{id = "http://www.roblox.com/asset/?id=393917195", weight = 10}
+			},
+			dance3 = {
+				{id = "http://www.roblox.com/asset/?id=393917375", weight = 10},
+				{id = "http://www.roblox.com/asset/?id=393917556", weight = 10},
+				{id = "http://www.roblox.com/asset/?id=393917721", weight = 10}
+			},
+			laugh = {{id = "http://www.roblox.com/asset/?id=393916166", weight = 10}},
+			cheer = {{id = "http://www.roblox.com/asset/?id=393916016", weight = 10}}
+		}
+		function scriptChildModified(K)
+			local L = J[K.Name]
+			if L then
+				configureAnimationSet(K.Name, L)
 			end
-			local O = ""
-			local P = {
-				wave = false,
-				point = false,
-				dance = true,
-				dance2 = true,
-				dance3 = true,
-				laugh = false,
-				cheer = false
-			}
-			local Q = nil
-			local R = nil
-			local S = nil
-			function stopAllAnimations()
-				local T = O
-				if P[T] then
-					if P[T] == false then
-						T = "idle"
+		end
+		c.ChildAdded:connect(scriptChildModified)
+		c.ChildRemoved:connect(scriptChildModified)
+		for M, N in pairs(J) do
+			configureAnimationSet(M, N)
+		end
+		local O = ""
+		local P = {
+			wave = false,
+			point = false,
+			dance = true,
+			dance2 = true,
+			dance3 = true,
+			laugh = false,
+			cheer = false
+		}
+		local Q = nil
+		local R = nil
+		local S = nil
+		function stopAllAnimations()
+			local T = O
+			if P[T] then
+				if P[T] == false then
+					T = "idle"
+				end
+			end
+			O = ""
+			Q = nil
+			if R then
+				R:disconnect()
+			end
+			if S then
+				S:Stop()
+				S:Destroy()
+				S = nil
+			end
+			return T
+		end
+		local U = 1
+		function setAnimationSpeed(V)
+			if V ~= U then
+				U = V
+				S:AdjustSpeed(U)
+			end
+		end
+		function keyFrameReachedFunc(W)
+			if W == "End" then
+				local X = O
+				if P[X] then
+					if P[X] == false then
+						X = "idle"
 					end
 				end
-				O = ""
-				Q = nil
+				playAnimation(X, 0.15, k)
+				setAnimationSpeed(U)
+			end
+		end
+		function playAnimation(Y, Z, _)
+			local a0 = math.random(1, l[Y].totalWeight)
+			local a1 = 1
+			while true do
+				if l[Y][a1].weight < a0 then
+				else
+					break
+				end
+				a0 = a0 - l[Y][a1].weight
+				a1 = a1 + 1
+			end
+			local a2 = l[Y][a1].anim
+			if a2 ~= Q then
+				if S then
+					S:Stop(Z)
+					S:Destroy()
+				end
+				U = 1
+				S = _:LoadAnimation(a2)
+				S:Play(Z)
+				O = Y
+				Q = a2
 				if R then
 					R:disconnect()
 				end
-				if S then
-					S:Stop()
-					S:Destroy()
-					S = nil
-				end
-				return T
+				R = S.KeyframeReached:connect(keyFrameReachedFunc)
 			end
-			local U = 1
-			function setAnimationSpeed(V)
-				if V ~= U then
-					U = V
-					S:AdjustSpeed(U)
-				end
+		end
+		local a3 = ""
+		function toolKeyFrameReachedFunc(a4)
+			if a4 == "End" then
+				playToolAnimation(a3, 0, k)
 			end
-			function keyFrameReachedFunc(W)
-				if W == "End" then
-					local X = O
-					if P[X] then
-						if P[X] == false then
-							X = "idle"
-						end
-					end
-					playAnimation(X, 0.15, k)
-					setAnimationSpeed(U)
+		end
+		local a5 = nil
+		local a6 = nil
+		local a7 = nil
+		function playToolAnimation(a8, a9, aa)
+			local ab = math.random(1, l[a8].totalWeight)
+			local ac = 1
+			while true do
+				if l[a8][ac].weight < ab then
+				else
+					break
 				end
+				ab = ab - l[a8][ac].weight
+				ac = ac + 1
 			end
-			function playAnimation(Y, Z, _)
-				local a0 = math.random(1, l[Y].totalWeight)
-				local a1 = 1
-				while true do
-					if l[Y][a1].weight < a0 then
-					else
-						break
-					end
-					a0 = a0 - l[Y][a1].weight
-					a1 = a1 + 1
-				end
-				local a2 = l[Y][a1].anim
-				if a2 ~= Q then
-					if S then
-						S:Stop(Z)
-						S:Destroy()
-					end
-					U = 1
-					S = _:LoadAnimation(a2)
-					S:Play(Z)
-					O = Y
-					Q = a2
-					if R then
-						R:disconnect()
-					end
-					R = S.KeyframeReached:connect(keyFrameReachedFunc)
-				end
-			end
-			local a3 = ""
-			function toolKeyFrameReachedFunc(a4)
-				if a4 == "End" then
-					playToolAnimation(a3, 0, k)
-				end
-			end
-			local a5 = nil
-			local a6 = nil
-			local a7 = nil
-			function playToolAnimation(a8, a9, aa)
-				local ab = math.random(1, l[a8].totalWeight)
-				local ac = 1
-				while true do
-					if l[a8][ac].weight < ab then
-					else
-						break
-					end
-					ab = ab - l[a8][ac].weight
-					ac = ac + 1
-				end
-				local ad = l[a8][ac].anim
-				if a5 ~= ad then
-					if a6 then
-						a6:Stop()
-						a6:Destroy()
-						a9 = 0
-					end
-					a6 = aa:LoadAnimation(ad)
-					a6:Play(a9)
-					a3 = a8
-					a5 = ad
-					a7 = a6.KeyframeReached:connect(toolKeyFrameReachedFunc)
-				end
-			end
-			function stopToolAnimations()
-				if a7 then
-					a7:disconnect()
-				end
-				a3 = ""
-				a5 = nil
+			local ad = l[a8][ac].anim
+			if a5 ~= ad then
 				if a6 then
 					a6:Stop()
 					a6:Destroy()
-					a6 = nil
+					a9 = 0
 				end
-				return a3
+				a6 = aa:LoadAnimation(ad)
+				a6:Play(a9)
+				a3 = a8
+				a5 = ad
+				a7 = a6.KeyframeReached:connect(toolKeyFrameReachedFunc)
 			end
-			local ae = "Standing"
-			function onRunning(af)
-				if 0.01 < af then
-				else
-					playAnimation("idle", 0.1, k)
-					ae = "Standing"
-					return
-				end
-				playAnimation("walk", 0.1, k)
-				setAnimationSpeed(af / 15)
+		end
+		function stopToolAnimations()
+			if a7 then
+				a7:disconnect()
+			end
+			a3 = ""
+			a5 = nil
+			if a6 then
+				a6:Stop()
+				a6:Destroy()
+				a6 = nil
+			end
+			return a3
+		end
+		local ae = "Standing"
+		function onRunning(af)
+			if 0.01 < af then
+			else
+				playAnimation("idle", 0.1, k)
+				ae = "Standing"
+				return
+			end
+			playAnimation("walk", 0.1, k)
+			setAnimationSpeed(af / 15)
+			ae = "Running"
+		end
+		function onDied()
+			ae = "Dead"
+		end
+		local ag = 0
+		function onJumping()
+			playAnimation("jump", 0.1, k)
+			ag = 0.31
+			ae = "Jumping"
+		end
+		function onClimbing(ah)
+			playAnimation("climb", 0.1, k)
+			setAnimationSpeed(ah / 2)
+			ae = "Climbing"
+		end
+		function onGettingUp()
+			ae = "GettingUp"
+		end
+		function onFreeFall()
+			if ag <= 0 then
+				playAnimation("fall", 0.2, k)
+			end
+			ae = "FreeFall"
+		end
+		function onFallingDown()
+			ae = "FallingDown"
+		end
+		function onSeated()
+			ae = "Seated"
+		end
+		function onPlatformStanding()
+			ae = "PlatformStanding"
+		end
+		function onSwimming(ai)
+			if 0 < ai then
 				ae = "Running"
+				return
 			end
-			function onDied()
-				ae = "Dead"
+			ae = "Standing"
+		end
+		function getTool()
+			local aj, ak, al = ipairs(j:GetChildren())
+			while true do
+				local am, an = aj(ak, al)
+				if am then
+				else
+					break
+				end
+				al = am
+				if an.className == "Tool" then
+					return an
+				end
 			end
-			local ag = 0
-			function onJumping()
-				playAnimation("jump", 0.1, k)
-				ag = 0.31
-				ae = "Jumping"
+			return nil
+		end
+		function getToolAnim(ao)
+			local ap, aq, ar = ipairs(ao:GetChildren())
+			while true do
+				local as, at = ap(aq, ar)
+				if as then
+				else
+					break
+				end
+				ar = as
+				if at.Name == "toolanim" then
+					if at.className == "StringValue" then
+						return at
+					end
+				end
 			end
-			function onClimbing(ah)
-				playAnimation("climb", 0.1, k)
-				setAnimationSpeed(ah / 2)
-				ae = "Climbing"
+			return nil
+		end
+		local au = "None"
+		function animateTool()
+			if au == "None" then
+				playToolAnimation("toolnone", 0.1, k)
+				return
 			end
-			function onGettingUp()
-				ae = "GettingUp"
+			if au == "Slash" then
+				playToolAnimation("toolslash", 0, k)
+				return
 			end
-			function onFreeFall()
+			if au == "Lunge" then
+			else
+				return
+			end
+			playToolAnimation("toollunge", 0, k)
+		end
+		function moveSit()
+			RightShoulder.MaxVelocity = 0.15
+			LeftShoulder.MaxVelocity = 0.15
+			RightShoulder:SetDesiredAngle(1.57)
+			LeftShoulder:SetDesiredAngle(-1.57)
+			RightHip:SetDesiredAngle(1.57)
+			LeftHip:SetDesiredAngle(-1.57)
+		end
+		local av = 0
+		local aw = 0
+		function move(ax)
+			av = ax
+			if 0 < ag then
+				ag = ag - (ax - av)
+			end
+			if ae == "FreeFall" then
 				if ag <= 0 then
 					playAnimation("fall", 0.2, k)
-				end
-				ae = "FreeFall"
-			end
-			function onFallingDown()
-				ae = "FallingDown"
-			end
-			function onSeated()
-				ae = "Seated"
-			end
-			function onPlatformStanding()
-				ae = "PlatformStanding"
-			end
-			function onSwimming(ai)
-				if 0 < ai then
-					ae = "Running"
-					return
-				end
-				ae = "Standing"
-			end
-			function getTool()
-				local aj, ak, al = ipairs(j:GetChildren())
-				while true do
-					local am, an = aj(ak, al)
-					if am then
-					else
-						break
-					end
-					al = am
-					if an.className == "Tool" then
-						return an
-					end
-				end
-				return nil
-			end
-			function getToolAnim(ao)
-				local ap, aq, ar = ipairs(ao:GetChildren())
-				while true do
-					local as, at = ap(aq, ar)
-					if as then
-					else
-						break
-					end
-					ar = as
-					if at.Name == "toolanim" then
-						if at.className == "StringValue" then
-							return at
-						end
-					end
-				end
-				return nil
-			end
-			local au = "None"
-			function animateTool()
-				if au == "None" then
-					playToolAnimation("toolnone", 0.1, k)
-					return
-				end
-				if au == "Slash" then
-					playToolAnimation("toolslash", 0, k)
-					return
-				end
-				if au == "Lunge" then
-				else
-					return
-				end
-				playToolAnimation("toollunge", 0, k)
-			end
-			function moveSit()
-				RightShoulder.MaxVelocity = 0.15
-				LeftShoulder.MaxVelocity = 0.15
-				RightShoulder:SetDesiredAngle(1.57)
-				LeftShoulder:SetDesiredAngle(-1.57)
-				RightHip:SetDesiredAngle(1.57)
-				LeftHip:SetDesiredAngle(-1.57)
-			end
-			local av = 0
-			local aw = 0
-			function move(ax)
-				av = ax
-				if 0 < ag then
-					ag = ag - (ax - av)
-				end
-				if ae == "FreeFall" then
-					if ag <= 0 then
-						playAnimation("fall", 0.2, k)
-					else
-						if ae == "Seated" then
-							playAnimation("sit", 0.5, k)
-							return
-						end
-						if ae == "Running" then
-							playAnimation("walk", 0.1, k)
-						elseif ae ~= "Dead" then
-							if ae ~= "GettingUp" then
-								if ae ~= "FallingDown" then
-									if ae ~= "Seated" then
-										if ae == "PlatformStanding" then
-											stopAllAnimations()
-										end
-									else
-										stopAllAnimations()
-									end
-								else
-									stopAllAnimations()
-								end
-							else
-								stopAllAnimations()
-							end
-						else
-							stopAllAnimations()
-						end
-					end
 				else
 					if ae == "Seated" then
 						playAnimation("sit", 0.5, k)
@@ -3802,59 +3780,86 @@ local Player = game:GetService("Players").LocalPlayer
 						stopAllAnimations()
 					end
 				end
-				local ay = getTool()
-				if ay then
-				else
-					stopToolAnimations()
-					au = "None"
-					a5 = nil
-					aw = 0
+			else
+				if ae == "Seated" then
+					playAnimation("sit", 0.5, k)
 					return
 				end
-				animStringValueObject = getToolAnim(ay)
-				if animStringValueObject then
-					au = animStringValueObject.Value
-					animStringValueObject.Parent = nil
-					aw = ax + 0.3
-				end
-				if aw < ax then
-					aw = 0
-					au = "None"
-				end
-				animateTool()
-			end
-			k.Died:connect(onDied)
-			k.Running:connect(onRunning)
-			k.Jumping:connect(onJumping)
-			k.Climbing:connect(onClimbing)
-			k.GettingUp:connect(onGettingUp)
-			k.FreeFalling:connect(onFreeFall)
-			k.FallingDown:connect(onFallingDown)
-			k.Seated:connect(onSeated)
-			k.PlatformStanding:connect(onPlatformStanding)
-			k.Swimming:connect(onSwimming)
-			Player.Chatted:connect(
-				function(az)
-					local aA = ""
-					if string.sub(az, 1, 3) == "/e " then
-						aA = string.sub(az, 4)
-					elseif string.sub(az, 1, 7) == "/emote " then
-						aA = string.sub(az, 8)
+				if ae == "Running" then
+					playAnimation("walk", 0.1, k)
+				elseif ae ~= "Dead" then
+					if ae ~= "GettingUp" then
+						if ae ~= "FallingDown" then
+							if ae ~= "Seated" then
+								if ae == "PlatformStanding" then
+									stopAllAnimations()
+								end
+							else
+								stopAllAnimations()
+							end
+						else
+							stopAllAnimations()
+						end
+					else
+						stopAllAnimations()
 					end
-					if ae == "Standing" and P[aA] then
-						playAnimation(aA, 0.1, k)
-					end
+				else
+					stopAllAnimations()
 				end
-			)
-			local aB = game:service("RunService")
-			playAnimation("idle", 0.1, k)
-			ae = "Standing"
-			while j.Parent do
-				local aC, aD = task.wait(0.1)
-				move(aD)
 			end
+			local ay = getTool()
+			if ay then
+			else
+				stopToolAnimations()
+				au = "None"
+				a5 = nil
+				aw = 0
+				return
+			end
+			animStringValueObject = getToolAnim(ay)
+			if animStringValueObject then
+				au = animStringValueObject.Value
+				animStringValueObject.Parent = nil
+				aw = ax + 0.3
+			end
+			if aw < ax then
+				aw = 0
+				au = "None"
+			end
+			animateTool()
 		end
-		coroutine.wrap(b)()
+		k.Died:connect(onDied)
+		k.Running:connect(onRunning)
+		k.Jumping:connect(onJumping)
+		k.Climbing:connect(onClimbing)
+		k.GettingUp:connect(onGettingUp)
+		k.FreeFalling:connect(onFreeFall)
+		k.FallingDown:connect(onFallingDown)
+		k.Seated:connect(onSeated)
+		k.PlatformStanding:connect(onPlatformStanding)
+		k.Swimming:connect(onSwimming)
+		Player.Chatted:connect(
+			function(az)
+				local aA = ""
+				if string.sub(az, 1, 3) == "/e " then
+					aA = string.sub(az, 4)
+				elseif string.sub(az, 1, 7) == "/emote " then
+					aA = string.sub(az, 8)
+				end
+				if ae == "Standing" and P[aA] then
+					playAnimation(aA, 0.1, k)
+				end
+			end
+		)
+		local aB = game:service("RunService")
+		playAnimation("idle", 0.1, k)
+		ae = "Standing"
+		while j.Parent do
+			local aC, aD = task.wait(0.1)
+			move(aD)
+		end
+	end
+	coroutine.wrap(b)()
 end)
 
 AddCommand("2006animations", {"2006anims"}, "old roblox animations", {2}, function()
@@ -5370,7 +5375,7 @@ AddCommand("uninvisible", {"uninvis", "visible", "vis"}, "gives you back visibli
 		end
 		Utils.Notify(Caller, "Invisible", "Now visible!")
 	end
-	return "You are already visible."
+	Utils.Notify(Caller, "Invisible", "You are already visible!")
 end)
 
 AddCommand("dupetools", {"dp"}, "dupes your tools", {"1", 1, {"protect"}}, function(Caller, Args, CEnv)
@@ -5719,7 +5724,7 @@ end)
 AddCommand("gravity", {"grav"}, "changes the gravity to arg", {}, function(Caller, Args)
 	SpoofProperty(Services.Workspace, "Gravity");
 	Services.Workspace.Gravity = tonumber(Args[1]) or Services.Workspace.Gravity
-	Utils.Notify(Caller, "Gravity", "Gravity set!")
+	Utils.Notify(Caller, "Gravity", "Gravity set to " .. Services.Workspace.Gravity)
 end)
 
 AddCommand("nogravity", {"nograv", "ungravity"}, "changes the gravity to default (196.2)", {}, function()
@@ -5733,7 +5738,7 @@ AddCommand("ignore", {}, "puts a players character in lighting", {}, function(Ca
 		if (v.Character) then
 			SpoofProperty(v.Character, "Parent");
 			v.Character.Parent = Lighting
-			Utils.Notify(Caller, "Command", v.Name .. "'s character is now parented to lighting.");
+			Utils.Notify(Caller, "Command", v.Name .. "'s character is now parented to lighting!");
 		end
 	end
 end)
@@ -5768,9 +5773,9 @@ AddCommand("unignore", {"recover"}, "removes a players character parented from l
 	for i, v in next, Target do
 		if (v.Character and v.Character.Parent == Lighting) then
 			v.Character.Parent = Services.Workspace
-			Utils.Notify(Caller, "Command", v.Name .. "'s character is now in workspace.");
+			Utils.Notify(Caller, "Command", v.Name .. "'s character is now in workspace!");
 		else
-			Utils.Notify(Caller, "Command", v.Name .. "'s character is not removed.");
+			Utils.Notify(Caller, "Command", v.Name .. "'s character is not removed!");
 		end
 	end
 end)
@@ -5820,7 +5825,7 @@ end)
 AddCommand("noinfinitejump", {"uninfjump"}, "removes infinite jump", {}, function()
 	local InfJump = LoadCommand("infjump").CmdEnv
 	if (not next(InfJump)) then
-		return "you are not infinite jumping"
+		Utils.Notify(Caller, "Infinitejump", "You are not infinite jumping!")
 	end
 	DisableAllCmdConnections("infinitejump");
 	Utils.Notify(Caller, "Infinitejump", "Disabled!")
@@ -5891,9 +5896,9 @@ AddCommand("removespawn", {}, "removes your spawn location", {}, function(Caller
 	local Spawn = LoadCommand("setspawn").CmdEnv[1]
 	if (Spawn) then
 		Disconnect(Spawn);
-		return "Removed spawn location."
+		Utils.Notify(Caller, "Spawn", "Removed!")	
 	end
-	return "You don't have a spawn location set."
+	Utils.Notify(Caller, "Spawn", "You don't have a spawn location set!")	
 end)
 
 AddCommand("ping", {}, "shows you your ping", {}, function()
@@ -6138,6 +6143,7 @@ AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, fu
 		temp.Position = game.Players.LocalPlayer:GetMouse().Hit.p + Vector3.new(0,0,0)
 		v.CanCollide = false
 	end
+	Utils.Notify(Caller, "Masshatfling", "Loaded!")	
 end)
 
 AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
@@ -6202,6 +6208,7 @@ AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
 		temp.Position = game.Players.LocalPlayer:GetMouse().Hit.p + Vector3.new(0,0,0)
 		v.CanCollide = false
 	end
+	Utils.Notify(Caller, "Hatfling", "Loaded!")	
 end)
 
 AddCommand("fling", {}, "flings a player", {}, function(Caller, Args)
@@ -6519,6 +6526,7 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 			v.CanCollide = false
 		end
 	end)
+	Utils.Notify(Caller, "Toolfling", "Loaded!")	
 end)
 
 AddCommand("reach", {"swordreach"}, "changes handle size of your tool", {1, 3}, function(Caller, Args, CEnv)
@@ -6807,7 +6815,7 @@ AddCommand("forceplay", {"bplay"}, "forcesplays an audio", {1,3,"1"}, function(C
 	UnequipTools(GetHumanoid());
 	local Boombox = filter(GetChildren(LocalPlayer.Backpack), filterBoomboxes)
 	if (not next(Boombox)) then
-		return "You need a boombox to forceplay."
+		Utils.Notify(Caller, "Forceplay", "You need a boombox to forceplay!")	
 	end
 	Services.SoundService.RespectFilteringEnabled = false
 	Boombox = Boombox[1]
@@ -6825,7 +6833,7 @@ AddCommand("forceplay", {"bplay"}, "forcesplays an audio", {1,3,"1"}, function(C
 		end
 		Services.SoundService.RespectFilteringEnabled = true
 	end)()
-	return "Now forceplaying ".. Id
+	Utils.Notify(Caller, "Forceplay", "Now forceplaying ".. Id)	
 end)
 
 AddCommand("unforceplay", {"unbplay"}, "stops forceplay", {}, function()
@@ -6834,7 +6842,7 @@ AddCommand("unforceplay", {"unbplay"}, "stops forceplay", {}, function()
 		FindFirstChild(i, "Sound", true).Playing = false
 		LoadCommand("forceplay").CmdEnv[i] = false
 	end
-	return "Stopped forceplaying."
+	Utils.Notify(Caller, "Forceplay", "Disabled!")
 end)
 
 AddCommand("checksound", {}, "checks if sound can be played  ", {}, function()
@@ -7038,13 +7046,13 @@ AddCommand("age", {}, "ages a player", {"1"}, function(Caller, Args)
 end)
 
 AddCommand("hidesales", {"nosales"}, "no purchase prompt notifications will be shown", {}, function()
-        local CoreGui = Services.CoreGui
+	local CoreGui = Services.CoreGui
 	CoreGui.PurchasePrompt.Enabled = false
 	Utils.Notify(Caller, "Hidesales", "Enabled!")
 end)
 
 AddCommand("showsales", {}, "purchase prompt notifications will be shown", {}, function()
-        local CoreGui = Services.CoreGui
+	local CoreGui = Services.CoreGui
 	CoreGui.PurchasePrompt.Enabled = true
 	Utils.Notify(Caller, "Hidesales", "Disabled!")
 end)
