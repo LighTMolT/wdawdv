@@ -5723,13 +5723,13 @@ end)
 
 AddCommand("gravity", {"grav"}, "changes the gravity to arg", {}, function(Caller, Args)
 	SpoofProperty(Services.Workspace, "Gravity");
-	Services.Workspace.Gravity = tonumber(Args[1]) or Services.Workspace.Gravity
+	Services.Workspace.Gravity = tonumber(Args[1])
 	Utils.Notify(Caller, "Gravity", "Gravity set to " .. Services.Workspace.Gravity)
 end)
 
 AddCommand("nogravity", {"nograv", "ungravity"}, "changes the gravity to default (196.2)", {}, function()
 	Services.Workspace.Gravity = 192
-	Utils.Notify(Caller, "Gravity", "Gravity set to default!")
+	Utils.Notify(Caller, "Gravity", "Gravity set to default! (196.2)")
 end)
 
 AddCommand("ignore", {}, "puts a players character in lighting", {}, function(Caller, Args)
