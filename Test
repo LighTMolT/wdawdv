@@ -5213,7 +5213,7 @@ AddCommand("rocket", {}, "rocket a user", {1,"1"}, function(Caller, Args)
 	Character.Animate.Disabled = false
 	Character.Humanoid:EquipTool(MainTool)
 	wait()
-	Utils.Notify(Caller, "Command", "Sending target to space!")
+	Utils.Notify(Caller, "Rocket", "Sending target to space!")
 	CF = Player.Character.PrimaryPart.CFrame
 	if firetouchinterest then
 		local flag = false
