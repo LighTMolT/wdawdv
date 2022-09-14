@@ -6478,6 +6478,7 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 	for i, v in next, Tools do
 		v.Parent = Char
 	end
+	Tools.CanCollide = false
 	game:GetService("Players").LocalPlayer.Character.Animate.toolnone.ToolNoneAnim.AnimationId = 1
 	wait(1)
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then
