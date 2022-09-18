@@ -10488,7 +10488,7 @@ Startup.SoundId = "rbxassetid://"..tostring(Id)
 
 local Settings = {
 
-	Version = "1.0.0", 
+	Player = game:GetService("Players").LocalPlayer.Name, 
 }
 
 HyperionScreenGui.Name = "HyperionScreenGui"
@@ -10556,7 +10556,7 @@ wait(0.35)
 
 game:GetService("TweenService"):Create(TitleLabelIntro, TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextTransparency = 0, TextStrokeTransparency = 0.9}):Play()
 wait(0.3)
-VersionLabelIntro.Text = "V" .. Settings.Version
+VersionLabelIntro.Text = "Welcome " .. Settings.Player
 game:GetService("TweenService"):Create(VersionLabelIntro, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0.8, 0)}):Play()
 wait(1.5)
 
@@ -10569,7 +10569,7 @@ wait(0.3)
 
 --/ Scripting: Intro
 
-Utils.Notify(LocalPlayer, "Welcome", format("Hyperion Admin has loaded in %.3f seconds.", (tick()) - _L.start));
+Utils.Notify(LocalPlayer, "Welcome!", format("Hyperion Admin has loaded in %.3f seconds.", (tick()) - _L.start));
 if game:GetService("SoundService").RespectFilteringEnabled == false then 
 	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "Filtering is DISABLED, audio commands will replicate.");
 else
