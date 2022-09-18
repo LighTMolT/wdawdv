@@ -4998,6 +4998,45 @@ AddCommand("void", {}, "voids a user", {1,"1"}, function(Caller, Args)
 	WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
 
+AddCommand("sink", {}, "sinks a player", {3,1}, function(Caller, Args)
+	local Target = GetPlayer(Args[1]);
+	local Humanoid = ReplaceHumanoid();
+	local OldPos = GetRoot(Caller).CFrame;
+	local Char = GetCharacter();
+	local tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(300, Enum.EasingStyle.Linear);
+
+	local TempRespawnTimes = {}
+	for i = 1, #Target do
+		local v = Target[i]
+		TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
+	end
+	DisableAnimate();
+	ReplaceHumanoid();
+	for i, v in next, Target do
+		if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
+			Destroy(LocalPlayer.Character);
+			CWait(LocalPlayer.CharacterAdded);
+			WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
+			wait(.1);
+			ReplaceHumanoid();
+		end
+	end
+	for i, v in next, Target do
+		local Tool = FindFirstChildWhichIsA(Char, "Tool") or FindFirstChildWhichIsA(LocalPlayer.Backpack, "Tool");
+		Tool.Parent = Char
+		local TargetRoot = GetRoot(v);
+		if (TargetRoot and Tool) then
+			tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(0, -1000, 0)})
+			tween:Play()
+			firetouchinterest(TargetRoot, Tool.Handle, 0);
+			firetouchinterest(TargetRoot, Tool.Handle, 1);
+		end
+		wait(.2);
+		CWait(LocalPlayer.CharacterAdded);
+		WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
+	end
+end)
+
 AddCommand("skydive", {}, "freefalls a user", {1,"1"}, function(Caller, Args)
 	local Target = GetPlayer(Args[1]);
 	local Target2 = Args[2] and GetPlayer(Args[2]);
