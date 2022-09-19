@@ -5693,7 +5693,7 @@ AddCommand("removerarm", {"rrarm"}, "removes right arm from your character", {3}
 	elseif game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then		
 		game.Players.LocalPlayer.Character["RightUpperArm"]:Destroy()		
 	end
-	Utils.Notify(Caller, "Removerarm", "Removed!")
+	Utils.Notify(Caller, "RightArm", "Removed!")
 end)
 
 AddCommand("removehats", {"nohats"}, "removes all the hats from your character", {3}, function()
