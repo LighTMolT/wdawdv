@@ -8471,7 +8471,7 @@ AddCommand("hidename", {"hidetag"}, "hides your nametag (billboardgui)", {3}, fu
 			Destroy(v);
 		end
 	end
-	return "Hidden!"
+	Utils.Notify(Caller, "Billboardgui", "Hidden!")
 end)
 
 AddCommand("nojumpcooldown", {}, "removes a jumpcooldown if any in games", {}, function()
