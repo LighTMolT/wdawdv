@@ -4278,16 +4278,6 @@ AddCommand("playsounds", {}, "plays all game sounds", {}, function()
 	Utils.Notify(Caller, "Playsounds", "Sounds played!")
 end)
 
-AddCommand("antichatlog", {}, "can't be banned for swearing", {}, function()
-	loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/Anti%20Chat%20Logger.lua"))();	
-	Utils.Notify(Caller, "Antichatlog", "Enabled!")	
-end)
-
-AddCommand("filterbypass", {}, "bypasses chat filter", {}, function()
-	loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/LighTMolT/wdawdv/main/owne.md"))();	
-	Utils.Notify(Caller, "Filterbypass", "Bypassed!")	
-end)
-
 AddCommand("removedestroyheight", {"nodestroyheight"}, "can't die by void", {}, function()
 	workspace.FallenPartsDestroyHeight = 0/1/0
 	Utils.Notify(Caller, "Destroyheight", "Removed!")
