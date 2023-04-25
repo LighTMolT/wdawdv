@@ -8650,7 +8650,7 @@ AddCommand("antiafk", {"antiidle"}, "prevents kicks from when you're afk", {}, f
 			CEnv[1] = true
 		end
 	end
-	return "Antiafk " .. (IsEnabled and " disabled" or "enabled");
+	return "Antiafk " .. (IsEnabled and " Disabled!" or "Enabled!");
 end)
 
 AddCommand("clicktp", {}, "tps you to where your mouse is when you click", {}, function(Caller, Args, CEnv)
