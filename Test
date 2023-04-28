@@ -7909,6 +7909,7 @@ end)
 AddCommand("errorchat", {}, "makes the chat error appear", {}, function()
 	for i=1,3 do 
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("\0", "All")
+    end
 end)
 
 AddCommand("chat", {}, "sends a message", {"1"}, function(Caller, Args)
