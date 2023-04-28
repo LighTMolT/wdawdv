@@ -7908,6 +7908,7 @@ end)
 
 AddCommand("antichatlog", {}, "blocks roblox from logging your chat", {}, function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/c0hxq4j1"))()
+	Utils.Notify(Caller, "AntiChatlog", "Enabled!")
 end)
 
 AddCommand("errorchat", {}, "makes the chat error appear", {}, function()
