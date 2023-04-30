@@ -4662,8 +4662,8 @@ end)
 
 AddCommand("getmass", {}, "checks your humanoid mass", {}, function()
 	local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.AssemblyMass 
-	local myMass = myPart:GetMass()
-	Utils.Notify(Caller, "Getmass", "HumanoidRootPart mass is "..myMass)
+	--local myMass = myPart:GetMass()
+	Utils.Notify(Caller, "Getmass", "HumanoidRootPart mass is "..myPart)
 end)
 
 
