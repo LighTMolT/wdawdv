@@ -4654,8 +4654,14 @@ AddCommand("legrescale", {}, "resizes your legs", {4}, function()
 	Utils.Notify(Caller, "Legrescale", "Rescaled!")
 end)
 
+AddCommand("backdoorscan", {}, "checks if there is a backdoor in the game", {}, function()
+    wait();
+    Utils.Notify(Caller, "Backdoor", "Checking if there is a backdoor...")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/L1ghtingBolt/FraktureSS/master/unobfuscated.lua"))()
+end)
+
 AddCommand("getmass", {}, "checks your humanoid mass", {}, function()
-	local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+	local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.AssemblyMass 
 	local myMass = myPart:GetMass()
 	Utils.Notify(Caller, "Getmass", "HumanoidRootPart mass is "..myMass)
 end)
