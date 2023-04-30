@@ -4661,9 +4661,9 @@ AddCommand("backdoorscan", {}, "checks if there is a backdoor in the game", {}, 
 end)
 
 AddCommand("getmass", {}, "checks your humanoid mass", {}, function()
-	local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.AssemblyMass 
-	--local myMass = myPart:GetMass()
-	Utils.Notify(Caller, "Getmass", "HumanoidRootPart mass is "..myPart)
+	local myPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+	local myMass = myPart:GetMass()
+	Utils.Notify(Caller, "Getmass", "HumanoidRootPart mass is "..myMass)
 end)
 
 
