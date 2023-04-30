@@ -7020,7 +7020,6 @@ AddCommand("volume", {"vol"}, "changes your game volume", {}, function(Caller, A
 end)
 
 AddCommand("respawn", {"gr"}, "resets your character", {3}, function()
-	AddCommand("respawn", {"gr"}, "resets your character", {3}, function()
 	local Player = game:GetService("Players").LocalPlayer
 	local Character = Player.Character
 	if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
