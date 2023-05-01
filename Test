@@ -94,13 +94,9 @@ local function getplr(name)
 	end
 end
 
-game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
-	if State == Enum.TeleportState.Started then
-		if queueteleport then
-			queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test'))()")
-		end
-	end
-end)
+if syn.queue_on_teleport then
+	syn.queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test'))()")
+end
 
 local JSONEncode, JSONDecode, GenerateGUID = 
 	Services.HttpService.JSONEncode, 
