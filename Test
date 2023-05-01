@@ -5738,6 +5738,39 @@ AddCommand("sit", {}, "makes you sit", {3}, function(Caller, Args, CEnv)
 	Utils.Notify(Caller, "Sit", "Sitting!")
 end)
 
+AddCommand("antikillbrick", {}, "makes brick kills unable to kill", {3}, function()
+	local player = game:GetService("Players").LocalPlayer
+	local UIS = game:GetService("UserInputService")
+	local myzaza = false
+
+	UIS.InputBegan:Connect(function(input, GPE)
+		if GPE then return end
+		myzaza = not myzaza
+	end)
+
+	local parts = workspace:GetPartBoundsInRadius(player.Character:WaitForChild("HumanoidRootPart").Position, 10)
+	for _, part in ipairs(parts) do
+		part.CanTouch = myzaza
+	end
+	Utils.Notify(Caller, "Antikillbrick", "Enabled!")
+end)
+
+AddCommand("unantikillbrick", {}, "makes brick kills able to kill", {3}, function()
+	local player = game:GetService("Players").LocalPlayer
+	local UIS = game:GetService("UserInputService")
+	local myzaza = true
+
+	UIS.InputBegan:Connect(function(input, GPE)
+		if GPE then return end
+		myzaza = not myzaza
+	end)
+
+	local parts = workspace:GetPartBoundsInRadius(player.Character:WaitForChild("HumanoidRootPart").Position, 10)
+	for _, part in ipairs(parts) do
+		part.CanTouch = myzaza
+	end
+	Utils.Notify(Caller, "Antikillbrick", "Disabled!")
+end)
 
 AddCommand("antikill", {}, "fakes your humanoid sit", {3}, function(Caller, Args, CEnv)
 	local c = game:GetService("Players").LocalPlayer.Character
