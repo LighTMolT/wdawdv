@@ -7037,16 +7037,15 @@ end)
 AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
 	local Player = game:GetService("Players").LocalPlayer
 	local Character = Player.Character
-	local Humanoid = Character:FindFirstChildOfClass("Humanoid")
-	local function anchor(model)
-		for i,v in pairs(model:GetChildren()) do
-			if v:IsA("BasePart") then v.Anchored = true end
-			anchor(v)
-		end
-	end
-	anchor(Character)
 	local OldPos = Character.HumanoidRootPart.CFrame
-	Humanoid.Health = 0
+	if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
+	Character:ClearAllChildren()
+	local newChar = Instance.new("Model")
+	newChar.Parent = workspace
+	Player.Character = newChar
+	wait()
+	Player.Character = Character
+	newChar:Destroy()
 	Player.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame = OldPos
 	Utils.Notify(Caller, "Refresh", "Refreshed!")
 end)
