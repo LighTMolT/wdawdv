@@ -5992,6 +5992,7 @@ if getgenv().ED_AntiKick.SendNotifications then
 		Duration = 3,
 	})
 end
+end)
 
 AddCommand("antikill", {}, "fakes your humanoid sit", {3}, function(Caller, Args, CEnv)
 	local c = game:GetService("Players").LocalPlayer.Character
