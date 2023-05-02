@@ -5619,8 +5619,8 @@ AddCommand("drophats", {}, "removes all the hats from your character", {3}, func
 	Utils.Notify(Caller, "Drophats", "Dropped!")
 end)
 
-AddCommand("throwhats", {}, "makes your hats throwable", {2}, function()
-	respos = nil
+AddCommand("throwhats", {}, "makes your hats throwable", {}, function()
+respos = nil
 player = game:GetService("Players").LocalPlayer
 mouse = player:GetMouse()
 
@@ -5633,7 +5633,9 @@ while true do
 	for i,v in pairs(character:GetChildren()) do
 		if v:IsA("Accessory") then
 			handles[#handles+1] = v.Handle
+			if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then 
 			v.Handle:FindFirstChildOfClass("SpecialMesh"):Destroy()
+			else end
 			v.Handle.AccessoryWeld:Destroy()
 			local obj = Instance.new("ObjectValue",v.Handle)
 			obj.Name = "ball"
