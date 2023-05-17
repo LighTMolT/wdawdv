@@ -10562,4 +10562,10 @@ if game:GetService("SoundService").RespectFilteringEnabled == false then
 else
 	Utils.Notify(LocalPlayer, "RespectFilteringEnabled", "Filtering is ENABLED, audio commands will NOT replicate.");    
 end
+
+if game:FindFirstChildOfClass("Players").LocalPlayer.Character.Head.CanCollide == true then
+Utils.Notify(LocalPlayer, "Collisions", "Collisions are ENABLED.");
+else
+Utils.Notify(LocalPlayer, "Collisions", "Collisions are DISABLED.");
+end
 --/END\--
