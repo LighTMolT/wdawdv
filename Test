@@ -1,5 +1,5 @@
 --[[
-	< Hyperion Admin >
+	Hyperion Admin -17/05/2023-
 ]]
 
 local game = game
@@ -74,8 +74,6 @@ game.Changed
 
 local Destroy, Clone = game.Destroy, game.Clone
 
-local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
-
 local Heartbeat, Stepped, RenderStepped;
 do
 	local RunService = Services.RunService;
@@ -92,10 +90,6 @@ local function getplr(name)
 	for i,v in pairs(game.Players:GetPlayers()) do
 		if v.Name:lower():find(name:lower()) or v.DisplayName:lower():find(name:lower()) then return v end
 	end
-end
-
-if syn.queue_on_teleport then
-	syn.queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test'))()")
 end
 
 local JSONEncode, JSONDecode, GenerateGUID = 
@@ -177,7 +171,7 @@ local GetState = __H.GetState
 local GetAccessories = __H.GetAccessories
 
 local LocalPlayer = Players.LocalPlayer
-local PlayerGui = FindFirstChildWhichIsA(LocalPlayer, "PlayerGui");
+local PlayerGui =  FindFirstChildWhichIsA(LocalPlayer, "PlayerGui");
 local Mouse = LocalPlayer.GetMouse(LocalPlayer);
 
 local CThread;
@@ -341,6 +335,7 @@ end
 
 local setthreadidentity = setthreadidentity or syn_context_set or setthreadcontext or (syn and syn.set_thread_identity)
 local getthreadidentity = getthreadidentity or syn_context_get or getthreadcontext or (syn and syn.get_thread_identity)
+
 --END IMPORT [var]
 
 
@@ -632,7 +627,7 @@ do
 			end
 		end
 
-		-- ik this is horrible but Hyperion admin v3 has a better way of doing hooks
+		-- ik this is horrible but fates admin v3 has a better way of doing hooks
 		if (Method == "children" or Method == "GetChildren" or Method ==  "getChildren" or Method == "GetDescendants" or Method == "getDescendants") then
 			return filter(__Namecall(...), function(i, instance)
 				return not isProtected(instance);
@@ -786,8 +781,8 @@ do
 					}
 				end
 				local Connections = tbl_concat(
-					getconnections(GetPropertyChangedSignal(Instance_, SpoofedPropertiesForInstance and SpoofedPropertiesForInstance.Property or Index), true),
-					getconnections(Instance_.Changed, true),
+					-- getconnections(GetPropertyChangedSignal(Instance_, SpoofedPropertiesForInstance and SpoofedPropertiesForInstance.Property or Index), true),
+					-- getconnections(Instance_.Changed, true),
 					getconnections(game.ItemChanged, true)
 				)
 
@@ -1084,7 +1079,7 @@ local WriteConfig = function(Destroy)
 	if (isfolder("Hyperion-admin") and Destroy) then
 		delfolder("Hyperion-admin");
 		writefile("Hyperion-admin/config.json", JSON);
-		writefile("Hyperion/admin/pluings/plugin-conf.json", PluginJSON);
+		writefile("fates/admin/pluings/plugin-conf.json", PluginJSON);
 	else
 		makefolder("Hyperion-admin");
 		makefolder("Hyperion-admin/plugins");
@@ -1262,7 +1257,7 @@ ParentGui = function(Gui, Parent)
 	Guis[#Guis + 1] = Gui
 	return Gui
 end
-UI = Clone(Services.InsertService:LoadLocalAsset("rbxassetid://10883430146"));
+UI = Clone(Services.InsertService:LoadLocalAsset("rbxassetid://7882275026"));
 UI.Enabled = true
 
 local CommandBarPrefix;
@@ -1567,6 +1562,8 @@ do
 	LoadTheme(Theme);
 end
 --END IMPORT [ui]
+
+
 
 --IMPORT [utils]
 Utils.Tween = function(Object, Style, Direction, Time, Goal)
@@ -2292,7 +2289,7 @@ do
 
 		Console.Frame.List.CanvasSize = UDim2.fromOffset(0, Console.Frame.List.UIListLayout.AbsoluteContentSize.Y);
 		AmountWarn = AmountWarn + 1
-		Utils.Notify(Plr, "Hyperion Admin", Text);
+		Utils.Notify(Plr, "Warning", Text);
 	end
 
 	Utils.Error = function(Text, Caller, FromNotif)
@@ -2823,9 +2820,178 @@ end)
 
 AddCommand("partownership", {}, "gives you ownership of unanchored parts", {}, function()
 	Utils.Notify(Caller, "Partownership", "Enabled!")	
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/your4eyes/RobloxScripts/main/Net_Library.lua"))()
+
+	local Players = game:GetService("Players")
+	local RunService = game:GetService("RunService")
+	local LocalPlayer = Players.LocalPlayer
+
+	if not getgenv().Network then
+		getgenv().Network = {
+			BaseParts = {};
+			FakeConnections = {};
+			Connections = {};
+			Output = {
+				Enabled = true;
+				Prefix = "[NETWORK] ";
+				Send = function(Type,Output,BypassOutput)
+					if typeof(Type) == "function" and (Type == print or Type == warn or Type == error) and typeof(Output) == "string" and (typeof(BypassOutput) == "nil" or typeof(BypassOutput) == "boolean") then
+						if Network["Output"].Enabled or BypassOutput then
+							Type(Network["Output"].Prefix..Output);
+						end;
+					elseif Network["Output"].Enabled then
+						error(Network["Output"].Prefix.."Output Send Error : Invalid syntax.");
+					end;
+				end;
+			};
+			LostParts = {};
+			CharacterRelative = true;
+			LastCharacter = nil;
+			TryKeep = true; --loop attempts to
+			PartOwnership = {
+				PreMethodSettings = {};
+				Enabled = false;
+			};
+		}
+
+		Network["Output"].Send(print,": Loading.")
+
+		Network["RetainPart"] = function(Part,Silent,ReturnFakePart) --function for retaining ownership of unanchored parts
+			assert(Network["PartOwnership"]["Enabled"], Network["Output"].Prefix.." RetainPart Error : PartOwnership is Disabled.")
+			assert(typeof(Part) == "Instance" and Part:IsA("BasePart") and not Part:IsGrounded(),Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg1 (Part) must be an ungrounded BasePart which is a descendant of workspace.")
+			if not Part:IsDescendantOf(workspace) then
+				Network["Output"].Send(error,"RetainPart Error : Invalid syntax: Arg1 (Part) must be an ungrounded BasePart which is a descendant of workspace.")
+				local Index = table.find(Network["LostParts"],Part)
+				if Index then
+					table.remove(Network["LostParts"],Index)
+				end
+				return false
+			end
+			assert(typeof(Silent) == "boolean" or typeof(Silent) == "nil",Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg2 (Silent) must be a boolean or nil.")
+			assert(typeof(ReturnFakePart) == "boolean" or typeof(ReturnFakePart) == "nil",Network["Output"].Prefix.."RetainPart Error : Invalid syntax: Arg3 (ReturnFakePart) must be a boolean or nil.")
+			if not table.find(Network["BaseParts"],Part) and not table.find(Network["LostParts"],Part) then
+				table.insert(Network["BaseParts"],Part)
+				Part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
+				if not Silent then
+					Network["Output"].Send(print,"PartOwnership Output : PartOwnership applied to BasePart "..Part:GetFullName()..".")
+				end
+				if ReturnFakePart then
+					local workspaceParts = {}
+					return FakePart
+				end
+			else
+				Network["Output"].Send(warn,"RetainPart Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it already active.")
+				return false
+			end
+		end
+
+		Network["RemovePart"] = function(Part,Silent) --function for removing ownership of unanchored part
+			assert(typeof(Part) == "Instance" and Part:IsA("BasePart"),Network["Output"].Prefix.."RemovePart Error : Invalid syntax: Arg1 (Part) must be a BasePart.")
+			local Index1 = table.find(Network["BaseParts"],Part)
+			local Index2 = table.find(Network["LostParts"],Part)
+			if Index1 then
+				table.remove(Network["BaseParts"],Index1)
+			else
+				if not Silent then
+					Network["Output"].Send(warn,"RemovePart Warning : BasePart "..Part:GetFullName().." not found in BaseParts table.")
+				end
+				return
+			end
+			if Index2 then
+				table.remove(Network["LostParts"],Index2)
+			end
+			if not Silent then
+				Network["Output"].Send(print,"RemovePart Output: PartOwnership removed from BasePart "..Part:GetFullName()..".")
+			end
+		end
+
+		Network["PartOwnership"]["PartCoroutine"] = coroutine.create(function(Part)
+			if Part:IsDescendantOf(workspace) then
+				if Network.CharacterRelative then
+					local Character = Network["LastCharacter"];
+					if not Character.PrimaryPart then
+						for _,Inst in pairs(Character:GetDescendants()) do
+							if Inst:IsA("BasePart") then
+								Character.PrimaryPart = Inst
+								break
+							end
+						end
+					end
+					if Character and Character.PrimaryPart then
+						local Distance = (Character.PrimaryPart.Position - Part.Position).Magnitude
+						if Distance > gethiddenproperty(LocalPlayer,"MaximumSimulationRadius") and not isnetworkowner(Part) then
+							Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is more than "..gethiddenproperty(LocalPlayer,"MaximumSimulationRadius").." studs away.")
+							Network["RemovePart"](Part)
+							if not Part:IsGrounded() then
+								table.insert(Network["LostParts"],Part)
+							else
+								Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as it is grounded.")
+							end
+						end
+					else
+						Network["Output"].Send(warn,"PartOwnership Warning : PartOwnership not applied to BasePart "..Part:GetFullName()..", as the LocalPlayer Character's PrimaryPart does not exist.")
+					end
+				end
+				Part.AssemblyLinearVelocity = (Part.AssemblyLinearVelocity.Unit+Vector3.new(.01,.01,.01))*(50+math.cos(tick()*10))
+			else
+				Network["RemovePart"](Part)
+			end
+		end)
+
+		Network["PartOwnership"]["Enable"] = coroutine.create(function() --creating a thread for network stuff
+			if not Network["PartOwnership"]["Enabled"] then
+				Network["PartOwnership"]["Enabled"] = true
+				Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus = LocalPlayer.ReplicationFocus
+				LocalPlayer.ReplicationFocus = workspace
+				Network["PartOwnership"]["PreMethodSettings"].SimulationRadius = gethiddenproperty(LocalPlayer,"SimulationRadius")
+				Network["PartOwnership"]["Connection"] = RunService.Stepped:Connect(function()
+					Network["LastCharacter"] = pcall(function() return LocalPlayer.Character end) or Network["LastCharacter"]
+					sethiddenproperty(LocalPlayer,"SimulationRadius",1/0)
+					coroutine.wrap(function()
+						for _,Part in pairs(Network["BaseParts"]) do --loop through parts and do network stuff
+							coroutine.resume(Network["PartOwnership"]["PartCoroutine"],Part)
+							--[==[ [[by 4eyes btw]] ]==]--
+						end
+					end)()
+					coroutine.wrap(function()
+						for _,Part in pairs(Network["LostParts"]) do
+							Network.RetainPart(Part,true)
+						end
+					end)()
+				end)
+				Network["Output"].Send(print,"PartOwnership Output : PartOwnership enabled.")
+			else
+				Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already enabled.")
+			end
+		end)
+
+		Network["PartOwnership"]["Disable"] = coroutine.create(function()
+			if Network["PartOwnership"]["Connection"] then
+				Network["PartOwnership"]["Connection"]:Disconnect()
+				LocalPlayer.ReplicationFocus = Network["PartOwnership"]["PreMethodSettings"].ReplicationFocus
+				sethiddenproperty(LocalPlayer,"SimulationRadius",Network["PartOwnership"]["PreMethodSettings"].SimulationRadius)
+				Network["PartOwnership"]["PreMethodSettings"] = {}
+				for _,Part in pairs(Network["BaseParts"]) do
+					Network["RemovePart"](Part)
+				end
+				for Index,Part in pairs(Network["LostParts"]) do
+					table.remove(Network["LostParts"],Index)
+				end
+				Network["PartOwnership"]["Enabled"] = false
+				Network["Output"].Send(print,"PartOwnership Output : PartOwnership disabled.")
+			else
+				Network["Output"].Send(warn,"PartOwnership Output : PartOwnership already disabled.")
+			end
+		end)
+
+		Network["Output"].Send(print,": Loaded.")
+	end
 	coroutine.resume(Network["PartOwnership"]["Enable"])
-	Network.RetainPart(Part)
+
+	for i,v in pairs(LocalPlayer.Character:GetDescendants()) do
+		if v:IsA("Accessory") then
+			Network.RetainPart(v.Handle)
+		end
+	end
 end)
 
 AddCommand("partgravity", {}, "unanchored parts zero gravity", {}, function()
@@ -2864,10 +3030,6 @@ end)
 AddCommand("headless", {}, "removes your head", {2}, function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/yc0STZCK"))()
 	Utils.Notify(Caller, "Headless", "Loading...")
-end)
-
-AddCommand("split", {}, "splits your body in half", {4}, function()
-	game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist:Destroy()
 end)
 
 AddCommand("r6", {}, "changes your humanoidrigtype to R6 if possible", {}, function()
@@ -4667,10 +4829,10 @@ AddCommand("rejoindupe", {}, "dupetools with rejoin method", {1,"1"}, function(C
 		v.Parent = Char
 		v.Parent = Workspace
 	end
-	writefile("fates-admin/tooldupe.txt", tostring(Amount - 1));
-	writefile("fates-admin/tooldupe.lua", format([[
+	writefile("Hyperion-admin/tooldupe.txt", tostring(Amount - 1));
+	writefile("Hyperion-admin/tooldupe.lua", format([[
         local OldPos = CFrame.new(%s);
-        local DupeAmount = tonumber(readfile("fates-admin/tooldupe.txt"));
+        local DupeAmount = tonumber(readfile("Hyperion-admin/tooldupe.txt"));
         local game = game
         local GetService = game.GetService
         local Players = GetService(game, "Players");
@@ -4695,8 +4857,8 @@ AddCommand("rejoindupe", {}, "dupetools with rejoin method", {1,"1"}, function(C
                     end
                 end
             end
-            delfile("fates-admin/tooldupe.txt");
-            delfile("fates-admin/tooldupe.lua");
+            delfile("Hyperion-admin/tooldupe.txt");
+            delfile("Hyperion-admin/tooldupe.lua");
             loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test"))();
             RootPart.CFrame = OldPos
             repeat wait() RootPart.CFrame = OldPos until RootPart.CFrame == OldPos
@@ -4708,14 +4870,14 @@ AddCommand("rejoindupe", {}, "dupetools with rejoin method", {1,"1"}, function(C
                 v.Parent = Char
                 v.Parent = Workspace
             end
-            writefile("fates-admin/tooldupe.txt", tostring(DupeAmount - 1));
+            writefile("Hyperion-admin/tooldupe.txt", tostring(DupeAmount - 1));
             local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
-            queue_on_teleport(readfile("fates-admin/tooldupe.lua"));
+            queue_on_teleport(readfile("Hyperion-admin/tooldupe.lua"));
             TeleportService.TeleportToPlaceInstance(TeleportService, game.PlaceId, game.JobId);
         end
     ]], tostring(OldPos)));
 	local TeleportService = Services.TeleportService
-	queue_on_teleport(readfile("fates-admin/tooldupe.lua"));
+	queue_on_teleport(readfile("Hyperion-admin/tooldupe.lua"));
 	TeleportService.TeleportToPlaceInstance(TeleportService, game.PlaceId, game.JobId);
 end)
 
@@ -4795,7 +4957,7 @@ AddCommand("droptools", {"dt"}, "drops all of your tools", {1,3}, function()
 end)
 
 AddCommand("trainhats", {}, "makes a train with all the accessories", {3}, function()
-	
+
 	if game:GetService("ReplicatedStorage"):FindFirstChild("RequestRespawn") then
 		game:GetService("ReplicatedStorage").RequestRespawn:Destroy()
 	end
@@ -6190,43 +6352,28 @@ AddCommand("fireproximityprompts", {"proximityprompts", "fpp"}, "fires all the p
 	return format("Fired %d amount of proximityprompts", amount);
 end)
 
-AddCommand("mute", {"loopmute"}, "loop mutes a users boombox", {}, function(Caller, Args, CEnv)
+AddCommand("muteboombox", {}, "mutes a users boombox", {}, function(Caller, Args)	
 	local Target = GetPlayer(Args[1]);
-	local filterBoomboxes = function(i,v)
-		return FindFirstChild(v, "Handle") and FindFirstChildWhichIsA(v.Handle, "Sound");
-	end
-	Services.SoundService.RespectFilteringEnabled = false
-	local Con = AddConnection(CConnect(Heartbeat, function()
-		for i, v in next, Target do
-			for i2, v2 in next, GetDescendants(v.Backpack) do
-				if (IsA(v2, "Sound")) then
-					v2.Playing = false
-				end
-			end
-			local Char = GetCharacter(v)
-			if (Char) then
-				for i22, v2 in next, GetDescendants(Char) do
-					if (IsA(v2, "Sound")) then
-						v2.Playing = false
-					end
-				end
+	for i, v in next, Target do
+		for i2, v2 in next, GetDescendants(v.Character) do
+			if (IsA(v2, "Sound")) then
+				v2.Playing = false
 			end
 		end
-	end));
-	CEnv[Target] = Con
+	end
 end)
 
-AddCommand("unmute", {}, "unloopmutes a persons boombox", {"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1])
-	local Muting = LoadCommand("mute").CmdEnv
-	for i, v in next, Muting do
-		for i2, v2 in next, Target do
-			if (v2 == i) then
-				Disconnect(v);
-				Muting[i] = nil
+AddCommand("muteserver", {}, "mutes all sound in the server, needs rejoin to stop", {}, function(Caller)	
+	Mute = true
+	while Mute == true do 
+		wait()
+		for _, sound in next, workspace:GetDescendants() do
+			if sound:IsA("Sound") then
+				sound:Stop()
 			end
 		end
 	end
+	Utils.Notify(Caller, "Muteserver", "Muted all sounds!")
 end)
 
 AddCommand("audiolag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
@@ -6369,7 +6516,7 @@ AddCommand("grippos", {}, "changes grippos of your tool", {"3"}, function(Caller
 	else
 		return "There isn't any tool to set grippos."
 	end
-	return "Grippos set."
+	--return "Grippos set."
 end)
 
 AddCommand("truesightguis", {}, "true sight on all guis", {}, function(Caller, Args, CEnv)
@@ -7381,7 +7528,7 @@ AddCommand("antichatlog", {}, "blocks roblox from logging your chat", {}, functi
 end)
 
 AddCommand("lagchat", {}, "makes people lag using chat", {}, function()
-    --<Chat Lag>--
+	--<Chat Lag>--
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatLag.lua"))()
 
 	--<Anti Lag For Yourself>--
@@ -8424,7 +8571,7 @@ AddCommand("advertise", {}, "advertises the admin", {}, function()
 	game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(table.unpack(ad))
 end)
 
-AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Hyperion admin has made", {}, function()
+AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs fates admin has made", {}, function()
 	local MessageClone = Clone(Console.Frame.List);
 
 	Utils.ClearAllObjects(Console.Frame.List)
@@ -8819,7 +8966,7 @@ end), Connections.UI, true);
 
 AddConnection(CConnect(ChatLogs.Save.MouseButton1Click, function()
 	local GameName = Services.MarketplaceService.GetProductInfo(Services.MarketplaceService, game.PlaceId).Name
-	local String =  format("Hyperion Admin Chatlogs for %s (%s)\n\n", GameName, os.date());
+	local String =  format("Fates Admin Chatlogs for %s (%s)\n\n", GameName, os.date());
 	local TimeSaved = gsub(tostring(os.date("%x")), "/", "-") .. " " .. gsub(tostring(os.date("%X")), ":", "-");
 	local Name = format("Hyperion-admin/chatlogs/%s (%s).txt", GameName, TimeSaved);
 	local Children = GetChildren(ChatLogs.Frame.List);
@@ -8835,7 +8982,7 @@ end), Connections.UI, true);
 
 AddConnection(CConnect(HttpLogs.Save.MouseButton1Click, function()
 	local Children = GetChildren(HttpLogs.Frame.List);
-	local Logs =  format("Hyperion Admin HttpLogs for %s\n\n", os.date());
+	local Logs =  format("Fates Admin HttpLogs for %s\n\n", os.date());
 	for i = 1, #Children do
 		local v = Children[i]
 		if (not IsA(v, "UIListLayout")) then
@@ -8853,7 +9000,7 @@ AddConnection(CConnect(Console.Save.MouseButton1Click, function()
 	local GameName = Services.MarketplaceService.GetProductInfo(Services.MarketplaceService, game.PlaceId).Name
 	local TimeSaved = gsub(tostring(os.date("%x")), "/", "-") .. " " .. gsub(tostring(os.date("%X")), ":", "-");
 	local Children = GetChildren(Console.Frame.List);
-	local String =  format("Hyperion Admin logs %s\nGame: %s - %d\n\n", TimeSaved, GameName, game.PlaceId);
+	local String =  format("Fates Admin logs %s\nGame: %s - %d\n\n", TimeSaved, GameName, game.PlaceId);
 	local Names = { ["P"] = "OUTPUT", ["W"] = "WARNING", ["E"] = "ERROR" }
 	for i = 1, #Children do
 		local v = Children[i]
@@ -9785,11 +9932,7 @@ do
 		return lower(split(v, ".")[#split(v, ".")]) == "lua"
 	end), function(i, v)
 		local splitted = split(v, "\\");
-		if (identifyexecutor and identifyexecutor() == "ScriptWare") then
-			return {splitted[#splitted], loadfile("Hyperion-admin/plugins/" .. v)}
-		else
-			return {splitted[#splitted], loadfile(v)}
-		end
+		return {splitted[#splitted], loadfile(v)}
 	end) or {}
 
 	if (SafePlugins) then
