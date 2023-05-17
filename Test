@@ -3050,7 +3050,7 @@ AddCommand("r6", {}, "changes your humanoidrigtype to R6 if possible", {}, funct
 	if result == Enum.AvatarPromptResult.Success then
 	end
 	Utils.Notify(Caller, "AvatarEditorService", "R6 loading...")
-	game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
+	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
 	CWait(LocalPlayer.CharacterAdded)
@@ -3075,7 +3075,7 @@ AddCommand("r15", {}, "changes your humanoidrigtype to R15 if possible", {}, fun
 	if result == Enum.AvatarPromptResult.Success then
 	end
 	Utils.Notify(Caller, "AvatarEditorService", "R15 loading...")
-	game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
+	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
 	CWait(LocalPlayer.CharacterAdded)
