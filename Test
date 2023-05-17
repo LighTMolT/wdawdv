@@ -3050,6 +3050,13 @@ AddCommand("r6", {}, "changes your humanoidrigtype to R6 if possible", {}, funct
 	if result == Enum.AvatarPromptResult.Success then
 	end
 	Utils.Notify(Caller, "AvatarEditorService", "R6 loading...")
+	local BaseParts = filter(GetChildren(GetCharacter(v)), function(i, v)
+		return IsA(v, "BasePart");
+	end)
+	for i, v in next, BaseParts do
+		SpoofProperty(v, "Anchored");
+		v.Anchored = true
+	end
 	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
@@ -3075,6 +3082,13 @@ AddCommand("r15", {}, "changes your humanoidrigtype to R15 if possible", {}, fun
 	if result == Enum.AvatarPromptResult.Success then
 	end
 	Utils.Notify(Caller, "AvatarEditorService", "R15 loading...")
+	local BaseParts = filter(GetChildren(GetCharacter(v)), function(i, v)
+		return IsA(v, "BasePart");
+	end)
+	for i, v in next, BaseParts do
+		SpoofProperty(v, "Anchored");
+		v.Anchored = true
+	end
 	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
@@ -3256,25 +3270,6 @@ AddCommand("blockholder", {}, "gives you an item to hold blocks", {}, function()
 		end)
 	end)
 	Utils.Notify(Caller, "Blockholder", "Got Blockholder!")
-end)
-
-AddCommand("removeconstraint", {"noconstraint"}, "makes your character impossible to ragdoll", {3}, function()
-	local Player = game:GetService("Players").LocalPlayer.Character
-	local antiragdoll = true
-
-	antiragdoll = antiragdoll and function(v)
-		if v:IsA("HingeConstraint") or v:IsA("BallSocketConstraint") then
-			v.Parent = nil
-		end
-	end
-
-	if antiragdoll then
-		for i, v in pairs(Player:GetDescendants()) do
-			antiragdoll(v)
-		end
-		Player.DescendantAdded:Connect(antiragdoll)
-	end
-	Utils.Notify(Caller, "Constraints", "Removed!")
 end)
 
 AddCommand("r15v2", {}, "old r15 roblox animations", {4}, function()
@@ -6654,6 +6649,13 @@ AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
 	local Player = game:GetService("Players").LocalPlayer
 	local Character = Player.Character
 	local OldPos = Character.HumanoidRootPart.CFrame
+	local BaseParts = filter(GetChildren(GetCharacter(v)), function(i, v)
+		return IsA(v, "BasePart");
+	end)
+	for i, v in next, BaseParts do
+		SpoofProperty(v, "Anchored");
+		v.Anchored = true
+	end
 	if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
 	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
 	Player.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame = OldPos
