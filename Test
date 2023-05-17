@@ -6645,13 +6645,7 @@ AddCommand("respawn", {"gr"}, "resets your character", {3}, function()
 	local Player = game:GetService("Players").LocalPlayer
 	local Character = Player.Character
 	if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
-	Character:ClearAllChildren()
-	local newChar = Instance.new("Model")
-	newChar.Parent = workspace
-	Player.Character = newChar
-	wait()
-	Player.Character = Character
-	newChar:Destroy()
+	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
 	Player.CharacterAdded:Wait()
 	Utils.Notify(Caller, "Respawn", "Respawned!")
 end)
@@ -6661,13 +6655,7 @@ AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
 	local Character = Player.Character
 	local OldPos = Character.HumanoidRootPart.CFrame
 	if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
-	Character:ClearAllChildren()
-	local newChar = Instance.new("Model")
-	newChar.Parent = workspace
-	Player.Character = newChar
-	wait()
-	Player.Character = Character
-	newChar:Destroy()
+	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
 	Player.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame = OldPos
 	Utils.Notify(Caller, "Refresh", "Refreshed!")
 end)
