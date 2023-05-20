@@ -7574,7 +7574,25 @@ end)
 
 AddCommand("lagchat", {}, "makes people lag using chat", {}, function()
 	--<Chat Lag>--
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatLag.lua"))()
+	--loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatLag.lua"))()
+        disabled = false
+
+        repeat task.wait(2.2) 
+
+	local Message = "⛓" 
+	local Unicode = " "
+	Message = Message .. Unicode:rep(200 - #Message)
+
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local SayMessageRequest = ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
+
+	if SayMessageRequest then
+		for i = 1, 1 do
+			SayMessageRequest:FireServer(Message, "All")
+		end
+	  end
+	  
+        until disabled == true
 
 	--<Anti Lag For Yourself>--
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLag.lua"))()
