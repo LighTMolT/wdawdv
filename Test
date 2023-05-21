@@ -3097,13 +3097,27 @@ AddCommand("r15", {}, "changes your humanoidrigtype to R15 if possible", {}, fun
 end)
 
 AddCommand("lowhold", {}, "makes you low holding a tool", {1}, function()
-	game:GetService("Players").LocalPlayer.Character.Animate.toolnone.ToolNoneAnim.AnimationId = 1
+local plr = game.Players.LocalPlayer
+local bp = plr.Backpack
 
-	local plr = game:GetService("Players").LocalPlayer; plr.Character.Humanoid:UnequipTools()
-	local Tools = plr.Backpack:GetChildren()
+local char = plr.Character
+local boombox = char and char:FindFirstChild("BoomBox") or bp:FindFirstChild("BoomBox")
 
-	Tools[1].Grip = CFrame.new(0,0.8,0) * CFrame.Angles(-89.5, math.rad(-360), math.rad(-270))
-	Tools[1].Parent = plr.Character
+if not boombox then return end
+
+boombox.Parent = char
+
+for _, x in next, char.Humanoid:GetPlayingAnimationTracks() do
+    if x.Name == "ToolNoneAnim" then
+        x:Stop()
+    end
+end
+
+char.Animate.toolnone.ToolNoneAnim.AnimationId = ""
+
+boombox.Grip = CFrame.new(0, .70, 0) * CFrame.Angles(math.rad(90), math.rad(180), math.rad(90))
+boombox.Parent = bp
+boombox.Parent = char
 end)
 
 AddCommand("swas", {"hail"}, "creates a swas with tools", {1}, function()
