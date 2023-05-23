@@ -7509,7 +7509,7 @@ AddCommand("lagchat", {}, "makes people lag using chat", {}, function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/LighTMolT/wdawdv/main/laggaer"))()
 end)
 
-AddCommand("nolagchat", {}, "disables lagchat", {}, function()
+AddCommand("unlagchat", {"nolagchat"}, "disables lagchat", {}, function()
 	disabled = true
 end)
 
