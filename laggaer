@@ -45,7 +45,7 @@ end)
 
         repeat task.wait(2.2) 
 
-	local Message = "⛓" 
+	local Message = "🤑" 
 	local Unicode = " "
 	Message = Message .. Unicode:rep(200 - #Message)
 
