@@ -7332,75 +7332,9 @@ AddCommand("enableanims", {"anims"}, "enables character animations", {3}, functi
 	Utils.Notify(Caller, "Disableanims", "Disabled!")
 end)
 
-AddCommand("buggedfly", {}, "fly your character", {3}, function(Caller, Args, CEnv)
-	CEnv[1] = tonumber(Args[1]) or GetConfig().FlySpeed or 2
-	local Speed = CEnv[1]
-	local Root = GetRoot();
-	local BodyGyro = InstanceNew("BodyGyro");
-	local BodyVelocity = InstanceNew("BodyVelocity");
-	local IdleAnim1 = "507766388"
-
-	local Character = GetCharacter();
-	local Animate = FindFirstChild(Character, "Animate");
-
-	if (Animate) then
-		pcall(function()
-			CEnv.AnimsChanged = {}
-			local Run = Animate.run.RunAnim
-			CEnv.AnimsChanged[Run] = Run.AnimationId
-			Run.AnimationId = IdleAnim1
-			local Walk = Animate.walk.WalkAnim
-			CEnv.AnimsChanged[Walk] = Walk.AnimationId
-			Walk.AnimationId = IdleAnim1
-			local Fall = Animate.fall.FallAnim
-			CEnv.AnimsChanged[Fall] = Fall.AnimationId
-			Fall.AnimationId = IdleAnim1
-			local Jump = Animate.jump.JumpAnim
-			CEnv.AnimsChanged[Jump] = Jump.AnimationId
-			Jump.AnimationId = IdleAnim1
-		end)
-	end
-
-	SpoofInstance(Root, isR6() and Character.Torso or Character.UpperTorso);
-	ProtectInstance(BodyGyro);
-	ProtectInstance(BodyVelocity);
-	BodyGyro.Parent = Root
-	BodyVelocity.Parent = Root
-	BodyGyro.P = 9e9
-	BodyGyro.MaxTorque = Vector3New(1, 1, 1) * 9e9
-	BodyGyro.CFrame = Root.CFrame
-	BodyVelocity.MaxForce = Vector3New(1, 1, 1) * 9e9
-	BodyVelocity.Velocity = Vector3New(0, 0.1, 0);
-	local Humanoid = GetHumanoid();
-	ChangeState(Humanoid, 8);
-	AddConnection(CConnect(Humanoid.StateChanged, function()
-		ChangeState(Humanoid, 8);
-		Humanoid.PlatformStand = false
-	end), CEnv)
-
-	local Table1 = { ['W'] = 0; ['A'] = 0; ['S'] = 0; ['D'] = 0 }
-
-	CThread(function()
-		while (next(LoadCommand("fly").CmdEnv) and wait()) do
-			Speed = LoadCommand("fly").CmdEnv[1]
-
-			Table1["W"] = Keys["W"] and Speed or 0
-			Table1["A"] = Keys["A"] and -Speed or 0
-			Table1["S"] = Keys["S"] and -Speed or 0
-			Table1["D"] = Keys["D"] and Speed or 0
-			if ((Table1["W"] + Table1["S"]) ~= 0 or (Table1["A"] + Table1["D"]) ~= 0) then
-				BodyVelocity.Velocity = ((Camera.CoordinateFrame.lookVector * (Table1["W"] + Table1["S"])) + ((Camera.CoordinateFrame * CFrameNew(Table1["A"] + Table1["D"], (Table1["W"] + Table1["S"]) * 0.2, 0).p) - Camera.CoordinateFrame.p)) * 50
-			else
-				BodyVelocity.Velocity = Vector3New(0, 0.1, 0);
-			end
-			BodyGyro.CFrame = Camera.CoordinateFrame
-		end
-	end)();
-end)
-
 AddCommand("fly", {}, "fly your character", {3}, function(Caller, Args, CEnv)
-	LoadCommand("buggedfly").CmdEnv[1] = tonumber(Args[1]) or GetConfig().FlySpeed or 3
-	local Speed = LoadCommand("buggedfly").CmdEnv[1]
+	
+	local Speed = GetConfig().FlySpeed
 	for i, v in next, GetChildren(GetRoot()) do
 		if (IsA(v, "BodyPosition") or IsA(v, "BodyGyro")) then
 			Destroy(v);
@@ -7420,8 +7354,8 @@ AddCommand("fly", {}, "fly your character", {3}, function(Caller, Args, CEnv)
 	GetHumanoid().PlatformStand = true
 	CThread(function()
 		BodyPos.Position = GetRoot().Position
-		while (next(LoadCommand("buggedfly").CmdEnv) and wait()) do
-			Speed = LoadCommand("buggedfly").CmdEnv[1]
+		while wait() do
+			Speed = GetConfig().FlySpeed
 			local NewPos = (BodyGyro.CFrame - (BodyGyro.CFrame).Position) + BodyPos.Position
 			local CoordinateFrame = Camera.CoordinateFrame
 			if (Keys["W"]) then
@@ -7451,7 +7385,7 @@ end)
 
 AddCommand("flyspeed", {"fs"}, "changes the fly speed", {3, "1"}, function(Caller, Args)
 	local Speed = tonumber(Args[1]);
-	LoadCommand("fly").CmdEnv[1] = Speed or LoadCommand("fly2").CmdEnv[1]
+	LoadCommand("fly").CmdEnv[1] = Speed 
 	if (Speed) then
 		SetConfig({FlySpeed=Speed});
 		return "Your flyspeed is now " .. Speed
@@ -7460,15 +7394,7 @@ AddCommand("flyspeed", {"fs"}, "changes the fly speed", {3, "1"}, function(Calle
 	end
 end)
 
-AddCommand("unfly", {}, "unflies your character", {3}, function()
-	DisableAllCmdConnections("buggedfly");
-	local FlyCEnv = LoadCommand("buggedfly").CmdEnv
-	if (FlyCEnv.AnimsChanged) then
-		for Anim, AnimId in next, FlyCEnv.AnimsChanged do
-			Anim.AnimationId = AnimId
-		end
-	end
-	table.clear(FlyCEnv);
+AddCommand("unfly", {}, "unflies your character", {3}, function()		
 	LoadCommand("fly").CmdEnv = {}
 	local Root = GetRoot();
 	local Instances = { ["BodyPosition"] = true, ["BodyGyro"] = true, ["BodyVelocity"] = true }
