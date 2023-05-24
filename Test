@@ -3057,7 +3057,7 @@ AddCommand("r6", {}, "changes your humanoidrigtype to R6 if possible", {}, funct
 		SpoofProperty(v, "Anchored");
 		v.Anchored = true
 	end
-	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+	player.Character:BreakJoints()
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
 	CWait(LocalPlayer.CharacterAdded)
@@ -3089,7 +3089,7 @@ AddCommand("r15", {}, "changes your humanoidrigtype to R15 if possible", {}, fun
 		SpoofProperty(v, "Anchored");
 		v.Anchored = true
 	end
-	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+	player.Character:BreakJoints()
 	wait(Players.RespawnTime - 0.03);
 	local OldPos = GetRoot().CFrame
 	CWait(LocalPlayer.CharacterAdded)
@@ -6651,16 +6651,16 @@ AddCommand("volume", {"vol"}, "changes your game volume", {}, function(Caller, A
 end)
 
 AddCommand("respawn", {"gr"}, "resets your character", {3}, function()
-	local Player = game:GetService("Players").LocalPlayer
+	local Player = game:FindFirstChildOfClass("Players").LocalPlayer
 	local Character = Player.Character
 	if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
-	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+	Player.Character:BreakJoints()
 	Player.CharacterAdded:Wait()
 	Utils.Notify(Caller, "Respawn", "Respawned!")
 end)
 
 AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
-	local Player = game:GetService("Players").LocalPlayer
+	local Player = game:FindFirstChildOfClass("Players").LocalPlayer
 	local Character = Player.Character
 	local OldPos = Character.HumanoidRootPart.CFrame
 	local BaseParts = filter(GetChildren(GetCharacter(v)), function(i, v)
@@ -6671,7 +6671,7 @@ AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
 		v.Anchored = true
 	end
 	if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
-	game:FindFirstChildOfClass("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+	Player.Character:BreakJoints()
 	Player.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame = OldPos
 	Utils.Notify(Caller, "Refresh", "Refreshed!")
 end)
