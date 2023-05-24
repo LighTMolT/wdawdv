@@ -6376,7 +6376,8 @@ AddCommand("muteboombox", {}, "mutes a users boombox", {}, function(Caller, Args
 	end
 end)
 
-AddCommand("muteserver", {}, "mutes all sound in the server", {}, function(Caller)	
+AddCommand("muteserver", {}, "mutes all sound in the server", {}, function(Caller)
+        Utils.Notify(Caller, "Muteserver", "Muted all sounds!")
 	Muteserver = true
 	while Muteserver == true do 
 		task.wait()
@@ -6386,7 +6387,6 @@ AddCommand("muteserver", {}, "mutes all sound in the server", {}, function(Calle
 			end
 		end
 	end
-	Utils.Notify(Caller, "Muteserver", "Muted all sounds!")
 end)
 
 AddCommand("unmuteserver", {}, "unmutes all sound in the server", {}, function(Caller)	
