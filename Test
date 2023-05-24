@@ -6376,10 +6376,10 @@ AddCommand("muteboombox", {}, "mutes a users boombox", {}, function(Caller, Args
 	end
 end)
 
-AddCommand("muteserver", {}, "mutes all sound in the server, needs rejoin to stop", {}, function(Caller)	
-	Mute = true
-	while Mute == true do 
-		wait()
+AddCommand("muteserver", {}, "mutes all sound in the server", {}, function(Caller)	
+	Muteserver = true
+	while Muteserver == true do 
+		task.wait()
 		for _, sound in next, workspace:GetDescendants() do
 			if sound:IsA("Sound") then
 				sound:Stop()
@@ -6387,6 +6387,11 @@ AddCommand("muteserver", {}, "mutes all sound in the server, needs rejoin to sto
 		end
 	end
 	Utils.Notify(Caller, "Muteserver", "Muted all sounds!")
+end)
+
+AddCommand("unmuteserver", {}, "unmutes all sound in the server", {}, function(Caller)	
+	Muteserver = false
+	Utils.Notify(Caller, "Muteserver", "Unmuted all sounds!")
 end)
 
 AddCommand("audiolag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
