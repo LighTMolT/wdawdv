@@ -7903,23 +7903,6 @@ AddCommand("copyid", {"copyuserid", "copyuid"}, "copies someones userid to your 
 	return "Copied " .. Target.Name .. "'s UserId."
 end)
 
-AddCommand("switchteam", {"team"}, "switches your team", {}, function(Caller, Args)
-	local Team = Args[1]
-	Team = FindFirstChild(Services.Teams, Team);
-	if (not Team) then
-		return Team.. " is not a valid team."
-	end
-	for i, v in next, GetDescendants(Services.Workspace) do
-		if (IsA(v, "SpawnLocation") and v.BrickColor == Team.TeamColor) then
-			firetouchinterest(v, GetRoot(), 0);
-			firetouchinterest(v, GetRoot(), 1);
-			break
-		end
-	end
-	wait(.1);
-	return LocalPlayer.Team == Team and "changed team to " .. Team.Name or "could'nt change team to " .. Team.Name
-end)
-
 AddCommand("freecam", {"fc"}, "enables/disables freecam", {}, function(Caller, Args, CEnv)
 	if (not CEnv.Activated) then
 		-- roblox freecam modifed by fate
