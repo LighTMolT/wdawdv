@@ -6365,7 +6365,7 @@ AddCommand("fireproximityprompts", {"proximityprompts", "fpp"}, "fires all the p
 	return format("Fired %d amount of proximityprompts", amount);
 end)
 
-AddCommand("muteboombox", {}, "mutes a users boombox", {}, function(Caller, Args)	
+AddCommand("mute", {}, "mutes a users boombox", {}, function(Caller, Args)	
 	local Target = GetPlayer(Args[1]);
 	for i, v in next, Target do
 		for i2, v2 in next, GetDescendants(v.Character) do
