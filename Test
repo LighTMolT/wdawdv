@@ -5385,7 +5385,7 @@ AddCommand("headstand", {}, "stands on a players head", {"1",3}, function(Caller
 			Root.CFrame = v.Character.Head.CFrame * CFrameNew(0, 1, 0);
 		end)
 		CEnv[v.Name] = Loop
-		AddPlayerConnection(v, Loop);
+		
 	end
 end)
 
@@ -5406,7 +5406,7 @@ AddCommand("setspawn", {}, "sets your spawn location to the location you are at"
 		WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = Position
 	end)
 	CEnv[1] = Spawn
-	AddPlayerConnection(LocalPlayer, Spawn);
+	
 	local SpawnLocation = pack(unpack(split(tostring(Position), ", "), 1, 3));
 	SpawnLocation.n = nil
 	return "Spawn successfully set to " .. concat(map(SpawnLocation, function(i,v)
