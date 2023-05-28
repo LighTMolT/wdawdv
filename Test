@@ -2818,7 +2818,7 @@ AddCommand("netless", {}, "gives you network of character", {}, function()
 	end
 end)
 
-AddCommand("partownership", {}, "gives you ownership of unanchored parts", {}, function()
+AddCommand("ownership", {}, "gives you ownership of unanchored parts", {}, function()
 	Utils.Notify(Caller, "Partownership", "Enabled!")	
 
 	local Players = game:GetService("Players")
@@ -4819,125 +4819,7 @@ AddCommand("dupetools", {"dp"}, "dupes your tools", {"1", 1, {"protect"}}, funct
 	return format("Successfully duped %d tool (s)", #GetChildren(LocalPlayer.Backpack) - ToolAmount);
 end)
 
-AddCommand("rejoindupe", {}, "dupetools with rejoin method", {1,"1"}, function(Caller, Args)
-	local Amount = tonumber(Args[1])
-	if (not Amount) then
-		return "Amount must be a number."
-	end
-	local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
-	if (not queue_on_teleport) then
-		return "Exploit not supported."
-	end
-	local Root, Humanoid = GetRoot(), GetHumanoid();
-	local OldPos = Root.CFrame
-	Root.CFrame = CFrameNew(0, 2e5, 0);
-	UnequipTools(Humanoid);
 
-	local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, v)
-		return IsA(v, "Tool");
-	end)
-
-	local Char, Workspace, ReplicatedStorage = GetCharacter(), Services.Workspace, Services.ReplicatedStorage
-	for i, v in next, Tools do
-		v.Parent = Char
-		v.Parent = Workspace
-	end
-	writefile("Hyperion-admin/tooldupe.txt", tostring(Amount - 1));
-	writefile("Hyperion-admin/tooldupe.lua", format([[
-        local OldPos = CFrame.new(%s);
-        local DupeAmount = tonumber(readfile("Hyperion-admin/tooldupe.txt"));
-        local game = game
-        local GetService = game.GetService
-        local Players = GetService(game, "Players");
-        local Workspace = GetService(game, "Workspace");
-        local ReplicatedFirst = GetService(game, "ReplicatedFirst");
-        local TeleportService = GetService(game, "TeleportService");
-        ReplicatedFirst.SetDefaultLoadingGuiRemoved(ReplicatedFirst);
-        local WaitForChild, GetChildren, IsA = game.WaitForChild, game.GetChildren, game.IsA
-        local LocalPlayer = Players.LocalPlayer
-        if (not LocalPlayer) then
-            repeat wait(); LocalPlayer = Players.LocalPlayer until LocalPlayer
-        end
-        local Char = LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded);
-        local RootPart = WaitForChild(Char, "HumanoidRootPart");
-        if (DupeAmount <= 1) then
-            for i, v in next, GetChildren(Workspace) do
-                if (IsA(v, "Tool")) then
-                    local Handle = WaitForChild(v, "Handle", .5);
-                    if (Handle) then
-                        firetouchinterest(Handle, RootPart, 0);
-                        firetouchinterest(Handle, RootPart, 1);
-                    end
-                end
-            end
-            delfile("Hyperion-admin/tooldupe.txt");
-            delfile("Hyperion-admin/tooldupe.lua");
-            loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test"))();
-            RootPart.CFrame = OldPos
-            repeat wait() RootPart.CFrame = OldPos until RootPart.CFrame == OldPos
-            getgenv().F_A.PluginLibrary.ExecuteCommand("dp", {"1"}, LocalPlayer);
-        else
-            RootPart.CFrame = CFrame.new(0, 2e5, 0);
-            wait(.3);
-            for i, v in next, GetChildren(LocalPlayer.Backpack) do
-                v.Parent = Char
-                v.Parent = Workspace
-            end
-            writefile("Hyperion-admin/tooldupe.txt", tostring(DupeAmount - 1));
-            local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
-            queue_on_teleport(readfile("Hyperion-admin/tooldupe.lua"));
-            TeleportService.TeleportToPlaceInstance(TeleportService, game.PlaceId, game.JobId);
-        end
-    ]], tostring(OldPos)));
-	local TeleportService = Services.TeleportService
-	queue_on_teleport(readfile("Hyperion-admin/tooldupe.lua"));
-	TeleportService.TeleportToPlaceInstance(TeleportService, game.PlaceId, game.JobId);
-end)
-
-AddCommand("stopdupe", {}, "stops the dupe", {}, function()
-	local Dupe = LoadCommand("dupetools").CmdEnv
-	if (not next(Dupe)) then
-		return "You are not duping tools."
-	end
-	LoadCommand("dupetools").CmdEnv[1] = false
-	DisableAllCmdConnections("dupetools");
-	Utils.Notify(Caller, "Dupetools", "Stopped!")
-end)
-
-AddCommand("givetools", {}, "gives all of your tools to a player", {3,1,"1"}, function(Caller, Args)
-	local Target = GetPlayer(Args[1]);
-	local Root = GetRoot();
-	local OldPos = Root.CFrame
-	local Humanoid = FindFirstChildOfClass(LocalPlayer.Character, "Humanoid");
-	Humanoid.Name = "1"
-	local Humanoid2 = Clone(Humanoid);
-	Humanoid2.Parent = LocalPlayer.Character
-	Humanoid2.Name = "Humanoid"
-	Services.Workspace.Camera.CameraSubject = Humanoid2
-	wait()
-	Destroy(Humanoid);
-	local Char = GetCharacter();
-	for i, v in next, Target do
-		local TRoot = GetRoot(v);
-		for i2, v2 in next, GetChildren(LocalPlayer.Backpack) do
-			if (IsA(v2, "Tool")) then
-				v2.Parent = GetCharacter();
-				CFrameTool(v2, TRoot.CFrame);
-				local Handle = v2.Handle
-				for i3 = 1, 3 do
-					if (TRoot and Handle) then
-						firetouchinterest(TRoot, Handle, 1);
-						firetouchinterest(TRoot, Handle, 1);
-					end
-				end
-			end
-		end
-	end
-	wait(.2);
-	Destroy(Char);
-	Char = CWait(LocalPlayer.CharacterAdded);
-	WaitForChild(Char, "HumanoidRootPart").CFrame = OldPos
-end)
 
 AddCommand("grabtools", {}, "once a tool is added to workspace it will be grabbed", {3}, function(Caller, Args, CEnv)
 	AddConnection(CConnect(Services.Workspace.ChildAdded, function(Child)
