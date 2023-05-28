@@ -2818,6 +2818,17 @@ AddCommand("netless", {}, "gives you network of character", {}, function()
 	end
 end)
 
+AddCommand("part", {}, "spawns a part (client side)", {}, function()
+local spawnPosition = game:FindFirstChildOfClass("Players").LocalPlayer.Character.Head.CFrame.p + Vector3.new(0,5,0) -- Change the values to the desired position
+
+local part = Instance.new("Part")
+part.Size = Vector3.new(5, 1, 2)  
+part.BrickColor = BrickColor.new("Grey")  
+part.Position = spawnPosition
+part.Parent = workspace
+part.Anchored = false
+end)
+
 AddCommand("ownership", {}, "gives you ownership of unanchored parts", {}, function()
 	Utils.Notify(Caller, "Partownership", "Enabled!")	
 
