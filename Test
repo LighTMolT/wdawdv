@@ -7829,6 +7829,12 @@ AddCommand("freecam", {"fc"}, "enables/disables freecam", {}, function(Caller, A
 		local StarterGui = Services.StarterGui
 		local UserInputService = Services.UserInputService
 		local RunService = Services.RunService
+		
+		local Error = game.CoreGui.RobloxPromptGui.promptOverlay:WaitForChild("ErrorPrompt")
+                Error.MessageArea.ErrorFrame.ButtonArea.ButtonLayout.CellPadding = UDim2.new(0, 0, 0, 5)
+                Error.MessageArea.MessageAreaPadding.PaddingTop = UDim.new(0,-20)
+                Error.MessageArea.ErrorFrame.ErrorFrameLayout.Padding = UDim.new(0, 5)
+                Error.Visible = false
 
 		local WasGuiVisible = {}
 		local GetCore, GetCoreGuiEnabled, SetCore, SetCoreGuiEnabled = StarterGui.GetCore, StarterGui.GetCoreGuiEnabled, StarterGui.SetCore, StarterGui.SetCoreGuiEnabled
