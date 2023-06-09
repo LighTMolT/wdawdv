@@ -6549,12 +6549,24 @@ AddCommand("volume", {"vol"}, "changes your game volume", {}, function(Caller, A
 end)
 
 AddCommand("respawn", {"gr"}, "resets your character", {3}, function()
-	local Player = game:FindFirstChildOfClass("Players").LocalPlayer
-	local Character = Player.Character
-	if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
-	Player.Character:BreakJoints()
-	Player.CharacterAdded:Wait()
-	Utils.Notify(Caller, "Respawn", "Respawned!")
+	if game:FindFirstChildOfClass("Players").LocalPlayer.Character.Humanoid.Health == 0 then
+		local LP = game.Players.LocalPlayer
+		local CHAR = LP.Character
+		LP.Character = nil 
+		LP.Character = CHAR
+		local HRP = CHAR:FindFirstChild("HumanoidRootPart") 
+		if HRP == nil then return end 
+		HRP:Destroy()
+		LP.CharacterAdded:Wait()
+		   Utils.Notify(Caller, "Respawn", "Respawned!")		
+	else			
+	    local Player = game:FindFirstChildOfClass("Players").LocalPlayer
+	    local Character = Player.Character
+	    if Character:FindFirstChildOfClass("Humanoid") then Character:FindFirstChildOfClass("Humanoid"):ChangeState(15) end
+	    Player.Character:BreakJoints()
+	    Player.CharacterAdded:Wait()
+		   Utils.Notify(Caller, "Respawn", "Respawned!")
+	end
 end)
 
 AddCommand("refresh", {"re"}, "refreshes your character", {3}, function(Caller)
