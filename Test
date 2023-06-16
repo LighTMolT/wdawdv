@@ -4207,7 +4207,7 @@ AddCommand("gun", {}, "makes your tool a gun", {1}, function()
 	Utils.Notify(Caller, "Gun", "Loaded!")
 end)
 
-AddCommand("upsidedown", {"dinnerbone"}, "upside down", {2}, function()
+AddCommand("upsidedown", {"dinnerbone"}, "upside down", {3}, function()
 local character = game.Players.LocalPlayer.Character
 local humanoid = character:WaitForChild("Humanoid")
 
