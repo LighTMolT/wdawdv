@@ -4215,6 +4215,11 @@ if humanoid.RigType == Enum.HumanoidRigType.R6 then
 local c = game:FindFirstChildOfClass("Players").LocalPlayer.Character
 local hrp0 = c:FindFirstChild("HumanoidRootPart")
 local hrp1 = hrp0:Clone()
+local Highlight = Instance.new("Highlight")
+Highlight.Parent = hrp0
+Highlight.Adornee = hrp0
+Highlight.LineThickness = 0.01 
+Highlight.FillColor = Color3.fromHSV(0,0,0)
 c.Parent = nil
 hrp0.Parent = hrp1
 hrp0.RootJoint.Part0 = nil
@@ -4233,6 +4238,11 @@ elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
 local c = game:FindFirstChildOfClass("Players").LocalPlayer.Character
 local hrp0 = c:FindFirstChild("HumanoidRootPart")
 local hrp1 = hrp0:Clone()
+local Highlight = Instance.new("Highlight")
+Highlight.Parent = hrp0
+Highlight.Adornee = hrp0
+Highlight.LineThickness = 0.01 
+Highlight.FillColor = Color3.fromHSV(0,0,0)
 c.Parent = nil
 hrp0.Parent = hrp1
 hrp1.Parent = c
