@@ -4227,6 +4227,7 @@ hrp1.Parent = c
 c.Parent = workspace
 local h = game:GetService("RunService").Heartbeat
 hrp0.Transparency = 0.5
+Utils.Notify(Caller, "Upsidedown", "Loaded!")
 while h:Wait() and c and c.Parent do
     hrp0.CFrame = hrp1.CFrame
     hrp0.Orientation += Vector3.new(0, 0, 180)
@@ -4249,6 +4250,7 @@ hrp1.Parent = c
 c.Parent = workspace
 local h = game:GetService("RunService").Heartbeat
 hrp0.Transparency = 0.5
+Utils.Notify(Caller, "Upsidedown", "Loaded!")
 while h:Wait() and c and c.Parent do
     hrp0.CFrame = hrp1.CFrame
     hrp0.CanCollide = false
@@ -4257,7 +4259,6 @@ while h:Wait() and c and c.Parent do
     hrp0.Velocity = hrp1.Velocity
    end
 end
-Utils.Notify(Caller, "Upsidedown", "Loaded!")
 end)
 
 AddCommand("lay", {"laydown"}, "lays on the floor", {}, function()
@@ -4274,33 +4275,48 @@ AddCommand("lay", {"laydown"}, "lays on the floor", {}, function()
 end)
 
 AddCommand("blockholder", {}, "gives you an item to hold blocks", {}, function()
-	bp = game.Players.LocalPlayer.Backpack
-	tool = Instance.new("Tool",bp)
-	tool.Name = "BlockHolder"
-	tool.CanBeDropped = false
-	handle = Instance.new("Part",tool)
-	handle.Size = Vector3.new(1,1,1)
-	handle.Name = "Handle"    
-	handle.Transparency = 0.5
-	align = Instance.new("AlignPosition",handle)
-	align.ApplyAtCenterOfMass = true
-	att0 = Instance.new("Attachment",handle)
-	att1 = Instance.new("Attachment")
-	att0.Position = Vector3.new(0,0,0)
-	align.Attachment0 = att1
-	align.Responsiveness = 200
-	orient = Instance.new("AlignOrientation",handle)
-	orient.Responsiveness = 200
-	orient.Attachment0 = att1
-	tool.Equipped:Connect(function(mouse)
-		mouse.Button1Down:Connect(function()
-			if mouse.Target and mouse.Target.Parent then
-				att1.Parent = mouse.Target
-				orient.Attachment1 = att0
-				align.Attachment1 = att0
-			end
-		end)
+local backpack = game.Players.LocalPlayer.Backpack
+local tool = Instance.new("Tool")
+tool.Name = "BlockHolder"
+tool.CanBeDropped = false
+
+local handle = Instance.new("Part")
+handle.Size = Vector3.new(1, 1, 1)
+handle.Name = "Handle"
+handle.Transparency = 0.5
+
+local align = Instance.new("AlignPosition")
+align.ApplyAtCenterOfMass = true
+
+local att0 = Instance.new("Attachment")
+local att1 = Instance.new("Attachment")
+att0.Position = Vector3.new(0, 0, 0)
+
+align.Attachment0 = att1
+align.Responsiveness = 200
+
+local orient = Instance.new("AlignOrientation")
+orient.Responsiveness = 200
+orient.Attachment0 = att1
+
+handle.Parent = tool
+align.Parent = handle
+orient.Parent = handle
+att0.Parent = handle
+
+local function onEquipped(mouse)
+	mouse.Button1Down:Connect(function()
+		local target = mouse.Target
+		if target and target.Parent then
+			att1.Parent = target
+			orient.Attachment1 = att0
+			align.Attachment1 = att0
+		end
 	end)
+end
+
+tool.Equipped:Connect(onEquipped)
+tool.Parent = backpack
 	Utils.Notify(Caller, "Blockholder", "Got Blockholder!")
 end)
 
