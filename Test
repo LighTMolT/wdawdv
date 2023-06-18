@@ -7283,46 +7283,52 @@ AddCommand("unmuteserver", {}, "unmutes all sound in the server", {}, function(C
 	Utils.Notify(Caller, "Muteserver", "Stopped!")
 end)
 
+local audioLagLoopRunning = false  
 AddCommand("audiolag", {}, "lags a user's boombox", {}, function(Caller, Args, CEnv)
 	local Target = GetPlayer(Args[1])
-	local Con = AddConnection(CConnect(Heartbeat, function()
-		local elapsedTime = 0
-		local delay = 0.2
 
-		for i, v in next, Target do
-			for i2, v2 in next, GetDescendants(v.Backpack) do
-				if (IsA(v2, "Sound")) then
-					elapsedTime = elapsedTime + Heartbeat:Wait()
-					if elapsedTime >= delay then
-						v2.TimePosition = math.random(1, 50)
-						elapsedTime = 0
-					end
-				end
-			end
+	local function updateBoomboxTimePosition(boombox)
+		boombox.TimePosition = math.random(1, 50)
+	end
 
-			local Char = GetCharacter(v)
-			if (Char) then
-				for i22, v2 in next, GetDescendants(Char) do
-					if (IsA(v2, "Sound")) then
-						elapsedTime = elapsedTime + Heartbeat:Wait()
-						if elapsedTime >= delay then
-							v2.TimePosition = math.random(1, 50)
-							elapsedTime = 0
-						end
-					end
-				end
+	local function updateCharacterBoomboxTimePosition(character)
+		for i, v in ipairs(character:GetDescendants()) do
+			if v:IsA("Sound") then
+				updateBoomboxTimePosition(v)
 			end
 		end
-	end))
+	end
 
-	CEnv[Target] = Con
+	local function updatePlayerBoomboxTimePosition(player)
+		for i, v in ipairs(player.Backpack:GetDescendants()) do
+			if v:IsA("Sound") then
+				updateBoomboxTimePosition(v)
+			end
+		end
+
+		local character = player.Character
+		if character then
+			updateCharacterBoomboxTimePosition(character)
+		end
+	end
+
+	local loopDelay = 0.4
+
+	local function audioLagLoop()
+		while audioLagLoopRunning do
+			for i, player in ipairs(Target) do
+				updatePlayerBoomboxTimePosition(player)
+			end
+			task.wait(loopDelay)
+		end
+	end
+
+	audioLagLoopRunning = true
+	spawn(audioLagLoop)
 end)
 
-AddCommand("stopaudiolag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
-	local Looped = LoadCommand("audiolag").CmdEnv
-	for i, v in next, Looped do
-		Disconnect(v);
-	end
+AddCommand("stopaudiolag", {}, "stops the audio lag", {}, function(Caller, Args, CEnv)
+	audioLagLoopRunning = false  
 end)
 
 AddCommand("checksound", {}, "checks if sound can be played  ", {}, function(Caller, Args, CEnv)
