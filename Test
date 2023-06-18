@@ -7280,7 +7280,7 @@ end)
 
 AddCommand("unmuteserver", {}, "unmutes all sound in the server", {}, function(Caller)	
 	Muteserver = false
-	Utils.Notify(Caller, "Muteserver", "Unmuted all sounds!")
+	Utils.Notify(Caller, "Muteserver", "Stopped!")
 end)
 
 AddCommand("audiolag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
