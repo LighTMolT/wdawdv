@@ -7284,11 +7284,7 @@ AddCommand("unmuteserver", {}, "unmutes all sound in the server", {}, function(C
 end)
 
 AddCommand("audiolag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
-	local Target = GetPlayer(Args[1]);
-	local filterBoomboxes = function(i,v)
-		return FindFirstChild(v, "Handle") and FindFirstChildWhichIsA(v.Handle, "Sound");
-	end
-	Services.SoundService.RespectFilteringEnabled = false
+	local Target = GetPlayer(Args[1]);	
 	local Con = AddConnection(CConnect(Heartbeat, function()
 		for i, v in next, Target do
 			for i2, v2 in next, GetDescendants(v.Backpack) do
@@ -7309,10 +7305,17 @@ AddCommand("audiolag", {}, "lags a users boombox", {}, function(Caller, Args, CE
 	CEnv[Target] = Con
 end)
 
-AddCommand("checksound", {}, "checks if sound can be played  ", {}, function()
-	if game:GetService("SoundService").RespectFilteringEnabled == false then
+AddCommand("stopaudiolag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
+	local Looped = LoadCommand("audiolag").CmdEnv
+	for i, v in next, Looped do
+		Disconnect(v);
+	end
+end)
+
+AddCommand("checksound", {}, "checks if sound can be played  ", {}, function(Caller, Args, CEnv)
+	if Services.SoundService.RespectFilteringEnabled == false then
 		Utils.Notify(Caller, "Sound Check", "Sounds CAN be exploited.")
-	else if game:GetService("SoundService").RespectFilteringEnabled == true then
+	else if Services.SoundService.RespectFilteringEnabled == true then
 			Utils.Notify(Caller, "Sound Check", "Sounds CAN'T be exploited.")
 		end
 	end
@@ -7326,7 +7329,7 @@ AddCommand("checkbackpack", {"backpack"}, "checks how much tools someone have", 
 			return format(target.Name ..(" got %d tool (s)"), #Tools);
 		end
 	end
-	return format (target.Name ..(" got 0 tools."))
+	return format (target.Name ..(" got 0 tools in the backpack."))
 end)
 
 AddCommand("audiotime", {"audiotimeposition"}, "changes audio timeposition", {"1",1}, function(Caller, Args)
