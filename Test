@@ -7283,25 +7283,38 @@ AddCommand("unmuteserver", {}, "unmutes all sound in the server", {}, function(C
 	Utils.Notify(Caller, "Muteserver", "Stopped!")
 end)
 
-AddCommand("audiolag", {}, "lags a users boombox", {}, function(Caller, Args, CEnv)
-	local Target = GetPlayer(Args[1]);	
+AddCommand("audiolag", {}, "lags a user's boombox", {}, function(Caller, Args, CEnv)
+	local Target = GetPlayer(Args[1])
 	local Con = AddConnection(CConnect(Heartbeat, function()
+		local elapsedTime = 0
+		local delay = 0.2
+
 		for i, v in next, Target do
 			for i2, v2 in next, GetDescendants(v.Backpack) do
 				if (IsA(v2, "Sound")) then
-					v2.TimePosition = math.random(5,50)
+					elapsedTime = elapsedTime + Heartbeat:Wait()
+					if elapsedTime >= delay then
+						v2.TimePosition = math.random(1, 50)
+						elapsedTime = 0
+					end
 				end
 			end
+
 			local Char = GetCharacter(v)
 			if (Char) then
 				for i22, v2 in next, GetDescendants(Char) do
 					if (IsA(v2, "Sound")) then
-						v2.TimePosition = math.random(5,50)
+						elapsedTime = elapsedTime + Heartbeat:Wait()
+						if elapsedTime >= delay then
+							v2.TimePosition = math.random(1, 50)
+							elapsedTime = 0
+						end
 					end
 				end
 			end
 		end
-	end));
+	end))
+
 	CEnv[Target] = Con
 end)
 
