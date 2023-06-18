@@ -7309,19 +7309,6 @@ AddCommand("audiolag", {}, "lags a users boombox", {}, function(Caller, Args, CE
 	CEnv[Target] = Con
 end)
 
-AddCommand("unaudiolag", {"noaudiolag"}, "unaudiolag a persons boombox", {}, function(Caller, Args)
-	local Target = GetPlayer(Args[1])
-	local Lag = LoadCommand("audiolag").CmdEnv
-	for i, v in next, Lag do
-		for i2, v2 in next, Target do
-			if (v2 == i) then
-				Disconnect(v);
-				Lag[i] = nil
-			end
-		end
-	end
-end)
-
 AddCommand("checksound", {}, "checks if sound can be played  ", {}, function()
 	if game:GetService("SoundService").RespectFilteringEnabled == false then
 		Utils.Notify(Caller, "Sound Check", "Sounds CAN be exploited.")
