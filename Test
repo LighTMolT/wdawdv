@@ -8853,7 +8853,7 @@ AddCommand("silentchat", {}, "sends a message but will not show in the chat (fir
 	return "Silent chatted " .. toChat
 end)
 
-AddCommand("instantleave", {}, "leaves the game you're currently in", {}, function(Caller)
+AddCommand("leave", {}, "leaves the game you're currently in", {}, function(Caller)
 	game:GetService("Players").LocalPlayer:Kick()
 	wait()
 	game:Shutdown()
