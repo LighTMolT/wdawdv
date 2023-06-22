@@ -7126,7 +7126,7 @@ AddCommand("invistoolfling", {}, "fling with tool and invisibility", {1}, functi
 		rainbowEffect(Box, "FillColor")
 		rainbowEffect(Box, "OutlineColor")
 
-		game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, true)
+		game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 	end
 
 	-- Tool Thing End --
