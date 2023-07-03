@@ -307,7 +307,7 @@ do -- [[ Rig ]] --
 		Health.Parent = FakeRig
 	end
 
-	FakeRig.Name = "GelatekRaw"
+	FakeRig.Name = "GelatekRig"
 	FakeRig.PrimaryPart = Head
 	FakeRig.Parent = Workspace:FindFirstChildOfClass("Terrain") or Workspace
 	FakeRoot.CFrame = RootPart.CFrame * CF(0, 5, 0)
