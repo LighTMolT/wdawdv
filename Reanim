@@ -119,7 +119,7 @@ if ReanimSettings.ToolFling then -- [[ Tool Flinging ]] --
 		if Backpack then
 			Backpack:ClearAllChildren()
 		end
-		
+
 		fdelay(WaitTime+1, function()
 			FlingPart.Massless = true
 			Highlight.Parent = FlingPart
@@ -602,15 +602,4 @@ do -- [[ Finishing Touches ]] --
 	if ReanimSettings.Animations then
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/toldblock/GelatekReanimateV2/main/bin/Animations.lua"))()
 	end
-
-	fwait(1)
-
-	local Credit = IN("Message")
-	Credit.Text = [[Reanimation Loaded! If something fails try again. 
-	https://discord.gg/A7VexVaZDA | Version: 1.1.1
-	Made by Gelatek, Lay and TimedMarch]]
-	Credit.Parent = workspace.Camera
-	fdelay(5, function()
-		Credit:Destroy()
-	end)
 end
