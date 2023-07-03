@@ -412,7 +412,7 @@ do -- [[ Hat Alignment ]] --
 				local PropertyName = Check and "MeshId" or pcall(function() Mesh.TextureID = Mesh.TextureID end) and "TextureID" or "TextureId"
 				if (Mesh[PropertyName] == AccessoryID) or (Mesh[PropertyName] == "rbxassetid://"..AccessoryID) then
 					table.remove(Hats, table.find(Hats, Target.Handle))
-					FakeRig:FindFirstChild(Target):Destroy()
+					FakeRig:FindFirstChild(Target.Name):Destroy()
 					return Handle
 				end
 			end
