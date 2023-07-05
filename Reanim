@@ -449,14 +449,14 @@ do -- [[ Hat Alignment ]] --
 	local FakeLL = FakeRig:WaitForChild("Left Leg")
 
 	local Torso = GetHatFromId(DefinedHats['Torso1'][1], DefinedHats['Torso1'][4])
-	local TorsoAlt = GetHatFromId(DefinedHats['Torso2'][1], DefinedHats['Torso2'][4])
+	--local TorsoAlt = GetHatFromId(DefinedHats['Torso2'][1], DefinedHats['Torso2'][4])
 	local LeftArm = GetHatFromId(DefinedHats['Left Arm'][1], DefinedHats['Left Arm'][4])
 	local RightArm = GetHatFromId(DefinedHats['Right Arm'][1], DefinedHats['Right Arm'][4])
 	local LeftLeg = GetHatFromId(DefinedHats['Left Leg'][1], DefinedHats['Left Leg'][4])
 	local RightLeg = GetHatFromId(DefinedHats['Right Leg'][1], DefinedHats['Right Leg'][4])
 
 	local TorsoCF = DefinedHats['Torso1'][2] * DefinedHats['Torso1'][3]
-	local TorsoAltCF = DefinedHats['Torso2'][2] * DefinedHats['Torso2'][3]
+	--local TorsoAltCF = DefinedHats['Torso2'][2] * DefinedHats['Torso2'][3]
 	local LeftArmCF = DefinedHats['Left Arm'][2] * DefinedHats['Left Arm'][3]
 	local RightArmCF = DefinedHats['Right Arm'][2] * DefinedHats['Right Arm'][3]
 	local LeftLegCF = DefinedHats['Left Leg'][2] * DefinedHats['Left Leg'][3]
