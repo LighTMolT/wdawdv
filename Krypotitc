@@ -101,10 +101,10 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		FlingPart = Tool:WaitForChild("Handle", 10)
 		FlingPart.Transparency = 0.25
 
-		--local Highlight = IN("Highlight")
-		--Highlight.Adornee = FlingPart
-		--Highlight.FillTransparency = 0.1
-		--Highlight.FillColor = Color3.fromRGB(52, 235, 195)
+		local Highlight = IN("Highlight")
+		Highlight.Adornee = FlingPart
+		Highlight.FillTransparency = 0.1
+		Highlight.FillColor = Color3.fromRGB(52, 235, 195)
 		Global.KryptonData['FlingPart'] = FlingPart
 		if Backpack then
 			Backpack:ClearAllChildren()
@@ -113,7 +113,7 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		Delay(WaitTime+1, function()
 			FlingPart.Massless = true
                         FlingPart.CanCollide = false
-			--Highlight.Parent = FlingPart
+			Highlight.Parent = FlingPart
 		end)
 	else
 		notification("Warning", "Player has no tools in Backpack, tool fling will be not enabled.")
