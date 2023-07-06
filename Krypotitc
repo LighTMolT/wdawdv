@@ -101,7 +101,7 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		Highlight.Adornee = FlingPart
 		Highlight.FillTransparency = 0.1
 		Highlight.FillColor = Color3.fromRGB(52, 235, 195)
-		Global.ReanimateData.FlingPart = FlingPart
+		Global.KryptonData.FlingPart = FlingPart
 		if Backpack then
 			Backpack:ClearAllChildren()
 		end
