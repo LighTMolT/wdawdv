@@ -261,9 +261,7 @@ do
 	Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Disabled
 	Workspace.Retargeting = "Disabled"
 	Client.ReplicationFocus = Workspace
-	SetHiddenProp(RealRig:FindFirstChildOfClass("Humanoid"), "InternalBodyScale", V3N(1/0, 1/0, 1/0))
-	SetHiddenProp(LocalPlayer, "MaximumSimulationRadius", 2763000)
-	SetHiddenProp(LocalPlayer, "SimulationRadius", 2763000)
+	SetHiddenProp(RealRig:FindFirstChildOfClass("Humanoid"), "InternalBodyScale", V3N(1/0, 1/0, 1/0))	
 	SetHiddenProp(Workspace, "SignalBehavior", "Immediate")
 	SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
 	SetHiddenProp(Workspace, "StreamingEnabled", true)
