@@ -44,6 +44,9 @@ local Physics = settings().Physics
 local Rendering = settings().Rendering
 local WaitTime = Players.RespawnTime + 0.65
 
+local Stepped = RunService[KryptonReanimateConfig.NewRunServiceEvents and "PreSimulation" or "Stepped"]
+local Heartbeat = RunService[KryptonReanimateConfig.NewRunServiceEvents and "PostSimulation" or "Heartbeat"]
+
 local LocalPlayer = Players.LocalPlayer
 local Client = Players.LocalPlayer
 local Character = Client.Character
@@ -91,6 +94,7 @@ if not Global.KryptonData then
 end
 
 local FlingPart = nil
+local FallenPartsDestroyHeight = Workspace.FallenPartsDestroyHeight
 
 if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 	local Backpack = Client:FindFirstChildOfClass("Backpack")
@@ -112,7 +116,7 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 
 		Delay(WaitTime+1, function()
 			FlingPart.Massless = true
-                        FlingPart.CanCollide = false
+			FlingPart.CanCollide = false
 			Highlight.Parent = FlingPart
 		end)
 	else
@@ -220,7 +224,7 @@ local function ClearUpData()
 	Data['Hat Folder']:ClearAllChildren()
 	Global.KryptonReanimateLoaded = nil
 	IsAlive = false
-	
+
 	for _, GlobalSignal in pairs(Data['Global Events']) do
 		GlobalSignal:Disconnect()
 	end
@@ -252,12 +256,13 @@ for _,v in pairs(RealRigDescendants) do
 	end
 end
 
-Physics.AllowSleep = false
-Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
---[[Workspace.Retargeting = "Disabled"
+do
+local SpawnPoint = Workspace:FindFirstChildOfClass("SpawnLocation",true) and Workspace:FindFirstChildOfClass("SpawnLocation",true) or CFN(0,20,0)
+Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Disabled
+Workspace.Retargeting = "Disabled"
 Client.ReplicationFocus = Workspace
 SetHiddenProp(RealRig:FindFirstChildOfClass("Humanoid"), "InternalBodyScale", V3N(1/0, 1/0, 1/0))
-SetHiddenProp(RealRig, "MaximumSimulationRadius", 2763000)
+--[[SetHiddenProp(RealRig, "MaximumSimulationRadius", 2763000)
 SetHiddenProp(RealRig, "SimulationRadius", 2763000)
 SetHiddenProp(Workspace, "SignalBehavior", "Immediate")
 SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
@@ -271,6 +276,26 @@ pcall(function()
 	Rendering.EagerBulkExecution = KryptonReanimateConfig.EagerBulkExecution
 	if ExtraOptimization then Rendering.QualityLevel = 2 end
 end)
+
+TInsert(Events, Stepped:Connect(function()
+			
+	if (FakeRoot and FakeRoot.Position.Y <= FallenPartsDestroyHeight + 60) then
+		if AntiVoid then
+			FakeRig:MoveTo(SpawnPoint.Position)
+			FakeRoot.Velocity = V3N(0, 0, 0)
+		else
+			FakeRoot.Anchored = true
+			FakeHum:ChangeState(15)
+		end
+	end
+
+	if FlingPart then
+		FlingPart.CanCollide = false
+		FlingPart.CanTouch = false
+		FlingPart.CanQuery = false
+	end
+	end))
+end
 
 local Platform = Instance.new("Part")
 Platform.Size = V3N(25, 0.5, 25)
