@@ -286,8 +286,7 @@ do
 			end
 		end
 
-		if FlingPart then                
-			FlingPart.CanCollide = false
+		if FlingPart then                			
 			FlingPart.CanTouch = false
 			FlingPart.CanQuery = false
 		end
@@ -370,6 +369,8 @@ FakeRoot.Anchored = false
 
 FakeRoot.CFrame = LoadPoint
 Workspace.CurrentCamera.CameraSubject = FakeHum
+
+FlingPart.CanCollide = false
 
 FakeHum:ChangeState(2)
 FakeHum:ChangeState(7)
