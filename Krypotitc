@@ -286,7 +286,7 @@ do
 			end
 		end
 
-                Wait(Players.RespawnTime + Ping:GetValue()/750)
+                Wait(Players.RespawnTime + 2)
 		if FlingPart then                
 			FlingPart.CanCollide = false
 			FlingPart.CanTouch = false
