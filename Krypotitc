@@ -376,6 +376,10 @@ FakeHum:ChangeState(2)
 FakeHum:ChangeState(7)
 RealRig.Parent = FakeRig
 
+if KryptonReanimateConfig.Shiftlock then
+	Client.DevEnableMouseLock = true
+end
+
 Spawn(function()
 	local AnimateScript = IN("LocalScript")
 	AnimateScript.Name = "Animate"
