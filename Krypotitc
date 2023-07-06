@@ -286,7 +286,8 @@ do
 			end
 		end
 
-		if FlingPart then                			
+		if FlingPart then
+                        FlingPart.CanCollide = false
 			FlingPart.CanTouch = false
 			FlingPart.CanQuery = false
 		end
