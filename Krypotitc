@@ -116,7 +116,7 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 
 		Delay(WaitTime+1, function()
 			FlingPart.Massless = true
-			FlingPart.CanCollide = false
+			FlingPart.CanCollide = true
 			Highlight.Parent = FlingPart
 		end)
 	else
