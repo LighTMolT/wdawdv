@@ -286,7 +286,7 @@ do
 			end
 		end
 
-                Wait(Players.RespawnTime + 2)
+                Wait(Players.RespawnTime + 10)
 		if FlingPart then                
 			FlingPart.CanCollide = false
 			FlingPart.CanTouch = false
