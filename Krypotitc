@@ -257,43 +257,43 @@ for _,v in pairs(RealRigDescendants) do
 end
 
 do
-local SpawnPoint = Workspace:FindFirstChildOfClass("SpawnLocation",true) and Workspace:FindFirstChildOfClass("SpawnLocation",true) or CFN(0,20,0)
-Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Disabled
-Workspace.Retargeting = "Disabled"
-Client.ReplicationFocus = Workspace
-SetHiddenProp(RealRig:FindFirstChildOfClass("Humanoid"), "InternalBodyScale", V3N(1/0, 1/0, 1/0))
-SetHiddenProp(RealRig, "MaximumSimulationRadius", 2763000)
-SetHiddenProp(RealRig, "SimulationRadius", 2763000)
-SetHiddenProp(Workspace, "SignalBehavior", "Immediate")
-SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
-SetHiddenProp(Workspace, "StreamingEnabled", true)
-SetHiddenProp(Workspace, "StreamOutBehavior", Enum.StreamOutBehavior.Opportunistic)
+	local SpawnPoint = Workspace:FindFirstChildOfClass("SpawnLocation",true) and Workspace:FindFirstChildOfClass("SpawnLocation",true) or CFN(0,20,0)
+	Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Disabled
+	Workspace.Retargeting = "Disabled"
+	Client.ReplicationFocus = Workspace
+	SetHiddenProp(RealRig:FindFirstChildOfClass("Humanoid"), "InternalBodyScale", V3N(1/0, 1/0, 1/0))
+	SetHiddenProp(LocalPlayer, "MaximumSimulationRadius", 2763000)
+	SetHiddenProp(LocalPlayer, "SimulationRadius", 2763000)
+	SetHiddenProp(Workspace, "SignalBehavior", "Immediate")
+	SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
+	SetHiddenProp(Workspace, "StreamingEnabled", true)
+	SetHiddenProp(Workspace, "StreamOutBehavior", Enum.StreamOutBehavior.Opportunistic)
 
-pcall(function()	
-	Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
-	Physics.AllowSleep = false
-	Physics.ThrottleAdjustTime = math.huge
-	Rendering.EagerBulkExecution = KryptonReanimateConfig.EagerBulkExecution
-	if ExtraOptimization then Rendering.QualityLevel = 2 end
-end)
+	pcall(function()	
+		Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
+		Physics.AllowSleep = false
+		Physics.ThrottleAdjustTime = math.huge
+		Rendering.EagerBulkExecution = KryptonReanimateConfig.EagerBulkExecution
+		if ExtraOptimization then Rendering.QualityLevel = 2 end
+	end)
 
-TInsert(Events, Stepped:Connect(function()
-			
-	if (FakeRoot and FakeRoot.Position.Y <= FallenPartsDestroyHeight + 60) then
-		if AntiVoid then
-			FakeRig:MoveTo(SpawnPoint.Position)
-			FakeRoot.Velocity = V3N(0, 0, 0)
-		else
-			FakeRoot.Anchored = true
-			FakeHum:ChangeState(15)
+	TInsert(Events, Stepped:Connect(function()
+
+		if (FakeRoot and FakeRoot.Position.Y <= FallenPartsDestroyHeight + 60) then
+			if AntiVoid then
+				FakeRig:MoveTo(SpawnPoint.Position)
+				FakeRoot.Velocity = V3N(0, 0, 0)
+			else
+				FakeRoot.Anchored = true
+				FakeHum:ChangeState(15)
+			end
 		end
-	end
 
-	if FlingPart then
-		FlingPart.CanCollide = true
-		FlingPart.CanTouch = false
-		FlingPart.CanQuery = false
-	end
+		if FlingPart then
+			FlingPart.CanCollide = true
+			FlingPart.CanTouch = false
+			FlingPart.CanQuery = false
+		end
 	end))
 end
 
