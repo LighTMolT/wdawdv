@@ -110,7 +110,7 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		Character:WaitForChild(Tool.Name)
 		FlingPart = Tool:WaitForChild("Handle", 10)
 		FlingPart.Transparency = 0.25
-		FlingPart.CanCollide = true
+		FlingPart.CanCollide = false
 
 		local Highlight = IN("Highlight")
 		Highlight.Adornee = FlingPart
