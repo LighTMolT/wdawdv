@@ -112,16 +112,20 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		FlingPart.Transparency = 0.25
 		FlingPart.CanCollide = false
 
-		local Highlight = IN("Highlight")
+		--[[local Highlight = IN("Highlight")
 		Highlight.Adornee = FlingPart
 		Highlight.FillTransparency = 0.1
-		Highlight.FillColor = Color3.fromRGB(52, 235, 195)
+		Highlight.FillColor = Color3.fromRGB(52, 235, 195)--]]
 		Global.KryptonData['FlingPart'] = FlingPart
 		if Backpack then
 			Backpack:ClearAllChildren()
 		end
 
 		Delay(Players.RespawnTime + Ping:GetValue()/750, function()
+                        local Highlight = IN("Highlight")
+		Highlight.Adornee = FlingPart
+		Highlight.FillTransparency = 0.1
+		Highlight.FillColor = Color3.fromRGB(52, 235, 195)
 			FlingPart.Massless = true
 			Highlight.Parent = FlingPart
 		end)
