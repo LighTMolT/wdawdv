@@ -370,8 +370,6 @@ FakeRoot.Anchored = false
 FakeRoot.CFrame = LoadPoint
 Workspace.CurrentCamera.CameraSubject = FakeHum
 
-FlingPart.CanCollide = false
-
 FakeHum:ChangeState(2)
 FakeHum:ChangeState(7)
 RealRig.Parent = FakeRig
