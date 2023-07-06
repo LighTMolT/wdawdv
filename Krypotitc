@@ -13,6 +13,7 @@ end
 local CFN = CFrame.new
 local CFA = CFrame.Angles
 local Rad = math.rad
+local AntiSleep = CFN()
 
 if Global.KryptonReanimateLoaded then
 	return
@@ -224,7 +225,7 @@ local function PullVelocity(Part0, Part1)
 end
 local function LinkParts(Part0, Part1, CFrame)
 	if Part0 and Part1 and isnetworkowner(Part0) then
-		Part0.RotVelocity = V3_010*Sin(Clock()*29)
+		Part0.RotVelocity = V3N(0,1,0)*Sin(Clock()*29)
 		Part0.CFrame = Part1.CFrame * CFrame * AntiSleep
 	end
 end
