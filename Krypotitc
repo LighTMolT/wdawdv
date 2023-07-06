@@ -286,7 +286,6 @@ do
 			end
 		end
 
-                Wait(Players.RespawnTime + 10)
 		if FlingPart then                
 			FlingPart.CanCollide = false
 			FlingPart.CanTouch = false
@@ -297,7 +296,7 @@ end
 
 local Platform = Instance.new("Part")
 Platform.Size = V3N(25, 0.5, 25)
-Platform.Position = V3N(32500, 0, 5000)
+Platform.Position = V3N(32500, 5000, 5000)
 Platform.Anchored = true
 Platform.Parent = Workspace
 
