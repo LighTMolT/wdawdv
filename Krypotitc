@@ -2,7 +2,6 @@ local Global = (getgenv and getgenv()) or getfenv(0)
 local KryptonReanimateConfig = Global.KryptonReanimateConfig
 local SetHiddenProp = sethiddenproperty or function(a,b,c) pcall(function() a[b]=c end) end
 local ExtraOptimization = KryptonReanimateConfig.ExtraOptimization or false
---local AntiSleepParts = KryptonReanimateConfig.AntiSleep or false
 local AntiVoid = KryptonReanimateConfig.AntiVoid or false
 
 local CFN = CFrame.new
@@ -104,6 +103,7 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		Character:WaitForChild(Tool.Name)
 		FlingPart = Tool:WaitForChild("Handle", 10)
 		FlingPart.Transparency = 0.25
+                FlingPart.CanCollide = true
 
 		local Highlight = IN("Highlight")
 		Highlight.Adornee = FlingPart
@@ -114,9 +114,8 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 			Backpack:ClearAllChildren()
 		end
 
-		Delay(WaitTime+1, function()
+		Delay(Players.RespawnTime + Ping:GetValue()/750, function()
 			FlingPart.Massless = true
-			FlingPart.CanCollide = true
 			Highlight.Parent = FlingPart
 		end)
 	else
@@ -288,7 +287,7 @@ do
 		end
 
 		if FlingPart then
-			FlingPart.CanCollide = true
+			FlingPart.CanCollide = false
 			FlingPart.CanTouch = false
 			FlingPart.CanQuery = false
 		end
@@ -380,6 +379,7 @@ if KryptonReanimateConfig.Shiftlock then
 	Client.DevEnableMouseLock = true
 end
 
+if KryptonReanimateConfig.Animations then
 Spawn(function()
 	local AnimateScript = IN("LocalScript")
 	AnimateScript.Name = "Animate"
@@ -782,7 +782,8 @@ Spawn(function()
 		Toggled = (AnimateScript and AnimateScript.Parent) and AnimateScript.Enabled or false
 		time = Wait(0.1)
 		move(time)
-	end
-end)
+	  end
+     end)
+end
 
 warn("Loaded!, Reanimated in: ".. tostring(Players.RespawnTime + Ping:GetValue()/750 + 3 + 0.1).."s. Made by Gelatek / Discord: @usedtampons")
