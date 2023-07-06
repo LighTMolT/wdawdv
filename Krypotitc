@@ -127,7 +127,7 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		Highlight.FillTransparency = 0.1
 		Highlight.FillColor = Color3.fromRGB(52, 235, 195)
 		FlingPart.Massless = true
-		Highlight.Parent = game.Players.LocalPlayer.Character.LighTMolT.BoomBox.Handle
+		Highlight.Parent = Character.LighTMolT:FindFirstChildOfClass("Tool").Handle
 		end)
 	else
 		notification("Warning", "Player has no tools in Backpack, tool fling will be not enabled.")
