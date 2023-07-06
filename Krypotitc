@@ -1,4 +1,5 @@
 local Global = (getgenv and getgenv()) or getfenv(0)
+local KryptonReanimateConfig = Global.KryptonReanimateConfig
 local SetHiddenProp = sethiddenproperty or function(a,b,c) pcall(function() a[b]=c end) end
 
 local CFN = CFrame.new
@@ -30,20 +31,6 @@ local Wait = task.wait
 local Delay = task.delay
 local Spawn = task.spawn
 
-local IN = Instance.new
-local Handles, Events = {}, {}
-
-local IsAlive = true
-
-if not Global.KryptonData then
-	Global.KryptonData = {
-		['Script Stopped'] = false,
-		['Script Running'] = false,
-		['Global Events'] = {},
-		['Hat Folder'] = Instance.new("Folder") 
-	}
-end
-
 local Workspace = game:FindFirstChildOfClass("Workspace")
 local RunService = game:FindFirstChildOfClass("RunService")
 local Players = game:FindFirstChildOfClass("Players")
@@ -51,9 +38,82 @@ local InsertService = game:FindFirstChildOfClass("InsertService")
 local Stats = game:FindFirstChildOfClass("Stats")
 local Ping = Stats.Network.ServerStatsItem["Data Ping"]
 local Physics = settings().Physics
+local WaitTime = Players.RespawnTime + 0.65
 
 local LocalPlayer = Players.LocalPlayer
+local Client = Players.LocalPlayer
+local Character = Client.Character
 local RealRig = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+local IN = Instance.new
+local Handles, Events = {}, {}
+
+local IsAlive = true
+
+local function notification(Title, Text)
+	game.StarterGui:SetCore("SendNotification", {
+		Title = Title or "",
+		Text = Text or "",
+		Duration = 5
+	})
+end
+
+do -- [[ Checks ]] --
+	if not game:IsLoaded("Workspace") then
+		notification("Game Not Loaded", "Game is still loading.")
+		game.Loaded:Wait()
+	end
+	Humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+	if (not LocalPlayer.Character) or (LocalPlayer.Character and LocalPlayer.Character.Name == "𝔾𝕖𝕝𝕒𝕥𝕖𝕜ℝ𝕒𝕨"..tostring(game.PlaceId)) then
+		notification("Error", "No Real Character found, or you are already reanimated")
+		return
+	end
+
+	if (Humanoid.Health == 0) or (Humanoid.BreakJointsOnDeath == false) then 
+		notification("Error", "Something is up with humanoid properties, or the game has patches.")
+		return
+	end
+end
+
+if not Global.KryptonData then
+	Global.KryptonData = {
+		['Script Stopped'] = false,
+		['Script Running'] = false,
+		['FlingEnabled'] = false,
+		['FlingPart'] = nil,
+		['Global Events'] = {},
+		['Hat Folder'] = Instance.new("Folder") 
+	}
+end
+
+local FlingPart = nil
+
+if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
+	local Backpack = Client:FindFirstChildOfClass("Backpack")
+	local Tool = Backpack:FindFirstChildOfClass("Tool")
+	if Tool then
+		Tool.Parent = Character
+		Character:WaitForChild(Tool.Name)
+		FlingPart = Tool:WaitForChild("Handle", 10)
+		FlingPart.Transparency = 0.25
+
+		local Highlight = IN("Highlight")
+		Highlight.Adornee = FlingPart
+		Highlight.FillTransparency = 0.1
+		Highlight.FillColor = Color3.fromRGB(52, 235, 195)
+		Global.ReanimateData.FlingPart = FlingPart
+		if Backpack then
+			Backpack:ClearAllChildren()
+		end
+
+		Delay(WaitTime+1, function()
+			FlingPart.Massless = true
+			Highlight.Parent = FlingPart
+		end)
+	else
+		notification("Warning", "Player has no tools in Backpack, tool fling will be not enabled.")
+	end
+end
 
 local RealRigDescendants = RealRig:GetDescendants()
 local FakeHum, FakeRoot, FakeTorso, FakeRightArm, FakeLeftArm, FakeRightLeg, FakeLeftLeg; local FakeRig = IN("Model"); do
@@ -212,7 +272,7 @@ Spawn(function()
 		[5] = {"http://www.roblox.com/asset/?id=11159284657", CFN(0,0,0), CFA(0,Rad(-90), Rad(90)), false},
 		[6] = {"http://www.roblox.com/asset/?id=11263219250", CFN(0,0,0), CFA(0,Rad(-90), Rad(90)), false},
 	}
-	
+
 	local T1 = GetHandle(DesiredHats[1][1], DesiredHats[1][4]); local T1_CF = DesiredHats[1][2] * DesiredHats[1][3]
 	local T2 = GetHandle(DesiredHats[2][1], DesiredHats[2][4]); local T2_CF = DesiredHats[2][2] * DesiredHats[2][3]
 	local RA = GetHandle(DesiredHats[3][1], DesiredHats[3][4]); local RA_CF = DesiredHats[3][2] * DesiredHats[3][3]
@@ -405,7 +465,7 @@ Spawn(function()
 	end
 	local playAnimation = function() end -- fix
 	local toolKeyFrameReachedFunc = function() end -- fix
-	
+
 	local function keyFrameReachedFunc(frameName)
 		if (frameName == "End") then
 			local repeatAnim = currentAnim
@@ -447,7 +507,7 @@ Spawn(function()
 			currentAnimKeyframeHandler = currentAnimTrack.KeyframeReached:connect(keyFrameReachedFunc)
 		end
 	end
-	
+
 	local function playToolAnimation(animName, transitionTime, humanoid, priority)	 
 		local roll = Random(1, animTable[animName].totalWeight) 
 		local origRoll = roll
@@ -476,7 +536,7 @@ Spawn(function()
 			currentToolAnimKeyframeHandler = toolAnimTrack.KeyframeReached:connect(toolKeyFrameReachedFunc)
 		end
 	end
-	
+
 	toolKeyFrameReachedFunc = function(frameName)
 		pcall(function() 
 			if (frameName == "End") then playToolAnimation(toolAnimName, 0.0, FakeHum) end 
