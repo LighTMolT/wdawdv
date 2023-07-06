@@ -287,6 +287,7 @@ do
 		end
 
 		if FlingPart then
+                Delay(WaitTime+1)
 			FlingPart.CanCollide = false
 			FlingPart.CanTouch = false
 			FlingPart.CanQuery = false
