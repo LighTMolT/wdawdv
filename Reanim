@@ -602,4 +602,8 @@ do -- [[ Finishing Touches ]] --
 	if ReanimSettings.Animations then
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/toldblock/GelatekReanimateV2/main/bin/Animations.lua"))()
 	end
+
+        if ReanimSettings.Shiftlock then
+		Client.DevEnableMouseLock = true
+	end
 end
