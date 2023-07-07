@@ -282,8 +282,10 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 	Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Disabled
 	Workspace.Retargeting = "Disabled"
 	Client.ReplicationFocus = Workspace
+        local Physics = settings().Physics
+	local Rendering = settings().Rendering
 
-        for _, Thing in pairs(RealRig) do
+        for _, Thing in pairs(RealRigDescendants) do
 		if Thing:IsA("Script") or Thing:IsA("LocalScript") then
 			Thing.Disabled = true
 		elseif Thing:IsA("BasePart") then
