@@ -283,13 +283,13 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 	Workspace.Retargeting = "Disabled"
 	Client.ReplicationFocus = Workspace
 
-        for _, Instance in pairs(RealRig) do
-		if Instance:IsA("Script") or Instance:IsA("LocalScript") then
-			Instance.Disabled = true
-		elseif Instance:IsA("BasePart") then
-			Instance.RootPriority = 127
-			Instance.Massless = Instance.Parent:IsA("Accessory") and true or false
-			Instance.CastShadow = not ExtraOptimization
+        for _, Thing in pairs(RealRig) do
+		if Thing:IsA("Script") or Thing:IsA("LocalScript") then
+			Thing.Disabled = true
+		elseif Thing:IsA("BasePart") then
+			Thing.RootPriority = 127
+			Thing.Massless = Thing.Parent:IsA("Accessory") and true or false
+			Thing.CastShadow = not ExtraOptimization
 		end
 	end
 	
