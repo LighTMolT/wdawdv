@@ -277,11 +277,26 @@ for _,v in pairs(RealRigDescendants) do
 	end
 end
 
-do
+do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 	local SpawnPoint = Workspace:FindFirstChildOfClass("SpawnLocation",true) and Workspace:FindFirstChildOfClass("SpawnLocation",true) or CFN(0,20,0)
 	Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Disabled
 	Workspace.Retargeting = "Disabled"
 	Client.ReplicationFocus = Workspace
+
+        for _, Instance in pairs(RealRig) do
+		if Instance:IsA("Script") or Instance:IsA("LocalScript") then
+			Instance.Disabled = true
+		elseif Instance:IsA("BasePart") then
+			Instance.RootPriority = 127
+			Instance.Massless = Instance.Parent:IsA("Accessory") and true or false
+			Instance.CastShadow = not ExtraOptimization
+		end
+	end
+	
+	for _, Track in pairs(Humanoid:GetPlayingAnimationTracks()) do
+		Track:Stop()
+	end
+     
 	SetHiddenProp(RealRig:FindFirstChildOfClass("Humanoid"), "InternalBodyScale", V3N(1/0, 1/0, 1/0))	
 	SetHiddenProp(Workspace, "SignalBehavior", "Immediate")
 	SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
