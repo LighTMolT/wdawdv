@@ -888,4 +888,4 @@ if KryptonReanimateConfig.AntiFling then
 	end
 end
 
-warn("Loaded!, Reanimated in: ".. tostring(Players.RespawnTime + Ping:GetValue()/750 + 3 + 0.1).."s. Made by Gelatek / Discord: @usedtampons")
+warn("Loaded!, Reanimated in: ".. tostring(Players.RespawnTime + Ping:GetValue()/750 + 3 + 0.1).."s.")
