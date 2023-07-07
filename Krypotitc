@@ -383,6 +383,10 @@ local Parent = RealRig.Parent; TInsert(Events, RealRig:GetPropertyChangedSignal(
 end))
 
 FakeHum.Died:Once(function()
+        for _, Signal in pairs(Events) do
+		Signal:Disconnect()
+	end
+
 	ClearUpData()
 	LocalPlayer.Character = RealRig
 	RealRig.Parent = Workspace
