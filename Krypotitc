@@ -410,7 +410,8 @@ FakeHum.Died:Once(function()
 	FakeRig:Destroy()
 end)
 
-Wait(3)
+--Wait(3)
+Wait(1)
 Platform:Destroy()
 FakeRoot.Anchored = false
 
