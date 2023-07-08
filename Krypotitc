@@ -53,10 +53,14 @@ local WaitTime = Players.RespawnTime + 0.65
 local Stepped = RunService[KryptonReanimateConfig.NewRunServiceEvents and "PreSimulation" or "Stepped"]
 local Heartbeat = RunService[KryptonReanimateConfig.NewRunServiceEvents and "PostSimulation" or "Heartbeat"]
 
+local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Client = Players.LocalPlayer
 local Character = Client.Character
 local RealRig = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+local UserID = Client.UserId
+local UserName = Players:GetNameFromUserIdAsync(UserID)
 
 local IN = Instance.new
 local Handles, Events = {}, {}
