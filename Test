@@ -10020,21 +10020,22 @@ a.AnimationId="rbxassetid://"..tostring(math.random(1,10^9))..[[)
 game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a):Play(0.1,0.1,0.1)
 end)
 
-AddCommand("consolemsg", {}, "makes a message appear in the console", {}, function(Args)
-local msg = concat(Args, " ");	
-local a=Instance.new("Animation")
-a.AnimationId="rbxassetid://"..tostring(math.random(1,10^9))..[[)
-╔══════════════╗]]
-
-		
-		
-..msg
+AddCommand("consolemsg", {}, "makes an custom error message appear in the console", {}, function(Args)
+local custommsg = concat(Args, " ");	
+local a = Instance.new("Animation")
+a.AnimationId = "rbxassetid://" .. tostring(math.random(1, 10^9))..[[)
+╔══════════════╗
 
 
 
---╚══════════════╝
---]]
-game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a):Play(0.1,0.1,0.1)
+]] .. custommsg .. [[
+
+
+
+
+╚══════════════╝
+]]
+game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a):Play(0.1, 0.1, 0.1)
 end)
 
 AddCommand("errorchat", {}, "makes the chat error appear", {}, function()
