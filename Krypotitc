@@ -117,7 +117,7 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		end
 
 		Delay(Players.RespawnTime + Ping:GetValue()/750, function()               
-		FlingPart.Massless = true
+		FlingPart.Massless = false          
 		end)
 	else
 		notification("Warning", "Player has no tools in Backpack, tool fling will be not enabled.")
