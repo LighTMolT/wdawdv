@@ -10020,8 +10020,8 @@ a.AnimationId="rbxassetid://"..tostring(math.random(1,10^9))..[[)
 game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a):Play(0.1,0.1,0.1)
 end)
 
-AddCommand("consolemsg", {}, "makes an custom error message appear in the console", {}, function(Args)
-local custommsg = concat(Args, " ");	
+AddCommand("consolemsg", {}, "makes an custom error message appear in the console", {}, function(Caller,Args)
+local custommsg = concat(Args, " ");
 local a = Instance.new("Animation")
 a.AnimationId = "rbxassetid://" .. tostring(math.random(1, 10^9))..[[)
 ╔══════════════╗
