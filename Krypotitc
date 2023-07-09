@@ -102,8 +102,7 @@ end
 local FlingPart = nil
 local FallenPartsDestroyHeight = Workspace.FallenPartsDestroyHeight
 
-if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
-	if RealRig:FindFirstChildOfClass("Tool") then -- Check if player has any tool.
+if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] -- -- Check if player has any tool.
 	local Backpack = Client:FindFirstChildOfClass("Backpack")
 	local Tool = Backpack:FindFirstChildOfClass("Tool")
 	if Tool then
@@ -120,7 +119,6 @@ if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] --
 		Delay(0.1, function()               
 			FlingPart.Massless = false          
 			end)
-		end
 	else
 		notification("Warning", "Player has no tools in Backpack, tool fling will be not enabled.")
 	end
