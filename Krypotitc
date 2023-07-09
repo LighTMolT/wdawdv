@@ -360,11 +360,6 @@ Global.KryptonReanimateLoaded = true
 Wait(Players.RespawnTime + Ping:GetValue()/750)
 RealRig:BreakJoints()
 
-local Backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
-if Backpack then
-	Backpack:ClearAllChildren()
-end
-
 Spawn(function()
 	local DesiredHats = Global.KryptonReanimateConfig.DefinedHats or {
 		[1] = {"rbxassetid://13415110780", CFN(0,0,0), CFA(0,0,0), false},
@@ -429,8 +424,6 @@ FakeRoot.Anchored = false
 
 FakeRoot.CFrame = LoadPoint
 Workspace.CurrentCamera.CameraSubject = FakeHum
-
-FlingPart.CanCollide = false
 
 FakeHum:ChangeState(2)
 FakeHum:ChangeState(7)
