@@ -436,6 +436,8 @@ if KryptonReanimateConfig.FlingEnabled and KryptonReanimateConfig.MousePredictio
 		local GEvents = Global.KryptonData['Global Events']
 		local StaticValue = V3N(0, 7500, 0)
 		local Mouse = LocalPlayer:GetMouse()
+                local Highlight = Instance.new("Highlight")
+                Highlight.Parent = FlingPart
 		local CurrentTarget;
 
 		TInsert(GEvents, Mouse.Button1Down:Connect(function()
