@@ -127,6 +127,13 @@ if KryptonReanimateConfig.FlingEnabled then -- [[ Tool Flinging ]] --
 	end
 end
 
+if not KryptonReanimateConfig.FlingEnabled then
+	local Backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
+		if Backpack then
+	        Backpack:ClearAllChildren()
+	end
+end
+
 local RealRigDescendants = RealRig:GetDescendants()
 local FakeHum, FakeRoot, FakeTorso, FakeRightArm, FakeLeftArm, FakeRightLeg, FakeLeftLeg; local FakeRig = IN("Model"); do
 	local function CI(ClassName, Info) local Inst = IN(ClassName) for i, v in pairs(Info) do Inst[i]=v end return Inst end
@@ -474,13 +481,6 @@ if KryptonReanimateConfig.FlingEnabled then
 			end
 		end))
 	end
-
-if not KryptonReanimateConfig.FlingEnabled then
-	local Backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
-		if Backpack then
-	        Backpack:ClearAllChildren()
-	end
-end
 
 if KryptonReanimateConfig.Animations then
 		local AnimateScript = IN("LocalScript")
