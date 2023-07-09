@@ -424,12 +424,12 @@ FakeHum:ChangeState(2)
 FakeHum:ChangeState(7)
 RealRig.Parent = FakeRig
 
+Spawn(function()
 if KryptonReanimateConfig.Shiftlock then
 	Client.DevEnableMouseLock = true
 end
 
 if KryptonReanimateConfig.Animations then
-	Spawn(function()
 		local AnimateScript = IN("LocalScript")
 		AnimateScript.Name = "Animate"
 		AnimateScript.Parent = FakeRig
@@ -832,7 +832,8 @@ if KryptonReanimateConfig.Animations then
 			time = Wait(0.1)
 			move(time)
 		end
-	end)
+	end
+	
 if KryptonReanimateConfig.AntiFling then
 		local Services = setmetatable({}, {__index = function(Self, Index)
 			local NewService = game.GetService(game, Index)
@@ -904,6 +905,6 @@ if KryptonReanimateConfig.AntiFling then
 			end)
 		end)
 	end
-end
+end)
 
 warn("Loaded!, Reanimated in: ".. tostring(Players.RespawnTime + Ping:GetValue()/750 + 3 + 0.1).."s.")
