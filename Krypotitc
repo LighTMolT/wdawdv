@@ -104,7 +104,7 @@ end
 local FlingPart = nil
 local FallenPartsDestroyHeight = Workspace.FallenPartsDestroyHeight
 
-if KryptonReanimateConfig.ToolFling then -- [[ Tool Flinging ]] -- -- Check if player has any tool.
+if KryptonReanimateConfig.FlingEnabled then -- [[ Tool Flinging ]] -- 
 	local Backpack = Client:FindFirstChildOfClass("Backpack")
 	local Tool = Backpack:FindFirstChildOfClass("Tool")
 	if Tool then
