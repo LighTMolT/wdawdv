@@ -435,10 +435,11 @@ end
 if KryptonReanimateConfig.FlingEnabled then
 		local GEvents = Global.KryptonData['Global Events']
 		local StaticValue = V3N(0, 7500, 0)
-                local OffsetDown = CFrame.new(0, -12, 0)
+		local OffsetDown = CFrame.new(0, -12, 0)
+		local Rotation = CFA(Random(-360,360),Random(-360,360),Random(-360,360))
 		local Mouse = LocalPlayer:GetMouse()
-                local Highlight = Instance.new("Highlight")
-                Highlight.Parent = FlingPart
+		local Highlight = Instance.new("Highlight")
+		Highlight.Parent = FlingPart
 		local CurrentTarget;
 
 		TInsert(GEvents, Mouse.Button1Down:Connect(function()
@@ -448,25 +449,30 @@ if KryptonReanimateConfig.FlingEnabled then
 		TInsert(GEvents, Mouse.Button1Up:Connect(function()
 			Global.FlingOnHold = true
 		end))
+		
+		TInsert(GEvents, Heartbeat:Connect(function()
+			if Global.FlingOnHold == true then
+				FlingPart.CFrame = FakeRoot.CFrame * OffsetDown * Rotation
+			end
+		end))
 
 		TInsert(GEvents, Heartbeat:Connect(function()
 			if Global.FlingOnHold == false and FlingPart and isnetworkowner(FlingPart) then
 				if Mouse.Target ~= nil then
 					CurrentTarget = Mouse.Target.Parent and Mouse.Target.Parent:FindFirstChildOfClass("Part") or Mouse.Target.Parent.Parent and Mouse.Target.Parent.Parent:FindFirstChildOfClass("Part")
 					FlingPart.RotVelocity = StaticValue
-                                        FlingPart.CFrame = FakeRoot.CFrame * OffsetDown
 					if CurrentTarget and CurrentTarget.Name == "Head" or CurrentTarget.Name == "Torso" or CurrentTarget.Name == "UpperTorso" or CurrentTarget.Name == "HumanoidRootPart" or CurrentTarget.Name == "Handle" then
 						FlingPart.CFrame = CFN(CurrentTarget.Position) * (CurrentTarget.Velocity.Magnitude > 6 and CFN(CurrentTarget.CFrame.LookVector*Random(-2, 7)) or CF0)
 					else
 						FlingPart.CFrame = Mouse.Hit
 					end
 				else
-					FlingPart.CFrame = FakeRoot.CFrame * OffsetDown * AntiSleepOffset
+					FlingPart.CFrame = FakeRoot.CFrame * AntiSleepOffset
 					FlingPart.AssemblyAngularVelocity = RotVelocityOffset
+				end
 			end
-		end
-	end))
-end
+		end))
+	end
 
 if KryptonReanimateConfig.Animations then
 		local AnimateScript = IN("LocalScript")
