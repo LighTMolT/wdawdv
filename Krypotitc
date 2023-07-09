@@ -435,8 +435,7 @@ end
 if KryptonReanimateConfig.FlingEnabled then
 		local GEvents = Global.KryptonData['Global Events']
 		local StaticValue = V3N(0, 7500, 0)
-		local OffsetDown = CFrame.new(0, -12, 0)
-		local Rotation = CFA(Random(-360,360),Random(-360,360),Random(-360,360))
+		local OffsetDown = CFrame.new(0, -12, 0)		
 		local Mouse = LocalPlayer:GetMouse()
 		local Highlight = Instance.new("Highlight")
 		Highlight.Parent = FlingPart
@@ -452,7 +451,7 @@ if KryptonReanimateConfig.FlingEnabled then
 		
 		TInsert(GEvents, Heartbeat:Connect(function()
 			if Global.FlingOnHold == true then
-				FlingPart.CFrame = FakeRoot.CFrame * OffsetDown * Rotation
+				FlingPart.CFrame = FakeRoot.CFrame * OffsetDown
 			end
 		end))
 
