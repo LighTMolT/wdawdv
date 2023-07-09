@@ -1,45 +1,77 @@
-local Global = (getgenv and getgenv()) or getfenv(0)
-local KryptonReanimateConfig = Global.KryptonReanimateConfig
-local SetHiddenProp = sethiddenproperty or function(a,b,c) pcall(function() a[b]=c end) end
-local ExtraOptimization = KryptonReanimateConfig.ExtraOptimization or false
-local AntiVoid = KryptonReanimateConfig.AntiVoid or false
-local DynamicalVelocityEnabled = KryptonReanimateConfig.DynamicalVelocity or false
-local isnetworkowner, sethiddenproperty, setsimulationradius
+local Global = (getgenv and getgenv()) or getfenv(0) or _G
+if Global.KryptonReanimateLoaded then return end
 
-isnetworkowner = isnetworkowner or function(Part)
-	return Part.ReceiveAge == 0
-end
-
+local LoadSpeed = tick()
 local CFN = CFrame.new
 local CFA = CFrame.Angles
-local Rad = math.rad
-local AntiSleep = CFN()
-
-if Global.KryptonReanimateLoaded then
-	return
-end
-
-if not Global.KryptonReanimateConfig then 
-	Global.KryptonReanimateConfig = {} 
-end
-
 local Cos = math.cos
 local Sin = math.sin
 local Random = math.random
-
 local Clock = os.clock
-
 local V3N = Vector3.new
-local CF0 = CFN(0,0,0)
-local V30 = V3N(0,0,0)
-
 local TInsert = table.insert
 local TRemove = table.remove
 local TFind = table.find
-
 local Wait = task.wait
 local Delay = task.delay
 local Spawn = task.spawn
+local Defer = task.defer
+local IN = Instance.new
+local Handles, Events = {}, {}
+local Rad = math.rad
+local CF0 = CFN(0,0,0)
+local V30 = V3N(0,0,0)
+local AntiSleep = CFN()
+
+local SetHiddenProp = sethiddenproperty or function(a,b,c) pcall(function() a[b]=c end) end
+local IsPartOwned = isnetworkowner or function(Part) return Part.ReceiveAge == 0 end
+
+local AntiSleepOffset, RotVelocityOffset = CF0, V30
+local IsAlive = true
+
+local ReanimSettings; do -- [[ Check Settings ]] --
+	if not Global.KryptonReanimateConfig then Global.KryptonReanimateConfig = {} end
+	ReanimSettings = Global.KryptonReanimateConfig
+	Global.FlingOnHold = true
+	if not Global.KryptonData then
+		Global.KryptonData = {
+			['Script Stopped'] = false,
+			['Script Running'] = false,
+			['FlingEnabled'] = false,
+			['FlingPart'] = nil,
+			['Global Events'] = {},
+			['Hat Folder'] = Instance.new("Folder")
+		}
+	end
+
+	local function CheckSettings(Setting, DefaultValue)
+		if not ReanimSettings[Setting] then
+			ReanimSettings[Setting] = DefaultValue
+		end
+	end
+
+	-- Antis | Solvers	
+	CheckSettings("AntiVoid", true) -- done (avoids dying by void)
+	CheckSettings("AntiFling", true) -- done (avoids getting flinged)
+
+	-- Fling
+	CheckSettings("FlingEnabled", true) -- done (tool fling)
+
+	-- Velocity / Claiming
+	CheckSettings("DynamicalVelocity", true) -- done ()
+	CheckSettings("EagerBulkExecution", true) -- done ()
+	CheckSettings("ExtraOptimization", true) -- done ()
+
+	-- Misc
+	CheckSettings("NewRunServiceEvents", true) -- done (old runservices just in case roblox disables the new)
+	CheckSettings("Animations", true) -- done (base roblox anims)
+	CheckSettings("LocalScriptSupport", true) -- makes the script work on localscripts
+	CheckSettings("Shiftlock", true) -- forces shiftlock
+end
+
+local ExtraOptimization = ReanimSettings.ExtraOptimization or false
+local AntiVoid = ReanimSettings.AntiVoid or false
+local DynamicalVelocityEnabled = ReanimSettings.DynamicalVelocity or false
 
 local Workspace = game:FindFirstChildOfClass("Workspace")
 local RunService = game:FindFirstChildOfClass("RunService")
@@ -49,23 +81,19 @@ local Stats = game:FindFirstChildOfClass("Stats")
 local Ping = Stats.Network.ServerStatsItem["Data Ping"]
 local Physics = settings().Physics
 local Rendering = settings().Rendering
-local WaitTime = Players.RespawnTime + 0.65
+local WaitTime = Players.RespawnTime + (ReanimSettings.LocalScriptSupport == true and 0.65 or Ping:GetValue()/750)
 
-local Stepped = RunService[KryptonReanimateConfig.NewRunServiceEvents and "PreSimulation" or "Stepped"]
-local Heartbeat = RunService[KryptonReanimateConfig.NewRunServiceEvents and "PostSimulation" or "Heartbeat"]
+local Stepped = RunService[ReanimSettings.NewRunServiceEvents and "PreSimulation" or "Stepped"]
+local Heartbeat = RunService[ReanimSettings.NewRunServiceEvents and "PostSimulation" or "Heartbeat"]
 
 local LocalPlayer = Players.LocalPlayer
-local Client = Players.LocalPlayer
-local Character = Client.Character
+local Character = LocalPlayer.Character
 local RealRig = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 
-local IN = Instance.new
-local Handles, Events = {}, {}
+local FlingPart = nil
+local FallenPartsDestroyHeight = Workspace.FallenPartsDestroyHeight
 
-local AntiSleepOffset, RotVelocityOffset = CF0, V30
-local IsAlive = true
-
-local function notification(Title, Text)
+local function Notification(Title, Text)
 	game.StarterGui:SetCore("SendNotification", {
 		Title = Title or "",
 		Text = Text or "",
@@ -75,45 +103,30 @@ end
 
 do -- [[ Checks ]] --
 	if not game:IsLoaded("Workspace") then
-		notification("Game Not Loaded", "Game is still loading.")
+		Notification("Game Not Loaded", "Game is still loading.")
 		game.Loaded:Wait()
 	end
 	Humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 	if (not LocalPlayer.Character) or (LocalPlayer.Character and LocalPlayer.Character.Name == "𝔾𝕖𝕝𝕒𝕥𝕖𝕜ℝ𝕒𝕨"..tostring(game.PlaceId)) then
-		notification("Error", "No Real Character found, or you are already reanimated")
+		Notification("Error", "No Real Character found, or you are already reanimated")
 		return
 	end
 
 	if (Humanoid.Health == 0) or (Humanoid.BreakJointsOnDeath == false) then 
-		notification("Error", "Something is up with humanoid properties, or the game has patches.")
+		Notification("Error", "Something is up with humanoid properties, or the game has patches.")
 		return
 	end
 end
 
-Global.FlingOnHold = true
-if not Global.KryptonData then
-	Global.KryptonData = {
-		['Script Stopped'] = false,
-		['Script Running'] = false,
-		['FlingEnabled'] = false,
-		['FlingPart'] = nil,
-		['Global Events'] = {},
-		['Hat Folder'] = Instance.new("Folder") 
-	}
-end
-
-local FlingPart = nil
-local FallenPartsDestroyHeight = Workspace.FallenPartsDestroyHeight
-
-if KryptonReanimateConfig.FlingEnabled then -- [[ Tool Flinging ]] -- 
-	local Backpack = Client:FindFirstChildOfClass("Backpack")
+if ReanimSettings.FlingEnabled then -- [[ Tool Flinging ]] -- 
+	local Backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
 	local Tool = Backpack:FindFirstChildOfClass("Tool")
 	if Tool then
 		Tool.Parent = Character
 		Character:WaitForChild(Tool.Name)
 		FlingPart = Tool:WaitForChild("Handle", 10)
 		FlingPart.Transparency = 0.25
-	
+
 		Global.KryptonData['FlingPart'] = FlingPart
 		if Backpack then
 			Backpack:ClearAllChildren()
@@ -121,16 +134,16 @@ if KryptonReanimateConfig.FlingEnabled then -- [[ Tool Flinging ]] --
 
 		Delay(0.1, function()               
 			FlingPart.Massless = false          
-			end)
+		end)
 	else
-		notification("Warning", "Player has no tools in Backpack, tool fling will be not enabled.")
+		Notification("Warning", "Player has no tools in Backpack, tool fling will be not enabled.")
 	end
 end
 
-if not KryptonReanimateConfig.FlingEnabled then
+if not ReanimSettings.FlingEnabled then
 	local Backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
-		if Backpack then
-	        Backpack:ClearAllChildren()
+	if Backpack then
+		Backpack:ClearAllChildren()
 	end
 end
 
@@ -228,7 +241,7 @@ local function PullVelocity(Part0, Part1)
 	end
 end
 local function LinkParts(Part0, Part1, CFrame)
-	if Part0 and Part1 and isnetworkowner(Part0) then
+	if Part0 and Part1 and IsPartOwned(Part0) then
 		Part0.RotVelocity = V3N(0,1,0)*Sin(Clock()*29)
 		Part0.CFrame = Part1.CFrame * CFrame * AntiSleep
 	end
@@ -291,11 +304,11 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 	local SpawnPoint = Workspace:FindFirstChildOfClass("SpawnLocation",true) and Workspace:FindFirstChildOfClass("SpawnLocation",true) or CFN(0,20,0)
 	Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Disabled
 	Workspace.Retargeting = "Disabled"
-	Client.ReplicationFocus = Workspace
-        local Physics = settings().Physics
+	LocalPlayer.ReplicationFocus = Workspace
+	local Physics = settings().Physics
 	local Rendering = settings().Rendering
 
-        for _, Thing in pairs(RealRigDescendants) do
+	for _, Thing in pairs(RealRigDescendants) do
 		if Thing:IsA("Script") or Thing:IsA("LocalScript") then
 			Thing.Disabled = true
 		elseif Thing:IsA("BasePart") then
@@ -304,16 +317,29 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 			Thing.CastShadow = not ExtraOptimization
 		end
 	end
-	
+
 	for _, Track in pairs(Humanoid:GetPlayingAnimationTracks()) do
 		Track:Stop()
 	end
-     
-	SetHiddenProp(RealRig:FindFirstChildOfClass("Humanoid"), "InternalBodyScale", V3N(1/0, 1/0, 1/0))	
+
+	SetHiddenProp(RealRig:FindFirstChildOfClass("Humanoid"), "InternalBodyScale", V3N(1/0, 1/0, 1/0))
+	SetHiddenProp(Workspace, "PhysicsSteppingMethod", Enum.PhysicsSteppingMethod.Fixed)	
 	SetHiddenProp(Workspace, "SignalBehavior", "Immediate")
 	SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
 	SetHiddenProp(Workspace, "StreamingEnabled", true)
 	SetHiddenProp(Workspace, "StreamOutBehavior", Enum.StreamOutBehavior.Opportunistic)
+	
+	for _,v in pairs(FakeRig:GetDescendants()) do
+		if v:IsA("BasePart") then
+			v.CastShadow = false
+		end
+	end
+
+	for _,v in pairs(RealRigDescendants) do
+		if v:IsA("BasePart") then
+			v.CastShadow = false
+		end
+	end
 
 	pcall(function()	
 		Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
@@ -322,7 +348,7 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 		Physics.DisableCSGv2 = false
 		Physics.UseCSGv2 = false
 		Physics.ThrottleAdjustTime = math.huge
-		Rendering.EagerBulkExecution = KryptonReanimateConfig.EagerBulkExecution
+		Rendering.EagerBulkExecution = ReanimSettings.EagerBulkExecution
 		if ExtraOptimization then Rendering.QualityLevel = 2 end
 	end)
 
@@ -343,7 +369,7 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 			if not Global.KryptonData['FlingEnabled'] then
 				LinkParts(FlingPart, FakeRoot, CFN(0, -1.5, 0))
 			end
-                        FlingPart.CanCollide = false
+			FlingPart.CanCollide = false
 			FlingPart.CanTouch = false
 			FlingPart.CanQuery = false
 		end
@@ -368,7 +394,7 @@ Wait(Players.RespawnTime + Ping:GetValue()/750)
 RealRig:BreakJoints()
 
 Spawn(function()
-	local DesiredHats = Global.KryptonReanimateConfig.DefinedHats or {
+	local DesiredHats = Global.ReanimSettings.DefinedHats or {
 		[1] = {"rbxassetid://13415110780", CFN(0,0,0), CFA(0,0,0), false},
 		[2] = {'nil', CFN(0,0,0), CFA(0,0,0), false},
 
@@ -415,7 +441,7 @@ local Parent = RealRig.Parent; TInsert(Events, RealRig:GetPropertyChangedSignal(
 end))
 
 FakeHum.Died:Once(function()
-        for _, Signal in pairs(Events) do
+	for _, Signal in pairs(Events) do
 		Signal:Disconnect()
 	end
 
@@ -437,11 +463,11 @@ FakeHum:ChangeState(7)
 RealRig.Parent = FakeRig
 
 Spawn(function()
-if KryptonReanimateConfig.Shiftlock then
-	Client.DevEnableMouseLock = true
-end
+	if ReanimSettings.Shiftlock then
+		LocalPlayer.DevEnableMouseLock = true
+	end
 
-if KryptonReanimateConfig.FlingEnabled then
+	if ReanimSettings.FlingEnabled and FlingPart then
 		local GEvents = Global.KryptonData['Global Events']
 		local StaticValue = V3N(0, 7500, 0)
 		local OffsetDown = CFrame.new(0, -12, 0)		
@@ -457,7 +483,7 @@ if KryptonReanimateConfig.FlingEnabled then
 		TInsert(GEvents, Mouse.Button1Up:Connect(function()
 			Global.FlingOnHold = true
 		end))
-		
+
 		TInsert(GEvents, Heartbeat:Connect(function()
 			if Global.FlingOnHold == true then
 				FlingPart.CFrame = FakeRoot.CFrame * OffsetDown
@@ -465,7 +491,7 @@ if KryptonReanimateConfig.FlingEnabled then
 		end))
 
 		TInsert(GEvents, Heartbeat:Connect(function()
-			if Global.FlingOnHold == false and FlingPart and isnetworkowner(FlingPart) then
+			if Global.FlingOnHold == false and FlingPart and IsPartOwned(FlingPart) then
 				if Mouse.Target ~= nil then
 					CurrentTarget = Mouse.Target.Parent and Mouse.Target.Parent:FindFirstChildOfClass("Part") or Mouse.Target.Parent.Parent and Mouse.Target.Parent.Parent:FindFirstChildOfClass("Part")
 					FlingPart.RotVelocity = StaticValue
@@ -482,7 +508,7 @@ if KryptonReanimateConfig.FlingEnabled then
 		end))
 	end
 
-if KryptonReanimateConfig.Animations then
+	if ReanimSettings.Animations then
 		local AnimateScript = IN("LocalScript")
 		AnimateScript.Name = "Animate"
 		AnimateScript.Parent = FakeRig
@@ -886,8 +912,8 @@ if KryptonReanimateConfig.Animations then
 			move(time)
 		end
 	end
-	
-if KryptonReanimateConfig.AntiFling then
+
+	if ReanimSettings.AntiFling then
 		local Services = setmetatable({}, {__index = function(Self, Index)
 			local NewService = game.GetService(game, Index)
 			if NewService then
