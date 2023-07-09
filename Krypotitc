@@ -435,6 +435,7 @@ end
 if KryptonReanimateConfig.FlingEnabled then
 		local GEvents = Global.KryptonData['Global Events']
 		local StaticValue = V3N(0, 7500, 0)
+                local OffsetDown = CFrame.new(0, -12, 0)
 		local Mouse = LocalPlayer:GetMouse()
                 local Highlight = Instance.new("Highlight")
                 Highlight.Parent = FlingPart
@@ -459,7 +460,7 @@ if KryptonReanimateConfig.FlingEnabled then
 						FlingPart.CFrame = Mouse.Hit
 					end
 				else
-					FlingPart.CFrame = FakeRoot.CFrame * AntiSleepOffset
+					FlingPart.CFrame = FakeRoot.CFrame * OffsetDown * AntiSleepOffset
 					FlingPart.AssemblyAngularVelocity = RotVelocityOffset
 			end
 		end
