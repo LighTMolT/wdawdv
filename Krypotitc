@@ -51,22 +51,22 @@ local ReanimSettings; do -- [[ Check Settings ]] --
 	end
 
 	-- Antis | Solvers	
-	CheckSettings("AntiVoid", true) -- done (avoids dying by void)
-	CheckSettings("AntiFling", true) -- done (avoids getting flinged)
+	CheckSettings("AntiVoid", false) -- done (avoids dying by void)
+	CheckSettings("AntiFling", false) -- done (avoids getting flinged)
 
 	-- Fling
-	CheckSettings("FlingEnabled", true) -- done (tool fling)
+	CheckSettings("FlingEnabled", false) -- done (tool fling)
 
 	-- Velocity / Claiming
-	CheckSettings("DynamicalVelocity", true) -- done ()
-	CheckSettings("EagerBulkExecution", true) -- done ()
-	CheckSettings("ExtraOptimization", true) -- done ()
+	CheckSettings("DynamicalVelocity", false) -- done ()
+	CheckSettings("EagerBulkExecution", false) -- done ()
+	CheckSettings("ExtraOptimization", false) -- done ()
 
 	-- Misc
-	CheckSettings("NewRunServiceEvents", true) -- done (old runservices just in case roblox disables the new)
-	CheckSettings("Animations", true) -- done (base roblox anims)
-	CheckSettings("LocalScriptSupport", true) -- makes the script work on localscripts
-	CheckSettings("Shiftlock", true) -- forces shiftlock
+	CheckSettings("NewRunServiceEvents", false) -- done (old runservices just in case roblox disables the new)
+	CheckSettings("Animations", false) -- done (base roblox anims)
+	CheckSettings("LocalScriptSupport", false) -- makes the script work on localscripts
+	CheckSettings("Shiftlock", false) -- forces shiftlock
 end
 
 local ExtraOptimization = ReanimSettings.ExtraOptimization or false
