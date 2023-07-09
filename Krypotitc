@@ -432,6 +432,38 @@ if KryptonReanimateConfig.Shiftlock then
 	Client.DevEnableMouseLock = true
 end
 
+if KryptonReanimateConfig.FlingEnabled and KryptonReanimateConfig.MousePredictionOnceReanimated then
+		local GEvents = Global.KryptonData['Global Events']
+		local StaticValue = V3N(0, 7500, 0)
+		local Mouse = LocalPlayer:GetMouse()
+		local CurrentTarget;
+
+		TInsert(GEvents, Mouse.Button1Down:Connect(function()
+			Global.FlingOnHold = false
+		end))
+
+		TInsert(GEvents, Mouse.Button1Up:Connect(function()
+			Global.FlingOnHold = true
+		end))
+
+		TInsert(GEvents, Heartbeat:Connect(function()
+			if Global.FlingOnHold == false and FlingPart and isnetworkowner(FlingPart) then
+				if Mouse.Target ~= nil then
+					CurrentTarget = Mouse.Target.Parent and Mouse.Target.Parent:FindFirstChildOfClass("Part") or Mouse.Target.Parent.Parent and Mouse.Target.Parent.Parent:FindFirstChildOfClass("Part")
+					FlingPart.RotVelocity = StaticValue
+					if CurrentTarget and CurrentTarget.Name == "Head" or CurrentTarget.Name == "HumanoidRootPart" or CurrentTarget.Name == "Handle" then
+						FlingPart.CFrame = CFN(CurrentTarget.Position) * (CurrentTarget.Velocity.Magnitude > 6 and CFN(CurrentTarget.CFrame.LookVector*Random(-2, 7)) or CF0)
+					else
+						FlingPart.CFrame = Mouse.Hit
+					end
+				else
+					FlingPart.CFrame = FakeRoot.CFrame * AntiSleepOffset
+					FlingPart.AssemblyAngularVelocity = RotVelocityOffset
+			end
+		end
+	end))
+end
+
 if KryptonReanimateConfig.Animations then
 		local AnimateScript = IN("LocalScript")
 		AnimateScript.Name = "Animate"
