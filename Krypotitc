@@ -31,6 +31,7 @@ local Clock = os.clock
 
 local V3N = Vector3.new
 local CF0 = CFN(0,0,0)
+local V30 = V3N(0,0,0)
 
 local TInsert = table.insert
 local TRemove = table.remove
@@ -61,6 +62,7 @@ local RealRig = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local IN = Instance.new
 local Handles, Events = {}, {}
 
+local AntiSleepOffset, RotVelocityOffset = CF0, V30
 local IsAlive = true
 
 local function notification(Title, Text)
