@@ -432,7 +432,7 @@ if KryptonReanimateConfig.Shiftlock then
 	Client.DevEnableMouseLock = true
 end
 
-if KryptonReanimateConfig.FlingEnabled and KryptonReanimateConfig.MousePredictionOnceReanimated then
+if KryptonReanimateConfig.FlingEnabled then
 		local GEvents = Global.KryptonData['Global Events']
 		local StaticValue = V3N(0, 7500, 0)
 		local Mouse = LocalPlayer:GetMouse()
