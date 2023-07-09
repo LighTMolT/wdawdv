@@ -475,6 +475,13 @@ if KryptonReanimateConfig.FlingEnabled then
 		end))
 	end
 
+if not KryptonReanimateConfig.FlingEnabled then
+	local Backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
+		if Backpack then
+	        Backpack:ClearAllChildren()
+	end
+end
+
 if KryptonReanimateConfig.Animations then
 		local AnimateScript = IN("LocalScript")
 		AnimateScript.Name = "Animate"
