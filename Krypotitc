@@ -453,7 +453,7 @@ if KryptonReanimateConfig.FlingEnabled then
 				if Mouse.Target ~= nil then
 					CurrentTarget = Mouse.Target.Parent and Mouse.Target.Parent:FindFirstChildOfClass("Part") or Mouse.Target.Parent.Parent and Mouse.Target.Parent.Parent:FindFirstChildOfClass("Part")
 					FlingPart.RotVelocity = StaticValue
-					if CurrentTarget and CurrentTarget.Name == "Head" or CurrentTarget.Name == "HumanoidRootPart" or CurrentTarget.Name == "Handle" then
+					if CurrentTarget and CurrentTarget.Name == "Head" or CurrentTarget.Name == "Torso" or CurrentTarget.Name == "UpperTorso" or CurrentTarget.Name == "HumanoidRootPart" or CurrentTarget.Name == "Handle" then
 						FlingPart.CFrame = CFN(CurrentTarget.Position) * (CurrentTarget.Velocity.Magnitude > 6 and CFN(CurrentTarget.CFrame.LookVector*Random(-2, 7)) or CF0)
 					else
 						FlingPart.CFrame = Mouse.Hit
