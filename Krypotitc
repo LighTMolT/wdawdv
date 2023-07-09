@@ -311,6 +311,9 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 	pcall(function()	
 		Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
 		Physics.AllowSleep = false
+		Physics.ForceCSGv2 = false
+		Physics.DisableCSGv2 = false
+		Physics.UseCSGv2 = false
 		Physics.ThrottleAdjustTime = math.huge
 		Rendering.EagerBulkExecution = KryptonReanimateConfig.EagerBulkExecution
 		if ExtraOptimization then Rendering.QualityLevel = 2 end
