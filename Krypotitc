@@ -90,6 +90,7 @@ do -- [[ Checks ]] --
 	end
 end
 
+Global.FlingOnHold = true
 if not Global.KryptonData then
 	Global.KryptonData = {
 		['Script Stopped'] = false,
