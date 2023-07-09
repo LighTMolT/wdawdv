@@ -362,11 +362,11 @@ Spawn(function()
 		[1] = {"rbxassetid://13415110780", CFN(0,0,0), CFA(0,0,0), false},
 		[2] = {'nil', CFN(0,0,0), CFA(0,0,0), false},
 
-		[3] = {"http://www.roblox.com/asset/?id=11263219250", CFN(0,0,0), CFA(0,Rad(-90), Rad(90)), false},
-		[4] = {"http://www.roblox.com/asset/?id=11159285454", CFN(0,0,0), CFA(0,Rad(90), Rad(90)), false},
+		[3] = {"rbxassetid://12652775021", CFN(0,0.09,0), CFA(0,Rad(-180),0), false},
+		[4] = {"http://www.roblox.com/asset/?id=11159285454", CFN(0,0,0), CFA(0,Rad(90),Rad(90)), false},
 
-		[5] = {"rbxassetid://12652775021", CFN(0,0.09,0), CFA(0,Rad(-180),0), false},
-		[6] = {"http://www.roblox.com/asset/?id=11159284652", CFN(0,0,0), CFA(0,Rad(-90), Rad(90)), false},
+		[5] = {"http://www.roblox.com/asset/?id=11159284657", CFN(0,0,0), CFA(0,Rad(-90), Rad(90)), false},
+		[6] = {"http://www.roblox.com/asset/?id=11263219250", CFN(0,0,0), CFA(0,Rad(90), Rad(90)), false},
 	}
 
 	local T1 = GetHandle(DesiredHats[1][1], DesiredHats[1][4]); local T1_CF = DesiredHats[1][2] * DesiredHats[1][3]
