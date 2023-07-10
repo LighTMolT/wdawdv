@@ -6331,10 +6331,10 @@ AddCommand("fakesit", {"fsit"}, "fakes your humanoid sit", {3}, function(Caller,
 			hum.Sit = true
 		end
 	end
-	Utils.Notify(Caller, "Antikill", "Enabled!")
+	Utils.Notify(Caller, "FakeSit", "Enabled!")
 end)
 
-AddCommand("unantikill", {"noantikill"}, "removes humanoid seated", {3}, function(Caller, Args, CEnv)
+AddCommand("unfakesit", {"unfsit"}, "removes humanoid seated", {3}, function(Caller, Args, CEnv)
 	local c = game:GetService("Players").LocalPlayer.Character
 	if c and c.Parent then
 		local hum = c:FindFirstChildOfClass("Humanoid")
@@ -6343,7 +6343,7 @@ AddCommand("unantikill", {"noantikill"}, "removes humanoid seated", {3}, functio
 			hum.Sit = false
 		end
 	end
-	Utils.Notify(Caller, "Antikill", "Disabled!")
+	Utils.Notify(Caller, "FakeSit", "Disabled!")
 end)
 
 AddCommand("infinitejump", {"infjump"}, "infinite jump no cooldown", {3}, function(Caller, Args, CEnv)
