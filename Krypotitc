@@ -49,6 +49,12 @@ local ReanimSettings; do -- [[ Check Settings ]] --
 			ReanimSettings[Setting] = DefaultValue
 		end
 	end
+	
+	local function CheckHat(Hat, DefaultValue)
+		if ReanimSettings.DefinedHats and (not ReanimSettings.DefinedHats[Hat]) then
+			ReanimSettings.DefinedHats[Hat] = DefaultValue 
+		end
+	end
 
 	-- Antis | Solvers	
 	CheckSettings("AntiVoid", false) -- done (avoids dying by void)
@@ -67,6 +73,15 @@ local ReanimSettings; do -- [[ Check Settings ]] --
 	CheckSettings("Animations", false) -- done (base roblox anims)
 	CheckSettings("LocalScriptSupport", false) -- makes the script work on localscripts
 	CheckSettings("Shiftlock", false) -- forces shiftlock
+	
+	-- Hat Checks --
+	CheckSettings("DefinedHats", {})
+	CheckHat(1, {'rbxassetid://13415110780', CF0, CF0, false}) -- tors1
+	CheckHat(2, {'nil', CF0, CF0, false}) -- tors0
+	CheckHat(3, {'rbxassetid://12652775021', CFN(0,0.09,0), CFA(0,Rad(-180),0), false}) -- ra
+	CheckHat(4, {'http://www.roblox.com/asset/?id=11159285454', CFN(0,0,0), CFA(0,Rad(90),Rad(90)), false}) -- la
+	CheckHat(5, {'http://www.roblox.com/asset/?id=11159284657', CFN(0,0,0), CFA(0,Rad(-90), Rad(90)), false}) -- rl
+	CheckHat(6, {'http://www.roblox.com/asset/?id=11263219250', CFN(0,0,0), CFA(0,Rad(90), Rad(90)), false}) -- ll
 end
 
 local ExtraOptimization = ReanimSettings.ExtraOptimization or false
@@ -328,7 +343,7 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 	SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
 	SetHiddenProp(Workspace, "StreamingEnabled", true)
 	SetHiddenProp(Workspace, "StreamOutBehavior", Enum.StreamOutBehavior.Opportunistic)
-	
+
 	for _,v in pairs(FakeRig:GetDescendants()) do
 		if v:IsA("BasePart") then
 			v.CastShadow = false
@@ -475,6 +490,7 @@ Spawn(function()
 		local Highlight = Instance.new("Highlight")
 		Highlight.Parent = FlingPart
 		local CurrentTarget;
+		local TargetHumanoid;
 
 		TInsert(GEvents, Mouse.Button1Down:Connect(function()
 			Global.FlingOnHold = false
@@ -496,7 +512,12 @@ Spawn(function()
 					CurrentTarget = Mouse.Target.Parent and Mouse.Target.Parent:FindFirstChildOfClass("Part") or Mouse.Target.Parent.Parent and Mouse.Target.Parent.Parent:FindFirstChildOfClass("Part")
 					FlingPart.RotVelocity = StaticValue
 					if CurrentTarget and CurrentTarget.Name == "Head" or CurrentTarget.Name == "Torso" or CurrentTarget.Name == "UpperTorso" or CurrentTarget.Name == "HumanoidRootPart" or CurrentTarget.Name == "Handle" then
-						FlingPart.CFrame = CFN(CurrentTarget.Position) * (CurrentTarget.Velocity.Magnitude > 6 and CFN(CurrentTarget.CFrame.LookVector*Random(-2, 7)) or CF0)
+					TargetHumanoid = CurrentTarget.Parent:FindFirstChildOfClass("Humanoid") or CurrentTarget.Parent.Parent:FindFirstChildOfClass("Humanoid") 
+					if TargetHumanoid then	
+						FlingPart.CFrame = CFN(CurrentTarget.Position) * CFN(TargetHumanoid.MoveDirection*7.5)
+					else
+						FlingPart.CFrame = CFN(CurrentTarget.Position) * (CurrentTarget.Velocity.Magnitude > 6 and CFN(CurrentTarget.CFrame.LookVector*Random(-4, 5)) or CF0)
+					end
 					else
 						FlingPart.CFrame = Mouse.Hit
 					end
@@ -507,6 +528,7 @@ Spawn(function()
 			end
 		end))
 	end
+end)
 
 	if ReanimSettings.Animations then
 		local AnimateScript = IN("LocalScript")
@@ -982,8 +1004,9 @@ Spawn(function()
 					LastPosition = PrimaryPart.CFrame
 				end
 			end)
-		end)
-	end
-end)
+	end)
+end
+
+
 
 warn("Loaded!, Reanimated in: ".. tostring(Players.RespawnTime + Ping:GetValue()/750 + 3 + 0.1).."s.")
