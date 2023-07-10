@@ -6322,7 +6322,7 @@ AddCommand("anticlientkick", {"antickick"}, "disables client kick scripts", {}, 
 	end
 end)
 
-AddCommand("antikill", {}, "fakes your humanoid sit", {3}, function(Caller, Args, CEnv)
+AddCommand("fakesit", {"fsit"}, "fakes your humanoid sit", {3}, function(Caller, Args, CEnv)
 	local c = game:GetService("Players").LocalPlayer.Character
 	if c and c.Parent then
 		local hum = c:FindFirstChildOfClass("Humanoid")
