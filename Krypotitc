@@ -343,6 +343,8 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 	SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
 	SetHiddenProp(Workspace, "StreamingEnabled", true)
 	SetHiddenProp(Workspace, "StreamOutBehavior", Enum.StreamOutBehavior.Opportunistic)
+        SetHiddenProp(LocalPlayer, "MaximumSimulationRadius", 9999)
+	SetHiddenProp(LocalPlayer, "SimulationRadius", LocalPlayer.MaximumSimulationRadius)
 
 	for _,v in pairs(FakeRig:GetDescendants()) do
 		if v:IsA("BasePart") then
