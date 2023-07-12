@@ -343,7 +343,7 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 	SetHiddenProp(Workspace, "StreamingMinRadius", 1/0)
 	SetHiddenProp(Workspace, "StreamingEnabled", true)
 	SetHiddenProp(Workspace, "StreamOutBehavior", Enum.StreamOutBehavior.Opportunistic)
-        SetHiddenProp(LocalPlayer, "MaximumSimulationRadius", 9999)
+	SetHiddenProp(LocalPlayer, "MaximumSimulationRadius", 9999)
 	SetHiddenProp(LocalPlayer, "SimulationRadius", LocalPlayer.MaximumSimulationRadius)
 
 	for _,v in pairs(FakeRig:GetDescendants()) do
@@ -412,7 +412,7 @@ RealRig:BreakJoints()
 
 Spawn(function()
 	local DesiredHats = ReanimSettings.DefinedHats
-	
+
 		--[[[1] = {"rbxassetid://13415110780", CFN(0,0,0), CFA(0,0,0), false},
 		[2] = {'nil', CFN(0,0,0), CFA(0,0,0), false},
 
@@ -421,7 +421,7 @@ Spawn(function()
 
 		[5] = {"http://www.roblox.com/asset/?id=11159284657", CFN(0,0,0), CFA(0,Rad(-90), Rad(90)), false},
 		[6] = {"http://www.roblox.com/asset/?id=11263219250", CFN(0,0,0), CFA(0,Rad(90), Rad(90)), false},--]]
-	
+
 
 	local T1 = GetHandle(DesiredHats[1][1], DesiredHats[1][4]); local T1_CF = DesiredHats[1][2] * DesiredHats[1][3]
 	local T2 = GetHandle(DesiredHats[2][1], DesiredHats[2][4]); local T2_CF = DesiredHats[2][2] * DesiredHats[2][3]
@@ -445,7 +445,7 @@ Spawn(function()
 		end
 
 		if FakeRoot and FakeHum.MoveDirection.Magnitude <= 0.1 then
-			FakeRoot.CFrame = FakeRoot.CFrame * CFN(0.005 * Cos(Clock()*19), 0, 0)
+			FakeRoot.CFrame = FakeRoot.CFrame * CFN(0.00065 * Cos(Clock()*40), 0, 0)
 		end
 	end))
 end)
@@ -469,7 +469,7 @@ FakeHum.Died:Once(function()
 	FakeRig:Destroy()
 end)
 
-Wait(0.1)
+--Wait(0.1)
 Platform:Destroy()
 FakeRoot.Anchored = false
 
