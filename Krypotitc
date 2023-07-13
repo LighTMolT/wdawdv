@@ -136,7 +136,7 @@ end
 if ReanimSettings.FlingEnabled then -- [[ Tool Flinging ]] -- 
 	local Backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
 	local Tool = Backpack:FindFirstChildOfClass("Tool")
-	if Tool then
+	if Tool and Tool.Handle then
 		Tool.Parent = Character
 		Character:WaitForChild(Tool.Name)
 		FlingPart = Tool:WaitForChild("Handle", 10)
