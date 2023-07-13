@@ -136,7 +136,8 @@ end
 if ReanimSettings.FlingEnabled then -- [[ Tool Flinging ]] -- 
 	local Backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
 	local Tool = Backpack:FindFirstChildOfClass("Tool")
-	if Tool and Tool.Handle then
+	if Tool then
+		if Tool:FindFirstChild("Handle") then
 		Tool.Parent = Character
 		Character:WaitForChild(Tool.Name)
 		FlingPart = Tool:WaitForChild("Handle", 10)
@@ -149,9 +150,12 @@ if ReanimSettings.FlingEnabled then -- [[ Tool Flinging ]] --
 
 		Delay(0.1, function()               
 			FlingPart.Massless = false          
-		end)
+			end)
+		else
+			Notification("Warning", "There are no tools with an handle, tool fling will not be enabled")
+		end
 	else
-		Notification("Warning", "Player has no tools in Backpack, tool fling will be not enabled.")
+		Notification("Warning", "Player has no tools in Backpack, tool fling will not be enabled.")
 	end
 end
 
