@@ -264,7 +264,7 @@ end
 
 local function CFrameTo(Part0, Part1, Offset)
 	if Part0 and Part1 and Part0.ReceiveAge == 0 then
-		Part0.CFrame = Part1.CFrame * (typeof(Offset) == "CFrame" and Offset or CF0) * CFN(0, Random(1,2)/200, 0)
+		Part0.CFrame = Part1.CFrame * (typeof(Offset) == "CFrame" and Offset or CF0) * CFN(0.0065 * Sin(Clock()*32), 0, 0.0065 * Cos(Clock()*32))
 		Part0.AssemblyAngularVelocity = V3N(0, 2*Cos(Clock()*19), 0)
 		Part0.AssemblyLinearVelocity = V3N(Part1.AssemblyLinearVelocity.X * (Part0.Mass * 5), -30, Part1.AssemblyLinearVelocity.Z * (Part0.Mass * 5))
 	end
@@ -525,8 +525,8 @@ Spawn(function()
 						FlingPart.CFrame = Mouse.Hit
 					end
 				else
-					FlingPart.CFrame = FakeRoot.CFrame * AntiSleepOffset
-					FlingPart.AssemblyAngularVelocity = RotVelocityOffset
+					FlingPart.CFrame = FakeRoot.CFrame * CFN(0.0065 * Sin(Clock()*32), 0, 0.0065 * Cos(Clock()*32))
+					FlingPart.AssemblyAngularVelocity = V3N(0, Sin(Clock())*5, 0)
 				end
 			end
 		end))
