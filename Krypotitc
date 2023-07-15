@@ -388,7 +388,7 @@ do -- [[ Improve Claiming / Disabling Things / Extra Settings. ]] --
 		if FlingPart then
 			PullVelocity(FlingPart, FakeRoot)
 			if not Global.KryptonData['FlingEnabled'] then
-				--LinkParts(FlingPart, FakeRoot, CFN(0, -1.5, 0))
+				LinkParts(FlingPart, FakeRoot, CFN(0, -1.5, 0))
 			end
 			FlingPart.CanCollide = false
 			FlingPart.CanTouch = false
