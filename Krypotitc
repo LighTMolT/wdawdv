@@ -509,7 +509,7 @@ Spawn(function()
 
 		TInsert(GEvents, Heartbeat:Connect(function()
 			if Global.FlingOnHold == true then
-				FlingPart.CFrame = FakeRoot.CFrame * OffsetDown
+				FlingPart.CFrame = FakeRoot.CFrame * OffsetDown * CFN(0.0065 * Sin(Clock()*32), 0, 0.0065 * Cos(Clock()*32))
 			end
 		end))
 
