@@ -305,8 +305,8 @@ end
 
 for _,v in pairs(RealRigDescendants) do
 	if v:IsA("BasePart") then
-		v.Anchored = false
-		v.Massless = false 
+                v.Massless = false 
+		v.Anchored = false		
 	elseif v:IsA("Accessory") then
 		local Handle = v:FindFirstChild("Handle") or v:FindFirstChildOfClass("BasePart")
 		local NewHat = ReWeldHats(Handle)
