@@ -496,6 +496,8 @@ Spawn(function()
 		local Mouse = LocalPlayer:GetMouse()
 		local Highlight = Instance.new("Highlight")
 		Highlight.Parent = FlingPart
+                Highlight.FillColor = Color3.fromHSV(0,0,0)
+                Highlight.OutlineColor = Color3.fromHSV(7,255,245)
 		local CurrentTarget;
 		local TargetHumanoid;
 
