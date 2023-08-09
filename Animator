@@ -1,17 +1,9 @@
 local Flinging = false
-local Highlight = Instance.new("Highlight")
 local Root = game.Players.LocalPlayer.Character.HumanoidRootPart
 local Version = "v1.0.3"
 print(Version)
 
-Highlight.FillColor = Color3.fromRGB(34, 77, 153)
-Highlight.OutlineColor = Color3.fromRGB(55, 127, 244)
 Root.Transparency = 0
-
-Highlight.Parent = Root
-Highlight.Adornee = Root
-
-
 
 local PASettings = {
 	WalkSpeed = 16,
@@ -74,14 +66,6 @@ local Character = Player.Character
 
 local Humanoid = Character:FindFirstChildOfClass("Humanoid")
 Humanoid.WalkSpeed = PASettings.WalkSpeed
-
-task.spawn(function()
-	while task.wait() do
-		if not Flinging then
-			Root.Position = Character.Torso.Position - Vector3.new(0, 5, 0)
-		end
-	end
-end)
 
 function Methods:SetWalkSpeed(Value)
 	PASettings.WalkSpeed = Value
