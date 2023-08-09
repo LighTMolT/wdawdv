@@ -1,4 +1,3 @@
-local Flinging = false
 local Root = game.Players.LocalPlayer.Character.HumanoidRootPart
 local Version = "v1.0.3"
 print(Version)
@@ -240,7 +239,7 @@ end
 
 function Methods:RunScript()
 
-	function LoadIntro()
+	--[[function LoadIntro()
 		game:GetService("ContentProvider"):PreloadAsync({"http://www.roblox.com/asset/?id=8955607825"})
 
 		task.wait()
@@ -319,7 +318,7 @@ function Methods:RunScript()
 		task.wait(2)
 		print("Intro done.")
 	end
-	LoadIntro()
+	LoadIntro()--]]
 
 	if PASettings.Teleportation.Enabled then
 		Mouse.KeyDown:Connect(function(Key)
@@ -493,7 +492,7 @@ function Methods:RunScript()
 			Humanoid.WalkSpeed = PASettings.WalkSpeed
 		end
 	end
-	
+
 	while task.wait() do
 		if CurrentType == "Idle" and Humanoid.Health >= 0 and not Attacking then
 			PlayAnimation(PASettings.Animations.IdleAnimation.AnimationID, PASettings.Animations.IdleAnimation.FrameSpeed, PASettings.Animations.IdleAnimation.TweenSpeed, "Idle")
