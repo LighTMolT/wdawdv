@@ -3,8 +3,6 @@ local Root = game.Players.LocalPlayer.Character.HumanoidRootPart
 local Version = "v1.0.3"
 print(Version)
 
-Root.Transparency = 0
-
 local PASettings = {
 	WalkSpeed = 16,
 	JumpPower = 125,
